@@ -44,17 +44,17 @@
 如果是新 repo：
 
 ```bash
-cp -r skill/harness-engineering /path/to/repo/.reusable/harness-engineering
+cp -r harness/harness-engineering /path/to/repo/.reusable/harness-engineering
 ```
 
 如果是要直接引入模板：
 
 ```bash
-cp skill/harness-engineering/templates/AGENTS.md /path/to/repo/AGENTS.md
-cp skill/harness-engineering/templates/INDEX.md /path/to/repo/INDEX.md
-cp skill/harness-engineering/templates/PROGRESS.md /path/to/repo/PROGRESS.md
-cp skill/harness-engineering/templates/DECISIONS.md /path/to/repo/DECISIONS.md
-cp skill/harness-engineering/templates/MANUAL.md /path/to/repo/MANUAL.md
+cp harness/harness-engineering/templates/AGENTS.md /path/to/repo/AGENTS.md
+cp harness/harness-engineering/templates/INDEX.md /path/to/repo/INDEX.md
+cp harness/harness-engineering/templates/PROGRESS.md /path/to/repo/PROGRESS.md
+cp harness/harness-engineering/templates/DECISIONS.md /path/to/repo/DECISIONS.md
+cp harness/harness-engineering/templates/MANUAL.md /path/to/repo/MANUAL.md
 ```
 
 之後再依 repo 實況補上技術棧、檢查命令、外部依賴與產品目標。

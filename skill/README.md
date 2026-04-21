@@ -11,11 +11,6 @@ skill/
 ├── README.md                              ← 本文件
 ├── INDEX.md                               ← 每個 skill 的完整說明
 │
-├── harness-engineering/                   ← collaboration harness / repo starter kit
-│   ├── SKILL.md                           ← repo harness engineering 工作規則
-│   ├── README.md                          ← 這套 starter kit 的用途與導入方式
-│   └── templates/                         ← AGENTS/PROGRESS/DECISIONS/MANUAL 等模板
-│
 └── notebooklm-skill/                      ← Google NotebookLM 查詢 skill
     ├── SKILL.md                           ← Claude 的行為指令
     ├── scripts/                           ← Python 自動化腳本
@@ -45,7 +40,6 @@ skill/
 
 ```bash
 cp -r skill/notebooklm-skill ~/.claude/skills/notebooklm
-cp -r skill/harness-engineering ~/.claude/skills/harness-engineering
 ```
 
 接著在 Claude Code 中說：
@@ -54,6 +48,7 @@ cp -r skill/harness-engineering ~/.claude/skills/harness-engineering
 ```
 
 詳細說明請見各 skill 的 `README.md` 與 [INDEX.md](./INDEX.md)。
+若要看 repo collaboration / workflow 類模板，請改看 `../harness/`。
 
 ---
 
