@@ -37,6 +37,24 @@
   .stat .n { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
   .stat .l { color: var(--faint); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
 
+  .nav { margin: 30px 0 4px; display: flex; flex-direction: column; gap: 10px; }
+  .nav-item { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,30,50,.04); border-left: 4px solid var(--c); transition: .15s; }
+  .nav-item:hover { box-shadow: 0 4px 14px rgba(20,30,50,.07); }
+  .nav-row { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; user-select: none; }
+  .nav-row:hover { background: var(--panel-2); }
+  .nav-row .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .nav-row .title { font-weight: 800; font-size: 17px; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  .nav-row .tag { color: var(--c); font-weight: 700; font-size: 12.5px; }
+  .nav-row .cnt { margin-left: auto; color: var(--faint); font-size: 13px; white-space: nowrap; }
+  .nav-row .chev { color: var(--faint); font-size: 13px; transition: transform .2s; }
+  .nav-item.open .chev { transform: rotate(90deg); }
+  .subs { display: none; flex-wrap: wrap; gap: 8px; padding: 2px 18px 18px 41px; }
+  .nav-item.open .subs { display: flex; }
+  .sub { cursor: pointer; border: 1px solid var(--border); background: var(--panel-2); border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 600; color: var(--muted); display: inline-flex; gap: 7px; align-items: center; transition: .12s; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  .sub:hover { border-color: var(--c); color: var(--text); }
+  .sub.active { background: var(--c); border-color: var(--c); color: #fff; }
+  .sub .scnt { opacity: .65; font-size: 11px; }
+
   .toolbar { position: sticky; top: 0; z-index: 5; background: rgba(246,247,249,.85); backdrop-filter: blur(10px); padding: 18px 0; margin: 30px 0 8px; border-bottom: 1px solid var(--border); }
   .search { width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 13px 16px; color: var(--text); font-size: 15px; outline: none; box-shadow: 0 1px 2px rgba(20,30,50,.04); }
   .search::placeholder { color: var(--faint); }
@@ -77,6 +95,8 @@
     <p class="lede">A curated collection of code decoupled from business logic and reusable across projects. Every component is stripped of domain dependencies and driven by injected config, callbacks, or design tokens — drop it into a new project and go.</p>
     <div class="stats" id="stats"></div>
   </header>
+
+  <nav class="nav" id="nav"></nav>
 
   <div class="toolbar">
     <input class="search" id="search" placeholder="Search by name, function, or dependency… (e.g. firebase, paywall, geofence)" />
@@ -192,8 +212,70 @@ const total = CATS.reduce((s,c)=>s+c.items.length,0);
 const statData = [["Components",total],["Categories",CATS.length]].concat(CATS.map(c=>[c.title,c.items.length]));
 stats.innerHTML = statData.map(([l,n],i)=>`<div class="stat" ${i>=2?`style="--c:${CATS[i-2].color}"`:""}><div class="n" ${i>=2?`style="color:${CATS[i-2].color}"`:""}>${n}</div><div class="l">${l}</div></div>`).join("");
 
-const filters = document.getElementById("filters");
+// Sub-category of an item: first path segment (app/web/ios), or the "kind" for
+// flat-file categories (llm), with explicit grouping for skill/harness.
+function subOf(catId, it) {
+  const p = it[0].replace(/\/+$/, "");
+  if (catId === "llm") return it[1];
+  if (catId === "harness") return "templates";
+  if (catId === "skill") {
+    if (p.startsWith("design-sense")) return "design-sense";
+    if (p.startsWith("notebooklm")) return "notebooklm-skill";
+    if (p.startsWith("harness-engineering")) return "harness-engineering";
+  }
+  return p.split("/")[0];
+}
+
 let activeCat = "all";
+let activeSub = null;
+
+// Vertical accordion of the 6 categories; click a category to reveal its sub-categories.
+const nav = document.getElementById("nav");
+nav.innerHTML = CATS.map(c => {
+  const subMap = {};
+  c.items.forEach(it => { const s = subOf(c.id, it); (subMap[s] ||= []).push(it); });
+  const subKeys = Object.keys(subMap);
+  const subChips = subKeys.map(s =>
+    `<span class="sub" data-cat="${c.id}" data-sub="${s}" style="--c:${c.color}">${s}<span class="scnt">${subMap[s].length}</span></span>`
+  ).join("");
+  return `<div class="nav-item" data-cat="${c.id}" style="--c:${c.color}">
+      <div class="nav-row">
+        <span class="dot" style="background:${c.color}"></span>
+        <span class="title">${c.title}</span>
+        <span class="tag">${c.tag}</span>
+        <span class="cnt">${c.items.length} components · ${subKeys.length} groups</span>
+        <span class="chev">▸</span>
+      </div>
+      <div class="subs">${subChips}</div>
+    </div>`;
+}).join("");
+
+function syncSub() {
+  nav.querySelectorAll(".sub").forEach(s =>
+    s.classList.toggle("active", s.dataset.cat === activeCat && s.dataset.sub === activeSub));
+}
+
+nav.addEventListener("click", e => {
+  const sub = e.target.closest(".sub");
+  if (sub) {
+    activeCat = sub.dataset.cat;
+    activeSub = sub.dataset.sub;
+    [...filters.children].forEach(c => c.classList.toggle("active", c.dataset.cat === activeCat));
+    syncSub();
+    render();
+    document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  const row = e.target.closest(".nav-row");
+  if (row) {
+    const item = row.parentElement;
+    const wasOpen = item.classList.contains("open");
+    [...nav.children].forEach(n => n.classList.remove("open"));
+    if (!wasOpen) item.classList.add("open");
+  }
+});
+
+const filters = document.getElementById("filters");
 const filterDefs = [["all","All","var(--text)"]].concat(CATS.map(c=>[c.id,c.title,c.color]));
 filters.innerHTML = filterDefs.map(([id,label,color])=>`<div class="chip ${id==="all"?"active":""}" data-cat="${id}"><span class="dot" style="background:${color}"></span>${label}</div>`).join("");
 
@@ -204,6 +286,7 @@ function render() {
   content.innerHTML = CATS.map(c => {
     if (activeCat !== "all" && activeCat !== c.id) return "";
     const matched = c.items.filter(it => {
+      if (activeSub && subOf(c.id, it) !== activeSub) return false;
       if (!q) return true;
       return (it[0]+" "+it[1]+" "+it[2]+" "+it[3].join(" ")).toLowerCase().includes(q);
     });
@@ -234,7 +317,9 @@ filters.addEventListener("click", e => {
   const chip = e.target.closest(".chip");
   if (!chip) return;
   activeCat = chip.dataset.cat;
+  activeSub = null;
   [...filters.children].forEach(c => c.classList.toggle("active", c === chip));
+  syncSub();
   render();
 });
 document.getElementById("search").addEventListener("input", render);
