@@ -1,0 +1,244 @@
+<title>Reusable Components 元件總覽</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1d212b;
+    --border: #2a2f3a;
+    --text: #e7e9ee;
+    --muted: #9aa3b2;
+    --faint: #6b7385;
+    --accent: #f4a259;
+    --app: #f4a259;
+    --web: #5b9bd5;
+    --ios: #b18cf0;
+    --llm: #4fc4a0;
+    --skill: #e06c9f;
+    --harness: #d4b94e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 70% -10%, #1b2030 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  header.hero { margin-bottom: 36px; }
+  .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; }
+  h1 { font-size: 40px; line-height: 1.1; margin: 10px 0 12px; font-weight: 800; letter-spacing: -.02em; }
+  .lede { color: var(--muted); max-width: 720px; font-size: 16px; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
+  .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; min-width: 110px; }
+  .stat .n { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  .stat .l { color: var(--faint); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+
+  .toolbar { position: sticky; top: 0; z-index: 5; background: rgba(15,17,21,.82); backdrop-filter: blur(10px); padding: 18px 0; margin: 30px 0 8px; border-bottom: 1px solid var(--border); }
+  .search { width: 100%; background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px; padding: 13px 16px; color: var(--text); font-size: 15px; outline: none; }
+  .search:focus { border-color: var(--accent); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip { cursor: pointer; user-select: none; border: 1px solid var(--border); background: var(--panel); color: var(--muted); padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; transition: .15s; display: inline-flex; align-items: center; gap: 7px; }
+  .chip .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .chip:hover { color: var(--text); border-color: var(--faint); }
+  .chip.active { color: #0f1115; background: var(--text); border-color: var(--text); }
+  .chip.active .dot { box-shadow: 0 0 0 2px rgba(0,0,0,.18); }
+
+  section.cat { margin-top: 44px; scroll-margin-top: 140px; }
+  .cat-head { display: flex; align-items: baseline; gap: 12px; border-left: 4px solid var(--c); padding-left: 14px; margin-bottom: 6px; }
+  .cat-head h2 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.01em; }
+  .cat-head .tag { color: var(--c); font-weight: 700; font-size: 13px; }
+  .cat-head .cnt { color: var(--faint); font-size: 13px; margin-left: auto; }
+  .cat-desc { color: var(--muted); font-size: 14px; padding-left: 18px; margin-bottom: 18px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px 17px; transition: .15s; position: relative; overflow: hidden; }
+  .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c); opacity: .65; }
+  .card:hover { border-color: var(--c); transform: translateY(-2px); }
+  .card .name { font-weight: 700; font-size: 15px; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  .card .kind { color: var(--c); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+  .card .desc { color: var(--muted); font-size: 13.5px; margin: 8px 0 10px; }
+  .card .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card .dep { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px solid var(--border); padding: 2px 8px; border-radius: 6px; font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+  .card .src { color: var(--faint); font-size: 11.5px; margin-top: 10px; }
+  .card .src b { color: var(--muted); font-weight: 600; }
+
+  .empty { display: none; text-align: center; color: var(--faint); padding: 60px 0; font-size: 15px; }
+  footer { margin-top: 60px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--border); padding-top: 22px; }
+  footer code { color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Reusable Components</div>
+    <h1>跨專案可復用元件總覽</h1>
+    <p class="lede">把過去專案裡與業務解耦、可跨專案重用的程式碼整理在這裡。每個元件已抽離 domain 依賴，靠外部注入的設定、callback 或 design tokens 驅動 — 新開專案時可直接抽取。</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <input class="search" id="search" placeholder="搜尋元件名稱、功能、依賴…（例如 firebase、paywall、geofence）" />
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <div id="content"></div>
+  <div class="empty" id="empty">沒有符合的元件 — 換個關鍵字試試。</div>
+
+  <footer>
+    來源專案：<code>cat_toxin_app</code>(RN) · <code>onmyway</code>(SwiftUI) · <code>wiser</code> · <code>interactive-book-tutor</code>(web/LLM)。
+    詳細 Props / 介面說明見各類別的 <code>INDEX.md</code>。
+  </footer>
+</div>
+
+<script>
+const CATS = [
+  {
+    id: "app", color: "var(--app)", title: "app/", tag: "React Native · Expo",
+    desc: "UI 元件、hooks、Firebase / RevenueCat 封裝、訂閱與 onboarding 工具，皆吃 tokens 設計變數。",
+    items: [
+      ["types/tokens.ts","型別","DesignTokens 介面、defaultTokens 暖色系預設與 resolveTokens() 合併工具，所有元件的基礎。",["—"]],
+      ["auth/SocialAuthButtons.tsx","認證","Apple + Google 登入按鈕組合，不綁 SDK，Promise 生命週期自動管理 loading。",["react-native"]],
+      ["auth/TestModeButton.tsx","認證 · 開發","dev-only 測試登入按鈕，production 自動隱藏，虛線外框低干擾樣式。",["react-native"]],
+      ["subscription/TrialBanner.tsx","訂閱","頂部黃色試用通知條 + 升級 CTA，daysLeft<=0 自動隱藏。",["react-native"]],
+      ["subscription/PaywallScreen.tsx","訂閱","訂閱方案選擇頁，方案外部傳入、不綁 RevenueCat，內建購買 loading/錯誤。",["safe-area-context"]],
+      ["feedback/FeedbackForm.tsx","使用者參與","意見回饋輸入框，支援自訂 onSubmit 或內建 Firestore 寫入兩種模式。",["react-native","firestore?"]],
+      ["ui/SearchBar.tsx","輸入","帶 focus 動畫的搜尋框，膠囊造型、非空顯示清除鈕。",["react-native"]],
+      ["ui/ChipFilter.tsx","篩選","水平捲動的圓角 chip 篩選列，泛型 key，支援 emoji icon。",["react-native"]],
+      ["ui/StatusBadge.tsx","資訊展示","彩色圓點 + 標籤狀態 badge，顏色文字由外部 statusMap 定義。",["react-native"]],
+      ["ui/DescriptionBlock.tsx","文字展示","可展開/收合長文字，隱藏測量取得行數，超過 maxLines 顯示 Show more。",["react-native"]],
+      ["ui/HeroImageCarousel.tsx","媒體","全寬橫向圖片輪播，gesture-handler 確保 Android paging，底部 dots。",["expo-image","gesture-handler"]],
+      ["ui/UserProfileHeader.tsx","帳號","圓形頭像 + 名稱 + email，無頭像時顯示首字母佔位圓。",["expo-image"]],
+      ["ui/NumberedStepsList.tsx","資訊展示","primary 色圓形數字編號的有序步驟列表，標題 + 選填說明。",["react-native"]],
+      ["ui/DisclaimerNote.tsx","法務","小字免責聲明，可選圓角外框。",["react-native"]],
+      ["ui/OnboardingSwipeView.tsx","手勢 · 容器","PanResponder 偵測水平 swipe 的容器，不吃掉垂直捲動，門檻可參數化。",["react-native"]],
+      ["ui/OnboardingBackButton.tsx","導航","絕對定位圓形返回鈕，常疊在 onboarding / hero 圖上，色彩由 tokens 推導。",["@expo/vector-icons"]],
+      ["ui/FeatureGate.tsx","訂閱 · 升級","功能限制 / 升級提示卡片：圖示 + 標題 + 說明 + CTA，搭配 SubscriptionContext。",["@expo/vector-icons"]],
+      ["hooks/useAuth.ts","認證 · 狀態","onAuthStateChanged 監聽 Firebase Auth，auth 實例注入、不綁專案設定。",["react","firebase/auth"]],
+      ["hooks/useLayout.ts","響應式","useWindowDimensions 響應式 layout：tablet 斷點、動態 padding、內容限寬。",["react-native"]],
+      ["lib/firebase.ts","基礎建設","RN Firebase 初始化工廠，AsyncStorage persistence，config 全注入。",["firebase","async-storage"]],
+      ["lib/purchases.ts","訂閱 · IAP","RevenueCat 封裝：premium TTL 快取、timeout 保護、Expo Go 偵測，keys 注入。",["react-native-purchases"]],
+      ["utils/pricing.ts","格式化","訂閱定價工具：Intl 貨幣格式化、年訂閱省比例、每月均價，零業務綁定。",["—"]],
+      ["utils/dates.ts","日期","addDays / formatRelativeDate，Intl 格式化、跨年加年份，零依賴。",["—"]],
+      ["utils/avatarColor.ts","視覺","seed 字串雜湊穩定對應色盤顏色，相同 seed 恆得相同色。",["—"]],
+      ["context/SubscriptionContext.tsx","訂閱 · 狀態","整合 RevenueCat + Firestore listener + dev override 的訂閱狀態 Provider。",["react","firebase"]],
+    ],
+  },
+  {
+    id: "web", color: "var(--web)", title: "web/", tag: "React + Vite · Cloudflare · Node",
+    desc: "adminUI 資料後台元件、Markdown 渲染、Cloudflare KV/HTTP/背景任務後端模式、TS utilities。",
+    items: [
+      ["adminUI/hooks/useSave.ts","狀態管理","帶 debounce 的 per-field auto-save hook，是 adminUI 核心，saveFn 外部定義。",["react"]],
+      ["adminUI/components/SaveIndicator.tsx","回饋","Saving…/✓Saved/✗Error 狀態文字 + FieldLabel 組合。",["react"]],
+      ["adminUI/components/TextField.tsx","表單輸入","local state 避免卡頓的受控輸入，onChange 即觸發 onSave 達成自動存。",["react"]],
+      ["adminUI/components/SelectField.tsx","表單輸入","泛型下拉選單，onChange 立即觸發（離散操作無需 debounce）。",["react"]],
+      ["adminUI/components/TagListField.tsx","表單輸入","tag pill 編輯（Enter/Add 新增、× 移除），重複自動忽略。",["react"]],
+      ["adminUI/components/ImagesField.tsx","媒體管理","圖片縮圖管理（hover 刪除），上傳/刪除 API 由外部定義。",["react"]],
+      ["adminUI/components/Section.tsx","佈局","細分隔線 + 全大寫小字標題的表單群組區塊。",["react"]],
+      ["adminUI/components/MasterDetailLayout.tsx","佈局","全螢幕兩欄 admin 佈局：固定寬 sidebar + flex-1 主面板。",["react"]],
+      ["components/MarkdownContent.tsx","內容渲染","全功能 Markdown：GFM、KaTeX、程式碼高亮、原始 HTML、Mermaid 智慧 fallback。",["react-markdown","mermaid","katex"]],
+      ["utils/sanitizeMermaid.ts","工具","把 Mermaid 標籤內半形括號轉全形，修復 AI 產生圖的解析失敗。",["—"]],
+      ["utils/tokenization.ts","工具","Unicode 感知分詞，可無損還原原文，連字號視為詞的一部分。",["—"]],
+      ["backend/kvStore.ts","後端 · Cloudflare KV","型別化 JSON 讀寫包裝，帶 fallback、具名綁定檢查。",["—"]],
+      ["backend/httpResponse.ts","後端 · Response","統一 JSON 回應 + CORS helper，json/error/preflight/createResponders。",["—"]],
+      ["backend/backgroundJob.ts","後端 · 背景任務","單進程背景任務 + 輪詢狀態 runner，single-job guard，框架無關。",["—"]],
+    ],
+  },
+  {
+    id: "ios", color: "var(--ios)", title: "ios/", tag: "SwiftUI",
+    desc: "地理圍欄 LocationManager、本機通知、泛型 JSON 持久化、權限 UI 元件。皆以 callback / 參數注入，僅依賴系統框架。",
+    items: [
+      ["location/LocationManager.swift","定位 · 背景監控","背景 geofence 管理器（系統 region monitoring），regionsProvider / onRegionEntered 注入，cooldown + 20 region 上限處理。",["CoreLocation","Combine"]],
+      ["notifications/NotificationManager.swift","本機通知","授權、時間提醒排程、即時推播、前景顯示、payloadID 點擊回調，文案全參數化。",["UserNotifications"]],
+      ["persistence/JSONStore.swift","持久化","泛型 JSONStore<T: Codable> 把任何 Codable 值存到 Documents，適合本機儲存。",["Foundation"]],
+      ["ui/PermissionRow.swift","UI · 權限","單列權限提示：icon + 說明 + 按鈕，文案圖示參數化。",["SwiftUI"]],
+      ["ui/PermissionCard.swift","UI · 權限","權限說明卡片，依 granted 切換綠勾或啟用按鈕。",["SwiftUI"]],
+      ["ui/Chip.swift","UI · 標籤","膠囊形小標籤：icon + 文字 + 半透明色底。",["SwiftUI"]],
+    ],
+  },
+  {
+    id: "llm", color: "var(--llm)", title: "llm/", tag: "TypeScript · Node",
+    desc: "LLM JSON 修復、本機 CLI 模型呼叫、retry / 並發控制等與供應商無關的工具，每個檔案 self-contained。",
+    items: [
+      ["jsonRepair.ts","輸出解析","從雜訊文字括號平衡掃描提取 JSON 並修復字串內非法跳脫/控制字元，extractJson / tryExtractJson / repairJsonStrings。",["—"]],
+      ["cliModel.ts","LLM 呼叫","spawn 本機 CLI 模型（-p prompt + stdin context），複用本機登入、免管 API key，模型參數全注入。",["child_process","os"]],
+      ["concurrency.ts","批次 async","withRetry 重試 + mapWithConcurrency work-stealing 限流，適用任何批次 async。",["—"]],
+    ],
+  },
+  {
+    id: "skill", color: "var(--skill)", title: "skill/", tag: "Claude Code Skills",
+    desc: "可安裝的 Claude Code skill — 複製到 ~/.claude/skills/ 即用。",
+    items: [
+      ["notebooklm-skill/","知識查詢","讓 Claude Code 直接與 Google NotebookLM 對話，取得有來源根據的引用答案。",["Python","patchright"]],
+      ["design-sense/design-analyze","設計分析","/design analyze <url> — 從網站提取設計 token 存為 .design/system.json。",["design-sense API"]],
+      ["design-sense/design-review","設計審查","/design review — 審查專案 UI，回傳分級建議（🔴/🟡/🟢）。",["design-sense API"]],
+      ["design-sense/design-style","設計風格","/design style <url> — 分析 icon/插畫風格，產生 AI 圖像 prompt。",["agent-browser"]],
+      ["design-sense/design-system","設計系統","/design system — 查看、編輯、匯出設計 token 至 Pencil.dev。",["Pencil MCP"]],
+      ["harness-engineering/","Harness","repo collaboration / agent workflow / 共享記憶 / 驗證流程的 starter kit 與模板。",["Markdown"]],
+    ],
+  },
+  {
+    id: "harness", color: "var(--harness)", title: "harness/", tag: "Markdown · 工作流",
+    desc: "保留 reusable 的 harness engineering 資產：repo collaboration、agent workflow、shared memory 與 verification workflow。",
+    items: [
+      ["harness/","工作流模板","harness engineering 資產的 top-level 收納處，對應 skill/harness-engineering/ starter kit。",["—"]],
+    ],
+  },
+];
+
+const stats = document.getElementById("stats");
+const total = CATS.reduce((s,c)=>s+c.items.length,0);
+const statData = [["元件總數",total],["類別",CATS.length]].concat(CATS.map(c=>[c.title,c.items.length]));
+stats.innerHTML = statData.map(([l,n],i)=>`<div class="stat" ${i>=2?`style="--c:${CATS[i-2].color}"`:""}><div class="n" ${i>=2?`style="color:${CATS[i-2].color}"`:""}>${n}</div><div class="l">${l}</div></div>`).join("");
+
+const filters = document.getElementById("filters");
+let activeCat = "all";
+const filterDefs = [["all","全部","var(--text)"]].concat(CATS.map(c=>[c.id,c.title,c.color]));
+filters.innerHTML = filterDefs.map(([id,label,color])=>`<div class="chip ${id==="all"?"active":""}" data-cat="${id}"><span class="dot" style="background:${color}"></span>${label}</div>`).join("");
+
+const content = document.getElementById("content");
+function render() {
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  let shown = 0;
+  content.innerHTML = CATS.map(c => {
+    if (activeCat !== "all" && activeCat !== c.id) return "";
+    const matched = c.items.filter(it => {
+      if (!q) return true;
+      return (it[0]+" "+it[1]+" "+it[2]+" "+it[3].join(" ")).toLowerCase().includes(q);
+    });
+    if (!matched.length) return "";
+    shown += matched.length;
+    const cards = matched.map(it => `
+      <div class="card" style="--c:${c.color}">
+        <div class="kind">${it[1]}</div>
+        <div class="name">${it[0]}</div>
+        <div class="desc">${it[2]}</div>
+        <div class="meta">${it[3].map(d=>`<span class="dep">${d}</span>`).join("")}</div>
+      </div>`).join("");
+    return `
+      <section class="cat" style="--c:${c.color}">
+        <div class="cat-head">
+          <span class="tag">${c.tag}</span>
+          <h2>${c.title}</h2>
+          <span class="cnt">${matched.length} 個元件</span>
+        </div>
+        <div class="cat-desc">${c.desc}</div>
+        <div class="grid">${cards}</div>
+      </section>`;
+  }).join("");
+  document.getElementById("empty").style.display = shown ? "none" : "block";
+}
+
+filters.addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  activeCat = chip.dataset.cat;
+  [...filters.children].forEach(c => c.classList.toggle("active", c === chip));
+  render();
+});
+document.getElementById("search").addEventListener("input", render);
+render();
+</script>
