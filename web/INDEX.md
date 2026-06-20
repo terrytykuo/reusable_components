@@ -197,3 +197,153 @@ onUpload={async (file) => {
 
 **使用情境**: 任何有「清單選取 → 右側編輯」互動的資料管理後台
 **來源**: `cat_toxin_app/admin/src/App.tsx`
+
+---
+
+## components/
+
+### `components/MarkdownContent.tsx`
+
+**分類**: 內容渲染
+**依賴**: `react`、`react-markdown`、`remark-gfm`、`remark-math`、`rehype-katex`、`rehype-highlight`、`rehype-raw`、`mermaid`、`katex`（需另引入 `katex/dist/katex.min.css` 與 highlight.js 主題 CSS）；內部使用 `utils/sanitizeMermaid`
+
+**Props/介面**:
+```ts
+function MarkdownContent({ children }: { children: string }): JSX.Element
+// 另 re-export：sanitizeMermaid(code: string): string
+```
+
+**功能說明**:
+全功能 Markdown 渲染元件，把一段 Markdown 字串渲染成完整內容。支援 GFM（表格、刪除線、任務清單）、KaTeX 數學式、highlight.js 程式碼高亮、原始 HTML（rehype-raw），以及 Mermaid 圖。
+
+Mermaid 採「智慧 fallback」：先用 `mermaid.parse()` 驗證（不碰 DOM，避免無效圖把 mermaid 的「Syntax error」孤兒 SVG 注入頁面）。解析失敗時，用 `sanitizeMermaid()` 把 `[..]`／`{..}` 標籤內的半形括號轉成全形後重試——專門修復 AI 產生的 `[節點(描述)]`（mermaid 會把標籤裡的 `(` 當形狀分隔符而整張解析失敗）。仍失敗才退回顯示原始程式碼。
+
+mermaid 於模組層級初始化一次（neutral 主題）；如需自訂主題/字型，於 import 本檔前先呼叫 `mermaid.initialize`。`sanitizeMermaid()` 已拆成獨立工具（見 `utils/sanitizeMermaid.ts`），可單獨用於送進任何 mermaid 渲染器前的修復。
+
+**使用情境**: AI 聊天/教學 app 的訊息氣泡、文件檢視器、任何需要渲染含圖表與數學式之 Markdown 的場景
+**來源**: `interactive-book-tutor/src/components/MarkdownContent.tsx`
+
+---
+
+## utils/
+
+### `utils/sanitizeMermaid.ts`
+
+**分類**: 工具函式
+**依賴**: 無（純字串處理）
+
+**介面**:
+```ts
+function sanitizeMermaid(code: string): string
+```
+
+**功能說明**:
+把 Mermaid 程式碼中 `[..]` 與 `{..}` 節點標籤內的半形括號 `(` `)` 轉成全形 `（` `）`。AI 產生的圖常在標籤裡塞半形括號（如 `D[資料庫主節點 (讀寫)]`），mermaid 會把 `(` 當成形狀分隔符導致整張圖解析失敗；轉全形後標籤閱讀依舊自然，解析器也不再報錯。
+
+設計為「僅在原始碼已解析失敗後」作為 fallback retry 使用，因此可積極轉換，永遠不會破壞一張原本就能正常渲染的圖。
+
+**使用情境**: 搭配 `MarkdownContent` 或任何 mermaid 渲染流程，作為解析失敗時的修復步驟
+**來源**: `interactive-book-tutor/src/components/MarkdownContent.tsx` → `sanitizeMermaid`
+
+---
+
+### `utils/tokenization.ts`
+
+**分類**: 工具函式
+**依賴**: 無（使用 Unicode property escapes，需 ES2018+ regex 支援）
+
+**介面**:
+```ts
+type TextToken = { text: string; isWord: boolean }
+function tokenizeText(text: string): TextToken[]   // 詞/非詞交錯，可無損還原
+function normalizeWord(word: string): string        // 去連字號與前後空白
+function getWordKey(word: string): string            // 正規化 + 小寫，可當字典 key
+function countWords(text: string): number            // 有效詞數統計
+```
+
+**功能說明**:
+Unicode 感知的文字分詞，零業務綁定。以 `\p{P}`（標點）、`\p{S}`（符號）作為斷詞點，但連字號（`-`、`‐`–`―`）例外，視為詞的一部分（"well-known" 算一個詞）。`tokenizeText` 保留所有原始字元（含空白與標點），故 token 串接可無損還原原文，方便用於可點擊的逐詞渲染。
+
+**使用情境**: 語言學習 app 的閱讀器逐詞高亮/查詞、字數統計、建立詞彙索引
+**來源**: `wiser/src/tokenization.ts`
+
+---
+
+## backend/
+
+### `backend/kvStore.ts`
+
+**分類**: 後端 helper（Cloudflare Workers/Pages KV）
+**依賴**: 無（型別相容 Cloudflare KV namespace）
+
+**介面**:
+```ts
+interface JsonKVNamespace { /* get<T>(key,'json'); put(key,value,opts?); delete?(key) */ }
+interface KvStore {
+  readJson<T>(key: string, fallback: T): Promise<T>   // 不存在回 fallback，永不回 null
+  writeJson(key: string, value: unknown, options?: { expirationTtl?: number }): Promise<void>
+  remove(key: string): Promise<void>
+  raw: JsonKVNamespace
+}
+function createKvStore(binding: JsonKVNamespace): KvStore
+function createKvStore(env: Record<string, unknown>, bindingName: string): KvStore
+```
+
+**功能說明**:
+Cloudflare KV 的型別化 JSON 讀寫包裝。KV 原生 API 是字串導向；本工具把 get/put 包成 JSON 化、帶 fallback、且具名綁定檢查的 helper。可直接傳入 namespace，或傳 `env` 物件 + 綁定名稱（找不到綁定時拋出清楚的錯誤訊息，提示先建立並綁定 KV namespace）。
+
+**使用情境**: 任何用 Cloudflare KV 當輕量資料儲存的 Pages Function / Worker，存取 JSON 集合（清單、設定、快取）
+**來源**: `wiser/functions/api/[[path]].ts` → `getKV` / `readJson` / `writeJson`
+
+---
+
+### `backend/httpResponse.ts`
+
+**分類**: 後端 helper（Cloudflare Functions Response）
+**依賴**: 無（使用標準 `Response` / `Headers`）
+
+**介面**:
+```ts
+function json(data: unknown, init?: ResponseInit): Response       // Content-Type + no-store
+function error(message: string, status?: number): Response         // 預設 400
+function preflight(): Response                                      // OPTIONS 回應
+function corsHeaders(options?: CorsOptions): Record<string, string>
+function createResponders(opts?: { cors?: boolean | CorsOptions; cacheControl?: string | null }):
+  { json; error; preflight }
+```
+
+**功能說明**:
+Cloudflare Function 的統一 JSON 回應 + CORS helper。`json()` 自動設定 `Content-Type: application/json; charset=utf-8` 與 `Cache-Control: no-store`；`error()` 包成 `{ error }` body 並帶狀態碼。`createResponders()` 可建立一組共用 CORS / Cache-Control 設定的回應函式，`preflight()` 處理 OPTIONS preflight，`corsHeaders()` 單獨產生 CORS header 物件。預設導出的 `json`/`error` 行為等同原始 wiser helper（無 CORS）。
+
+**使用情境**: 所有 Cloudflare Pages/Workers Function 的 API handler，統一回應格式與跨域設定
+**來源**: `wiser/functions/api/[[path]].ts` → `json` / `error`
+
+---
+
+### `backend/backgroundJob.ts`
+
+**分類**: 後端 helper（背景任務，框架無關）
+**依賴**: 無
+
+**介面**:
+```ts
+interface JobProgress { phase: string; done: number; total: number; message: string }
+type JobStatus = 'idle' | 'running' | 'done' | 'error'
+interface JobState<Meta> extends JobProgress {
+  status: JobStatus; meta: Meta; error?: string; startedAt: string; finishedAt?: string
+}
+function createBackgroundJob<Meta>(options?: { initialPhase?; initialMessage? }): {
+  start(meta: Meta, runner: (a: { meta: Meta; onProgress: (p: Partial<JobProgress>) => void }) => Promise<unknown>):
+    { started: boolean; job: JobState<Meta> | null }
+  getStatus(): JobState<Meta> | null
+  reset(): void
+}
+```
+
+**功能說明**:
+「單一進程內背景任務 + 輪詢狀態」的可復用 runner。`start()` 為 fire-and-forget：立即回傳，工作於背景進行，進度透過 `onProgress(phase/done/total/message)` 寫回狀態物件。內建 single-job guard——同時只允許一個工作執行，重複啟動時 `started: false` 並回傳目前工作（呼叫端可對應成 HTTP 409）。`getStatus()` 回傳純狀態物件供輪詢 endpoint JSON 化；`reset()` 可清除已結束（done/error）的工作。
+
+完全不綁框架（無 Express、無 Cloudflare 型別），Express handler 只需把 `start` 結果對應成 202/409、把 `getStatus()` JSON 化即可。
+
+**使用情境**: 耗時工作（AI 內容產生、資料前處理、批次匯出）需在回應後於背景持續執行、前端輪詢進度
+**來源**: `interactive-book-tutor/server.ts` → `/api/pregen/start` + `/api/pregen/status`
