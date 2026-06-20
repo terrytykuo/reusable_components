@@ -209,8 +209,8 @@ const CATS = [
 
 const stats = document.getElementById("stats");
 const total = CATS.reduce((s,c)=>s+c.items.length,0);
-const statData = [["Components",total],["Categories",CATS.length]].concat(CATS.map(c=>[c.title,c.items.length]));
-stats.innerHTML = statData.map(([l,n],i)=>`<div class="stat" ${i>=2?`style="--c:${CATS[i-2].color}"`:""}><div class="n" ${i>=2?`style="color:${CATS[i-2].color}"`:""}>${n}</div><div class="l">${l}</div></div>`).join("");
+const statData = [["Components",total],["Categories",CATS.length]];
+stats.innerHTML = statData.map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
 
 // Sub-category of an item: first path segment (app/web/ios), or the "kind" for
 // flat-file categories (llm), with explicit grouping for skill/harness.
