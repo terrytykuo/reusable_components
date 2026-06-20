@@ -54,3 +54,50 @@ cp -r skill/notebooklm-skill ~/.claude/skills/notebooklm
 **來源**: 第三方 open-source skill，原作者 PleasePrompto
 **原始 repo**: `https://github.com/PleasePrompto/notebooklm-skill`
 **詳細文件**: `notebooklm-skill/README.md`、`notebooklm-skill/references/`
+
+---
+
+## `design-sense/`
+
+**分類**: UI 設計 / 設計系統分析
+**語言**: Markdown only（純 skill，無腳本依賴）
+**外部依賴**: design-sense API（Cloudflare Workers）、`agent-browser` skill（design-style 需要）、Pencil MCP（design-system export 需要）
+**平台限制**: 無（純 Claude Code skill）
+
+**安裝**:
+```bash
+cp -r skill/design-sense/design-analyze ~/.claude/skills/design-analyze
+cp -r skill/design-sense/design-review  ~/.claude/skills/design-review
+cp -r skill/design-sense/design-style   ~/.claude/skills/design-style
+cp -r skill/design-sense/design-system  ~/.claude/skills/design-system
+```
+
+**包含的 skill**:
+| Skill | 指令 | 功能 |
+|-------|------|------|
+| `design-analyze/` | `/design analyze <url>` | 從網站提取設計 token（色彩、字體、間距等），存為 `.design/system.json` |
+| `design-review/` | `/design review` | 審查專案 UI 程式碼，回傳分級改善建議（🔴必修 / 🟡建議 / 🟢微調） |
+| `design-style/` | `/design style <url>` | 分析網站 icon/插畫風格，產生 AI 圖像生成 prompt |
+| `design-system/` | `/design system` | 查看、編輯設計 token，或匯出至 Pencil.dev |
+
+**典型使用流程**:
+```
+1. /design analyze stripe.com   → 提取 Stripe 的設計系統
+2. /design review               → 審查目前專案 UI
+3. 修復建議的問題
+4. /design system export        → 匯出到 Pencil.dev
+```
+
+**適用情境**:
+- 想讓自己的專案 UI 符合某個知名網站的設計風格
+- 需要系統性地改善 UI（色彩對比、字體比例、間距一致性）
+- 想用 AI 工具（Midjourney、DALL-E）生成風格一致的 icon 或插畫
+- 管理、調整、匯出設計 token
+
+**限制**:
+- design-analyze / design-review 依賴 design-sense API，需網路連線
+- design-style 依賴 `agent-browser` skill（需另行安裝）
+- design-system export 依賴 Pencil MCP server（需在 Claude Code 設定中啟用）
+
+**來源**: 自製 skill，對應專案 `~/Workspace/design-sense`
+**詳細文件**: 各 skill 目錄下的 `SKILL.md`
