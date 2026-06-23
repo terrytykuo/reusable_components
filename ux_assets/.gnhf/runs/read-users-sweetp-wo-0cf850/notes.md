@@ -18,3 +18,18 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - MewGuard's design system lives in cat_toxin_app/constants/colors.ts (warm cream surfaces #F1ECE3, forest-green primary #1b9150, coral #E76953, and explicit safe/cautious/toxic severity colors) — the severity triad maps directly onto the app's three verdict states and drives the emotional tone of the verdict assets
 - The objective targets 40 assets but iterations are incremental; 12 well-crafted assets covering the full journey-stage spread is a verifiable first batch, with the footer/INDEX tracking '12 of 40' so future iterations can extend the same grid
 - headless Chrome --screenshot mode self-exits (no lingering background process), making it a clean way to visually verify illustration rendering quality for these assets
+
+### Iteration 2
+
+**Summary:** Extended the MewGuard sentimental-design asset kit from 12 to 20 of 40 assets by adding 8 app-grounded illustrations and a new "Care" journey stage, with INDEX.md and all gallery counts updated.
+
+**Changes:**
+- Added 8 new brand-tagged animated SVG assets (Mealtime logged, Step on the scale, Time for meds, Fresh claws, Vet day booked, Recall watch, Guardian+ unlocked, Swipe to explore) grounded in real cat_toxin_app features (care tabs, recalls, paywall, onboarding carousel)
+- Introduced a new 'Care' journey stage (5 assets) with its own filter chip, and rebalanced all stage counts, the asset count label, and the footer progress to 20 of 40
+- Added a new a-swipe keyframe animation wired into the <style>, the prefers-reduced-motion/Reduce-motion fallback lists, and the exportable ANIM_CSS so copied/downloaded SVGs stay self-animating
+- Updated INDEX.md with rows 13-20, status 20/40, the added care journey stage, and the a-swipe class in the conventions section
+
+**Learnings:**
+- The cat_toxin_app has a rich care-tracking surface (feeding/weight/medication/claw-trim/vet micro-forms, weight timeline, recalls, paywall) beyond the search/verdict core — these map cleanly onto a distinct 'Care' journey stage and a recall 'Alert' under emergency, giving authentic moments for future asset batches
+- Adding a new animation requires touching four places in mewguard.html to stay consistent: the <style> @keyframes + class, the @media prefers-reduced-motion list, the body.motion-reduced preview selectors, and the JS ANIM_CSS export array
+- 20 assets in a 3-column grid fit within a single 1200x2400 headless Chrome capture, so one full-page screenshot is enough to visually verify the whole kit at this scale
