@@ -129,3 +129,17 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - The kit had a pause toggle (freeze current frame) but no way to preview the prefers-reduced-motion RESTING state — these are genuinely different (mid-frame vs. completed/static fallback), so a reduce-motion preview was a non-redundant, on-narrative gap given the kit's heavy accessibility framing
 - The existing @media (prefers-reduced-motion) rule could be replicated verbatim under a body.motion-reduced class, but the .draw animation needed both stroke-dashoffset:0 AND animation:none with !important to force the completed check immediately rather than re-running the one-shot draw
 - agent-browser 'find text' clicking 'Reduce motion' then resolving 'Full motion' on the next click is the reliable verifier for this toggle's label/state flip, same pattern as the prior pause/dark toggles; the screenshot confirmed the success check renders fully-drawn in the static state
+
+### Iteration 10
+
+**Summary:** Added a 10th emotional-design asset — a "Be right back · Maintenance" cozy coffee-mug mascot — to the Mood kit, filling the underweight Waiting journey stage and verifying clean browser rendering.
+
+**Changes:**
+- Authored a new non-functional 'Grab a coffee' maintenance/downtime asset: an amber ceramic mug with handle, coffee surface, a blinking smiling face with rosy cheeks, and three staggered rising-steam wisps, with emotional goal, UX benefit, and maintenance/downtime/scheduled tags matching the existing card schema
+- Tagged the new card data-cat="waiting" and updated the journey-stage filter counts (All 9→10, Waiting 1→2) and the live asset count (9→10 assets), balancing the taxonomy from a lopsided 1-asset Waiting stage to 2
+- Reused only existing animations (a-float, a-rise, a-blink) so the asset is automatically covered by Copy SVG, Download .svg, pause, replay, dark-stage, and reduced-motion features with zero edits to the ANIM_CSS export array or reduced-motion guard
+
+**Learnings:**
+- Iterations 6-9 had all been adding preview toggles to a now-saturated filter bar; returning to the objective's core (build actual non-functional illustration assets) by adding a genuine 10th asset was the higher-value, on-objective increment
+- Choosing an asset that reuses only existing keyframe classes (a-float/a-rise/a-blink) sidesteps the 3-place sync hazard the notes warn about (page <style>, reduced-motion list, JS ANIM_CSS array) — new assets stay fully self-animating in copy/download exports for free
+- The mug body path (M40 62 H84 L81 92 a8 8 0 0 1 -8 7 H51 a8 8 0 0 1 -8 -7 Z) gives a clean tapered ceramic shape with rounded bottom corners using two arc segments — a simple alternative to hand-computing complex shapes like the medal star
