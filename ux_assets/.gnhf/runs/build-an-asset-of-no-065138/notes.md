@@ -72,3 +72,17 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 **Learnings:**
 - The existing buildSvg() helper already produced fully self-animating standalone markup, so the download feature reused it verbatim — only an XML prolog and Blob/object-URL plumbing were new, keeping copy and download exports identical and DRY
 - Verified the exported file with xmllint --noout (well-formed XML) in addition to browser checks; agent-browser's find-text on a transient toast fails because the toast is covered/faded, so a downloaded-file inspection is the reliable verification path for download features
+
+### Iteration 6
+
+**Summary:** Added a global play/pause motion toggle to the Mood asset kit that freezes every asset animation in place for inspection while reinforcing the kit's accessibility narrative.
+
+**Changes:**
+- Added a right-aligned motion-toggle button to the journey-stage filter bar that flips between 'Pause motion' (⏸) and 'Play motion' (▷) icon+label states, tinted with the accent color when active
+- Added a `body.motion-paused .stage svg *` rule using `animation-play-state: paused` so toggling freezes all asset animations in place (current frame preserved) rather than restarting or removing them
+- Wired a JS click handler that toggles the `motion-paused` body class and keeps aria-pressed/aria-label in sync for accessibility
+
+**Learnings:**
+- `animation-play-state: paused` applied via a body-level class freezes the current frame without restart, which is the right primitive for an inspect-a-frame feature (vs. `animation: none` which resets); a single `.stage svg *` selector covers every per-asset animation class at once without enumerating them
+- The filterbar's `.fb-count` used `margin-left:auto` to push right; inserting another right-aligned control required moving the `auto` margin onto the new toggle and giving the count a fixed small margin, since only one flex child can claim the auto margin
+- agent-browser's `find text` is a reliable toggle-state verifier here: 'Pause motion' then 'Play motion' both resolving to clickable elements confirms the label/state actually flipped, unlike transient toasts which fade before they can be asserted
