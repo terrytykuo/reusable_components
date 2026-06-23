@@ -115,3 +115,17 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - For an illustration/asset library, dark-surface preview is a genuine production concern: the 9 existing assets already used self-colored fills, so they read with strong contrast on a dark stage with zero per-asset edits — only the stage background and the white Replay pill needed dark variants
 - The iteration-6 right-grouped flex pattern generalizes cleanly: extracting a shared .fb-toggle class and putting margin-left:auto on whichever control is first in the right group lets new toggles be added without re-juggling per-button margins
 - Keeping card bodies light while only the stage goes dark realistically mirrors how an illustration sits inside a light app shell, which is a more useful preview than darkening the whole page
+
+### Iteration 9
+
+**Summary:** Added a "Reduce motion" preview toggle to the Mood asset kit that forces every asset into its prefers-reduced-motion resting state, letting designers verify the static accessibility fallback reads as intentional before shipping.
+
+**Changes:**
+- Added a 'Reduce motion / Full motion' toggle button to the filter bar (accessibility/activity icons, accent-tinted active state, full aria-label) that flips every asset into its prefers-reduced-motion static fallback for inspection
+- Added body.motion-reduced CSS that reuses the existing reduced-motion rules (animation:none on all infinite animations, stroke-dashoffset:0 on draw animations) so the still state matches exactly what reduced-motion users see — distinct from the iteration-6 pause toggle which freezes a mid-frame
+- Wired a JS click handler that toggles the motion-reduced body class and keeps aria-pressed/aria-label in sync, and updated footer copy to point at the new control as the way to preview the accessibility fallback
+
+**Learnings:**
+- The kit had a pause toggle (freeze current frame) but no way to preview the prefers-reduced-motion RESTING state — these are genuinely different (mid-frame vs. completed/static fallback), so a reduce-motion preview was a non-redundant, on-narrative gap given the kit's heavy accessibility framing
+- The existing @media (prefers-reduced-motion) rule could be replicated verbatim under a body.motion-reduced class, but the .draw animation needed both stroke-dashoffset:0 AND animation:none with !important to force the completed check immediately rather than re-running the one-shot draw
+- agent-browser 'find text' clicking 'Reduce motion' then resolving 'Full motion' on the next click is the reliable verifier for this toggle's label/state flip, same pattern as the prior pause/dark toggles; the screenshot confirmed the success check renders fully-drawn in the static state

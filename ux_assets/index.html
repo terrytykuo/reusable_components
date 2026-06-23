@@ -227,9 +227,9 @@
 
   <nav class="filterbar" id="filterbar" aria-label="Filter assets by journey stage">
     <span class="fb-label">Journey stage</span>
-    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">9</span></button>
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">10</span></button>
     <button type="button" class="chip" data-filter="onboarding" aria-pressed="false">Onboarding <span class="ct">2</span></button>
-    <button type="button" class="chip" data-filter="waiting" aria-pressed="false">Waiting <span class="ct">1</span></button>
+    <button type="button" class="chip" data-filter="waiting" aria-pressed="false">Waiting <span class="ct">2</span></button>
     <button type="button" class="chip" data-filter="feedback" aria-pressed="false">Feedback <span class="ct">3</span></button>
     <button type="button" class="chip" data-filter="recovery" aria-pressed="false">Recovery <span class="ct">2</span></button>
     <button type="button" class="chip" data-filter="delight" aria-pressed="false">Delight <span class="ct">1</span></button>
@@ -248,7 +248,7 @@
       <svg class="ic rm-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
       <span class="rm-on">Reduce motion</span><span class="rm-off">Full motion</span>
     </button>
-    <span class="fb-count" id="fbCount" aria-live="polite">9 assets</span>
+    <span class="fb-count" id="fbCount" aria-live="polite">10 assets</span>
   </nav>
 
   <div class="grid">
@@ -470,6 +470,40 @@
         <p class="goal">A gently beating heart turns a like, a thank-you, or a renewal into a warm, human moment.</p>
         <div class="benefit"><span class="ico">↑</span><span>Deepens emotional attachment and lifts retention at feel-good touchpoints.</span></div>
         <div class="tags"><span class="tag">like</span><span class="tag">thank-you</span><span class="tag">renewal</span></div>
+      </div>
+    </article>
+
+    <!-- 10. BE RIGHT BACK / MAINTENANCE -->
+    <article class="card" data-cat="waiting" style="--c:var(--joy)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cozy coffee mug — we'll be right back">
+          <ellipse cx="60" cy="104" rx="30" ry="6" fill="#cdd6e2"/>
+          <!-- rising steam -->
+          <path d="M50 50 q-5 -7 0 -13 q5 -6 0 -13" stroke="#cdd6e2" stroke-width="3" fill="none" stroke-linecap="round" class="a-rise" opacity=".7"/>
+          <path d="M60 48 q-5 -7 0 -13 q5 -6 0 -13" stroke="#cdd6e2" stroke-width="3" fill="none" stroke-linecap="round" class="a-rise" style="animation-delay:.5s" opacity=".85"/>
+          <path d="M70 50 q-5 -7 0 -13 q5 -6 0 -13" stroke="#cdd6e2" stroke-width="3" fill="none" stroke-linecap="round" class="a-rise" style="animation-delay:1s" opacity=".6"/>
+          <g class="a-float">
+            <!-- handle -->
+            <path d="M80 70 q16 0 16 14 q0 14 -16 12" stroke="#e08e12" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <!-- mug body -->
+            <path d="M40 62 H84 L81 92 a8 8 0 0 1 -8 7 H51 a8 8 0 0 1 -8 -7 Z" fill="#ffe6c7" stroke="#e08e12" stroke-width="3" stroke-linejoin="round"/>
+            <!-- coffee surface -->
+            <ellipse cx="62" cy="63" rx="22" ry="5" fill="#7a4a26"/>
+            <!-- friendly face -->
+            <circle cx="55" cy="78" r="2.6" fill="#1c2026" class="a-blink"/>
+            <circle cx="69" cy="78" r="2.6" fill="#1c2026" class="a-blink"/>
+            <path d="M55 84 Q62 89 69 84" stroke="#1c2026" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="50" cy="83" r="3" fill="#f29ec0" opacity=".5"/>
+            <circle cx="74" cy="83" r="3" fill="#f29ec0" opacity=".5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Be right back · Maintenance</div>
+        <div class="name">Grab a coffee</div>
+        <p class="goal">Planned downtime is unavoidable; a warm mug reframes the wait as a short, friendly break — not a broken product.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns maintenance frustration into patience and protects trust during outages.</span></div>
+        <div class="tags"><span class="tag">maintenance</span><span class="tag">downtime</span><span class="tag">scheduled</span></div>
       </div>
     </article>
 
