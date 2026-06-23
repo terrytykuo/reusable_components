@@ -20,7 +20,7 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
-**Status:** 12 of 40 planned assets. **Tag:** every asset carries the `mewguard` brand tag.
+**Status:** 20 of 40 planned assets. **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
 |---|-------|-------|------|-----------|
@@ -36,8 +36,16 @@ A recurring cat mascot is the face of "we've got you."
 | 10 | Lost the thread | Recovery | Offline | Tangled-yarn cat frames a dropped connection as fixable, not the user's fault |
 | 11 | Saved to My Cats | Delight | Feedback | Heart pop + purr rewards saving a substance to a cat's profile |
 | 12 | Resting easy | Delight | Ambient | Sleeping cat is visual proof that all is well |
+| 13 | Mealtime logged | Care | Feedback | Full bowl + heart rewards logging a feeding in the care tracker |
+| 14 | Step on the scale | Care | Empty state | Cat-on-a-scale makes the empty weight timeline approachable, not clinical |
+| 15 | Time for meds | Care | Reminder | Soft-pulsing capsule nudges on-time dosing without alarm |
+| 16 | Fresh claws | Care | Feedback | Tidy paw + sparkle gives grooming/claw-trim logs a small payoff |
+| 17 | Vet day booked | Care | Confirmation | Stamped calendar with a check closes the loop on care planning |
+| 18 | Recall watch | Emergency | Alert | Friendly ringing bell flags a product recall as important, not catastrophic |
+| 19 | Guardian+ unlocked | Onboarding | Premium | Crowned mascot frames the paywall as richer care, not a wall |
+| 20 | Swipe to explore | Onboarding | Intro | Sweeping paw teaches the onboarding carousel gesture without words |
 
-**Journey stages:** onboarding · search · verdict · recovery · emergency · delight.
+**Journey stages:** onboarding · search · verdict · care · recovery · emergency · delight.
 
 ---
 
@@ -55,8 +63,8 @@ general-purpose reference companion to the app-specific MewGuard kit above.
 
 - **Format** — pure inline `<svg>` + a small `<style>` of `@keyframes`; no JS framework, no build step.
 - **Animation classes** — `a-float`, `a-blink`, `a-sway`, `a-pop`, `a-spin`, `a-pulse`, `a-wiggle`,
-  `a-orbit`, `a-rise`, `a-twinkle`, `a-heartbeat`, plus MewGuard's `a-purr` / `a-tailwag`; one-shots
-  use the `draw` / `pop` / `conf` (confetti) helpers.
+  `a-orbit`, `a-rise`, `a-twinkle`, `a-heartbeat`, plus MewGuard's `a-purr` / `a-tailwag` / `a-swipe`;
+  one-shots use the `draw` / `pop` / `conf` (confetti) helpers.
 - **Accessibility** — every stage `<svg>` has a descriptive `role="img"` + `aria-label`; all motion
   collapses to a static resting frame under `prefers-reduced-motion: reduce`.
 - **Export** — **Copy SVG** / **Download** embed the needed `@keyframes` inside the SVG, so a pasted
