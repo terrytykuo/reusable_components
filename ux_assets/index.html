@@ -76,6 +76,12 @@
   body.stage-dark .stage-toggle .st-light { display: inline; }
   body.stage-dark .stage-toggle { border-color: var(--accent); color: var(--accent); }
 
+  .reduce-toggle .rm-on  { display: inline; }
+  .reduce-toggle .rm-off { display: none; }
+  body.motion-reduced .reduce-toggle .rm-on  { display: none; }
+  body.motion-reduced .reduce-toggle .rm-off { display: inline; }
+  body.motion-reduced .reduce-toggle { border-color: var(--accent); color: var(--accent); }
+
   .fb-count { margin-left: 4px; font-size: 12.5px; color: var(--faint); font-weight: 600; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 22px; }
@@ -180,6 +186,22 @@
   /* Global motion toggle — freeze every asset animation in place for inspection */
   body.motion-paused .stage svg * { animation-play-state: paused !important; }
 
+  /* Reduce-motion preview — force the resting/static fallback that prefers-reduced-motion users see,
+     so designers can verify the still state reads as intentional (distinct from the mid-frame freeze above) */
+  body.motion-reduced .stage svg .a-float,
+  body.motion-reduced .stage svg .a-blink,
+  body.motion-reduced .stage svg .a-sway,
+  body.motion-reduced .stage svg .a-pop,
+  body.motion-reduced .stage svg .a-spin,
+  body.motion-reduced .stage svg .a-pulse,
+  body.motion-reduced .stage svg .a-wiggle,
+  body.motion-reduced .stage svg .a-orbit,
+  body.motion-reduced .stage svg .a-rise,
+  body.motion-reduced .stage svg .a-twinkle,
+  body.motion-reduced .stage svg .a-heartbeat,
+  body.motion-reduced .stage svg .conf { animation: none !important; }
+  body.motion-reduced .stage svg .draw { stroke-dashoffset: 0 !important; animation: none !important; }
+
   /* Dark-stage preview — check how each illustration reads on a dark product surface */
   body.stage-dark .stage { background: linear-gradient(160deg, #262d39 0%, #181d26 100%); }
   body.stage-dark .stage .replay-btn { background: rgba(38,45,57,.82); border-color: rgba(255,255,255,.16); }
@@ -220,6 +242,11 @@
       <svg class="ic mt-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
       <svg class="ic mt-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg>
       <span class="mt-pause">Pause motion</span><span class="mt-play">Play motion</span>
+    </button>
+    <button type="button" class="fb-toggle reduce-toggle" id="reduceToggle" aria-pressed="false" aria-label="Preview the reduced-motion fallback">
+      <svg class="ic rm-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.6" r="1.4"/><path d="M5 8c2.4 1.1 4.5 1.4 7 1.4S16.6 9.1 19 8"/><path d="M12 9.4v5.2"/><path d="M8.6 21l3.4-6 3.4 6"/></svg>
+      <svg class="ic rm-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      <span class="rm-on">Reduce motion</span><span class="rm-off">Full motion</span>
     </button>
     <span class="fb-count" id="fbCount" aria-live="polite">9 assets</span>
   </nav>
@@ -452,7 +479,7 @@
 
   <footer>
     <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
-    <code>prefers-reduced-motion</code>. <b>Copy SVG</b> drops self-animating markup onto your clipboard, or hit the
+    <code>prefers-reduced-motion</code> — toggle <b>Reduce motion</b> to preview that still fallback. <b>Copy SVG</b> drops self-animating markup onto your clipboard, or hit the
     <b>download</b> button to save a standalone <code>.svg</code> file — both embed their own animation
     <code>&lt;style&gt;</code>, so the asset stays alive the moment you paste or open it.
   </footer>
@@ -652,6 +679,16 @@
       var dark = document.body.classList.toggle('stage-dark');
       stageBtn.setAttribute('aria-pressed', String(dark));
       stageBtn.setAttribute('aria-label', dark ? 'Preview assets on a light surface' : 'Preview assets on a dark surface');
+    });
+  }
+
+  // ---- Reduce-motion preview toggle (force the static prefers-reduced-motion fallback) ----
+  var reduceBtn = document.getElementById('reduceToggle');
+  if (reduceBtn) {
+    reduceBtn.addEventListener('click', function () {
+      var reduced = document.body.classList.toggle('motion-reduced');
+      reduceBtn.setAttribute('aria-pressed', String(reduced));
+      reduceBtn.setAttribute('aria-label', reduced ? 'Restore full motion' : 'Preview the reduced-motion fallback');
     });
   }
 })();

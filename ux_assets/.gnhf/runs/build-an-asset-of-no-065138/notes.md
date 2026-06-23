@@ -100,3 +100,18 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - The kit's .a-pop and .draw animations are one-shot (fire once on load then sit static), so for an inspect-the-asset library a replay affordance was the highest-value remaining gap — copy/download/filter/pause were already shipped in iterations 2-6
 - The restart trick needs a forced reflow between removing and re-adding animations; reading svg.getBoundingClientRect() after toggling .anim-off (which sets animation:none !important on all SVG descendants) reliably flushes layout so the animations restart instead of being coalesced away
 - A single '.stage svg.anim-off *' selector covers every per-asset animation class at once — same one-selector pattern the iteration-6 pause toggle used — so replay needed no per-animation wiring
+
+### Iteration 8
+
+**Summary:** Added a "Dark stage" preview toggle to the Mood asset kit that flips every asset stage to a dark product surface, letting designers verify how each illustration reads on dark-mode backgrounds before shipping.
+
+**Changes:**
+- Added a 'Dark stage / Light stage' toggle button to the filter bar (moon/sun icons, accent-tinted active state, full aria-label) that switches all asset stages between light and dark backgrounds for inspection
+- Added body.stage-dark CSS that repaints every .stage with a dark gradient and re-tints the hover Replay pill for contrast, leaving card bodies light to simulate an illustration zone within a light UI
+- Refactored the shared toggle styling into a reusable .fb-toggle class (consumed by both the new stage toggle and the existing motion toggle) and moved the right-group auto-margin onto the new first control
+- Wired a JS click handler that toggles the stage-dark body class and keeps aria-pressed/aria-label in sync
+
+**Learnings:**
+- For an illustration/asset library, dark-surface preview is a genuine production concern: the 9 existing assets already used self-colored fills, so they read with strong contrast on a dark stage with zero per-asset edits — only the stage background and the white Replay pill needed dark variants
+- The iteration-6 right-grouped flex pattern generalizes cleanly: extracting a shared .fb-toggle class and putting margin-left:auto on whichever control is first in the right group lets new toggles be added without re-juggling per-button margins
+- Keeping card bodies light while only the stage goes dark realistically mirrors how an illustration sits inside a light app shell, which is a more useful preview than darkening the whole page
