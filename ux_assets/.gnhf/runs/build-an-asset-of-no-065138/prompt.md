@@ -1,0 +1,1 @@
+build an asset of non-functional illustration, assets, or ui components where that fits the emotional design goal and can increase ux. Build a html page to display the series of assets. You can search online to get inspired. 

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mood — Emotional Design Asset Kit</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --panel-2: #f1f3f6;
+    --border: #e2e5ea;
+    --text: #1c2026;
+    --muted: #5b6472;
+    --faint: #8a93a2;
+    --accent: #e07b39;
+    --joy: #f5a623;
+    --calm: #2f7dc4;
+    --care: #1f9d76;
+    --warm: #c84d86;
+    --sky: #6aa9e9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 70% -10%, #eef1f6 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  header.hero { margin-bottom: 30px; }
+  .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; }
+  h1 { font-size: 42px; line-height: 1.08; margin: 10px 0 12px; font-weight: 800; letter-spacing: -.02em; }
+  .lede { color: var(--muted); max-width: 740px; font-size: 16px; }
+  .lede b { color: var(--text); }
+
+  .principles { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .principle { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; box-shadow: 0 1px 2px rgba(20,30,50,.04); max-width: 230px; }
+  .principle .pt { font-weight: 800; font-size: 13.5px; }
+  .principle .pd { color: var(--faint); font-size: 12.5px; margin-top: 2px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 38px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: .18s; box-shadow: 0 1px 2px rgba(20,30,50,.04); border-top: 4px solid var(--c); }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(20,30,50,.09); }
+  .stage { height: 210px; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--panel) 0%, var(--panel-2) 100%); position: relative; }
+  .stage svg { width: 160px; height: 160px; overflow: visible; }
+  .body { padding: 16px 18px 20px; }
+  .kind { color: var(--c); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+  .name { font-weight: 800; font-size: 18px; margin: 3px 0 8px; letter-spacing: -.01em; }
+  .goal { font-size: 13.5px; color: var(--muted); margin: 0 0 12px; }
+  .benefit { display: flex; gap: 9px; align-items: flex-start; font-size: 12.5px; color: var(--text); background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; }
+  .benefit .ico { flex-shrink: 0; color: var(--c); font-weight: 800; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 999px; font-weight: 600; }
+
+  footer { margin-top: 56px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--border); padding-top: 22px; }
+  footer b { color: var(--muted); }
+
+  /* ---------- Asset animations ---------- */
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+  @keyframes sway { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+  @keyframes pop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes confetti { 0% { transform: translateY(0) rotate(0); opacity: 1; } 100% { transform: translateY(-46px) rotate(220deg); opacity: 0; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.12); opacity: .5; } }
+  @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(8deg); } 75% { transform: rotate(-8deg); } }
+  @keyframes orbit { to { transform: rotate(-360deg); } }
+  @keyframes rise { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+  .a-float { animation: float 4s ease-in-out infinite; transform-origin: center; }
+  .a-blink { animation: blink 5s ease-in-out infinite; transform-origin: center; }
+  .a-sway  { animation: sway 4.5s ease-in-out infinite; transform-origin: 50% 90%; }
+  .a-pop   { animation: pop .7s cubic-bezier(.2,1.3,.4,1) both; }
+  .a-spin  { animation: spin 1.4s linear infinite; transform-origin: center; }
+  .a-pulse { animation: pulse 2.6s ease-in-out infinite; transform-origin: center; }
+  .a-wiggle{ animation: wiggle 3.5s ease-in-out infinite; transform-origin: 50% 80%; }
+  .a-orbit { animation: orbit 6s linear infinite; transform-origin: center; }
+  .a-rise  { animation: rise 3s ease-in-out infinite; transform-origin: center; }
+
+  .draw { stroke-dasharray: 90; stroke-dashoffset: 90; animation: draw 1s ease-out .25s forwards; }
+  .conf { animation: confetti 1.3s ease-out infinite; }
+  .conf:nth-child(odd) { animation-duration: 1.6s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.conf { animation: none; }
+    .draw { stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Reusable Components · UX Assets</div>
+    <h1>Mood — an emotional-design asset kit</h1>
+    <p class="lede">
+      A series of <b>non-functional</b> illustrations and animated assets. They render no data and gate no flow —
+      their only job is to make the moments <i>around</i> the work feel human: less anxious, more delightful, worth coming back to.
+      Each asset is mapped to one emotional moment in a product journey, with the <b>UX payoff</b> it earns.
+    </p>
+    <div class="principles">
+      <div class="principle"><div class="pt">Visceral</div><div class="pd">First-glance warmth — soft shapes, friendly faces, gentle motion.</div></div>
+      <div class="principle"><div class="pt">Behavioral</div><div class="pd">Motion reassures: progress, success, and patience made visible.</div></div>
+      <div class="principle"><div class="pt">Reflective</div><div class="pd">Personality the user remembers and re-tells to others.</div></div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- 1. EMPTY STATE -->
+    <article class="card" style="--c:var(--calm)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Friendly empty box illustration">
+          <g class="a-float">
+            <ellipse cx="60" cy="104" rx="34" ry="6" fill="#cdd6e2"/>
+            <path d="M30 58 L60 46 L90 58 L60 70 Z" fill="#bcd3ef"/>
+            <path d="M30 58 L30 86 L60 98 L60 70 Z" fill="#8fb8e6"/>
+            <path d="M90 58 L90 86 L60 98 L60 70 Z" fill="#6aa9e9"/>
+            <circle cx="52" cy="64" r="2.6" fill="#1c2026" class="a-blink"/>
+            <circle cx="64" cy="69" r="2.6" fill="#1c2026" class="a-blink"/>
+            <path d="M53 74 Q59 78 65 74" stroke="#1c2026" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="42" cy="34" r="3" fill="#f5a623" class="a-rise"/>
+            <circle cx="84" cy="40" r="2.4" fill="#c84d86" class="a-rise" style="animation-delay:.6s"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State</div>
+        <div class="name">Nothing here — yet</div>
+        <p class="goal">A blank list is a dead end. A cheerful box turns absence into an invitation to start.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Cuts the "is it broken?" anxiety of empty screens and points to the first action.</span></div>
+        <div class="tags"><span class="tag">lists</span><span class="tag">first-run</span><span class="tag">search-zero</span></div>
+      </div>
+    </article>
+
+    <!-- 2. SUCCESS / CELEBRATION -->
+    <article class="card" style="--c:var(--care)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Success checkmark with confetti">
+          <g class="a-pop">
+            <circle cx="60" cy="60" r="34" fill="#dff2ea"/>
+            <circle cx="60" cy="60" r="34" fill="none" stroke="#1f9d76" stroke-width="3" opacity=".3"/>
+            <path d="M46 61 L56 71 L76 49" stroke="#1f9d76" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+          </g>
+          <rect class="conf" x="26" y="40" width="5" height="9" rx="1.5" fill="#f5a623"/>
+          <rect class="conf" x="90" y="44" width="5" height="9" rx="1.5" fill="#c84d86" style="animation-delay:.2s"/>
+          <rect class="conf" x="40" y="30" width="5" height="9" rx="1.5" fill="#2f7dc4" style="animation-delay:.45s"/>
+          <rect class="conf" x="78" y="32" width="5" height="9" rx="1.5" fill="#1f9d76" style="animation-delay:.65s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Success</div>
+        <div class="name">Done — and it felt good</div>
+        <p class="goal">A drawn-on check plus a confetti burst rewards completion the instant it happens.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Positive reinforcement closes the loop and nudges the next action.</span></div>
+        <div class="tags"><span class="tag">submit</span><span class="tag">checkout</span><span class="tag">streaks</span></div>
+      </div>
+    </article>
+
+    <!-- 3. ERROR / REASSURANCE -->
+    <article class="card" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Gentle unplugged cable, calm error">
+          <g class="a-sway">
+            <path d="M40 40 q-12 14 0 30" stroke="#e9b08a" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <rect x="34" y="64" width="14" height="16" rx="4" fill="#e07b39"/>
+            <path d="M80 40 q12 14 0 30" stroke="#e9b08a" stroke-width="7" fill="none" stroke-linecap="round"/>
+            <rect x="72" y="64" width="14" height="16" rx="4" fill="#e07b39"/>
+            <circle cx="79" cy="60" r="1.6" fill="#1c2026"/>
+            <circle cx="83" cy="62" r="1.6" fill="#1c2026"/>
+            <path d="M77 67 Q79 65 81 67" stroke="#1c2026" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <path d="M58 54 l4 0 m-2 -2 l0 4" stroke="#f5a623" stroke-width="2" stroke-linecap="round" class="a-pulse"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Error · Reassurance</div>
+        <div class="name">A loose connection</div>
+        <p class="goal">An unplugged-cable mascot frames failure as fixable and small — never the user's fault.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Defuses frustration and lowers rage-quits; pairs with a clear retry.</span></div>
+        <div class="tags"><span class="tag">network</span><span class="tag">500</span><span class="tag">offline</span></div>
+      </div>
+    </article>
+
+    <!-- 4. LOADING / PATIENCE -->
+    <article class="card" style="--c:var(--sky)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Playful orbiting loader">
+          <circle cx="60" cy="60" r="26" fill="none" stroke="#e2e5ea" stroke-width="6"/>
+          <g class="a-orbit">
+            <circle cx="60" cy="34" r="7" fill="#6aa9e9"/>
+          </g>
+          <g class="a-orbit" style="animation-duration:2.4s">
+            <circle cx="60" cy="86" r="5" fill="#f5a623"/>
+          </g>
+          <circle cx="60" cy="60" r="9" fill="#fff" stroke="#cdd6e2" stroke-width="2" class="a-pulse"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Loading · Patience</div>
+        <div class="name">Hang tight</div>
+        <p class="goal">Two cheerful dots orbiting a calm core make a wait feel shorter and intentional.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Continuous motion lowers perceived wait time and signals "still working".</span></div>
+        <div class="tags"><span class="tag">fetch</span><span class="tag">upload</span><span class="tag">processing</span></div>
+      </div>
+    </article>
+
+    <!-- 5. WELCOME / MASCOT -->
+    <article class="card" style="--c:var(--warm)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Waving welcome mascot">
+          <g class="a-float">
+            <ellipse cx="60" cy="106" rx="26" ry="5" fill="#e6cdd9"/>
+            <rect x="40" y="50" width="40" height="42" rx="20" fill="#c84d86"/>
+            <circle cx="60" cy="44" r="22" fill="#f6d7e5"/>
+            <circle cx="53" cy="42" r="3" fill="#1c2026" class="a-blink"/>
+            <circle cx="67" cy="42" r="3" fill="#1c2026" class="a-blink"/>
+            <circle cx="48" cy="48" r="3.5" fill="#f29ec0" opacity=".7"/>
+            <circle cx="72" cy="48" r="3.5" fill="#f29ec0" opacity=".7"/>
+            <path d="M54 51 Q60 56 66 51" stroke="#1c2026" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <g class="a-wiggle" style="transform-origin:84px 60px">
+              <rect x="80" y="52" width="9" height="20" rx="4.5" fill="#c84d86"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Welcome · Mascot</div>
+        <div class="name">Hi, glad you're here</div>
+        <p class="goal">A small waving character greets first-run users and gives the product a face.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Builds early emotional connection and warms up onboarding.</span></div>
+        <div class="tags"><span class="tag">onboarding</span><span class="tag">splash</span><span class="tag">tooltip</span></div>
+      </div>
+    </article>
+
+    <!-- 6. 404 / LOST -->
+    <article class="card" style="--c:var(--joy)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Whimsical lost paper plane and 404">
+          <text x="60" y="50" text-anchor="middle" font-size="30" font-weight="800" fill="#cdd6e2" font-family="-apple-system,sans-serif">404</text>
+          <g class="a-float" style="animation-duration:3.2s">
+            <path d="M30 78 L92 56 L58 92 L52 74 Z" fill="#f5a623"/>
+            <path d="M58 92 L52 74 L70 70 Z" fill="#e08e12"/>
+            <path d="M30 78 L52 74 L58 92" fill="none" stroke="#fff" stroke-width="1.5" opacity=".5"/>
+          </g>
+          <path d="M26 92 q18 -10 30 -4" stroke="#cdd6e2" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="3 5"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">404 · Lost</div>
+        <div class="name">This page flew off</div>
+        <p class="goal">A wandering paper plane turns a dead-end URL into a light, forgivable moment.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Keeps the user smiling instead of bouncing; pairs with a "go home" link.</span></div>
+        <div class="tags"><span class="tag">404</span><span class="tag">not-found</span><span class="tag">routing</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
+    <code>prefers-reduced-motion</code>. Drop a card's <code>&lt;svg&gt;</code> straight into any project.
+  </footer>
+</div>
+</body>
+</html>
