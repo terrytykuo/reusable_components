@@ -32,3 +32,17 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - The iteration-1 page already shipped 6 polished assets and rendered cleanly, so the highest-value increment was usability (extraction) rather than adding more assets
 - Embedding the animation CSS as an SVG-namespaced <style> inside the cloned SVG is what makes copied assets drop-in functional — without it the .a-* classes are dead outside this page
 - agent-browser's 'find text click' confirms success ('Done') but clipboard read isn't directly exposed; visual screenshot + zero console errors + correct aria-labels were sufficient to verify the feature
+
+### Iteration 3
+
+**Summary:** Expanded the "Mood" emotional-design kit from 6 to 9 assets by adding self-animating Saved/Synced cloud, Achievement medal, and Appreciation heart SVGs, fully wired into the existing Copy-SVG export, and verified clean browser rendering with no errors.
+
+**Changes:**
+- Added 3 new non-functional animated SVG assets covering previously-missing emotional moments: a cloud-with-check 'Saved · Synced' (trust/autosave), a sparkling medal+star 'Achievement · Pride' (milestone/gamification), and a beating-heart 'Appreciation · Delight' (like/thank-you/renewal), each with emotional goal, UX benefit, and use-case tags matching the existing card schema
+- Introduced two new CSS keyframe animations (twinkle, heartbeat) with a-twinkle/a-heartbeat classes and added them to the prefers-reduced-motion guard so the new assets respect accessibility settings
+- Extended the Copy-SVG ANIM_CSS export array with the twinkle/heartbeat keyframes, classes, and reduced-motion rule so the 3 new assets stay self-animating when copied into any project, keeping the export feature consistent across all 9 cards
+
+**Learnings:**
+- Adding any new asset animation requires three synchronized edits to keep the kit consistent: the page <style> block, the prefers-reduced-motion list (in both <style> and ANIM_CSS), and the JS ANIM_CSS export array — missing the export array would make copied assets render statically
+- The grid (auto-fill minmax(330px,1fr)) cleanly absorbed 9 cards into a balanced 3x3 layout with no layout changes needed, so the kit can keep growing without touching CSS structure
+- Hand-computed 5-point star path coordinates (outer r=13 / inner r=5.2 around center 60,52) produced a clean medal star without needing a path-generation library

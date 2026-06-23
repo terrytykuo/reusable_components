@@ -42,7 +42,22 @@
   .principle .pt { font-weight: 800; font-size: 13.5px; }
   .principle .pd { color: var(--faint); font-size: 12.5px; margin-top: 2px; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 38px; }
+  .filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 34px; }
+  .filterbar .fb-label { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
+  .chip {
+    font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    color: var(--muted); background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px;
+    transition: .15s; -webkit-font-smoothing: antialiased; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+  .chip .ct { background: var(--panel-2); color: var(--faint); font-size: 11px; font-weight: 700; border-radius: 999px; padding: 0 7px; line-height: 17px; transition: .15s; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .chip[aria-pressed="true"] .ct { background: rgba(255,255,255,.25); color: #fff; }
+  .fb-count { margin-left: auto; font-size: 12.5px; color: var(--faint); font-weight: 600; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 22px; }
+  .card.hide { display: none; }
+  .empty-note { display: none; color: var(--faint); font-size: 14px; margin-top: 24px; }
   .card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: .18s; box-shadow: 0 1px 2px rgba(20,30,50,.04); border-top: 4px solid var(--c); }
   .card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(20,30,50,.09); }
   .stage { height: 210px; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--panel) 0%, var(--panel-2) 100%); position: relative; }
@@ -131,10 +146,21 @@
     </div>
   </header>
 
+  <nav class="filterbar" id="filterbar" aria-label="Filter assets by journey stage">
+    <span class="fb-label">Journey stage</span>
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">9</span></button>
+    <button type="button" class="chip" data-filter="onboarding" aria-pressed="false">Onboarding <span class="ct">2</span></button>
+    <button type="button" class="chip" data-filter="waiting" aria-pressed="false">Waiting <span class="ct">1</span></button>
+    <button type="button" class="chip" data-filter="feedback" aria-pressed="false">Feedback <span class="ct">3</span></button>
+    <button type="button" class="chip" data-filter="recovery" aria-pressed="false">Recovery <span class="ct">2</span></button>
+    <button type="button" class="chip" data-filter="delight" aria-pressed="false">Delight <span class="ct">1</span></button>
+    <span class="fb-count" id="fbCount" aria-live="polite">9 assets</span>
+  </nav>
+
   <div class="grid">
 
     <!-- 1. EMPTY STATE -->
-    <article class="card" style="--c:var(--calm)">
+    <article class="card" data-cat="onboarding" style="--c:var(--calm)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Friendly empty box illustration">
           <g class="a-float">
@@ -160,7 +186,7 @@
     </article>
 
     <!-- 2. SUCCESS / CELEBRATION -->
-    <article class="card" style="--c:var(--care)">
+    <article class="card" data-cat="feedback" style="--c:var(--care)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Success checkmark with confetti">
           <g class="a-pop">
@@ -184,7 +210,7 @@
     </article>
 
     <!-- 3. ERROR / REASSURANCE -->
-    <article class="card" style="--c:var(--accent)">
+    <article class="card" data-cat="recovery" style="--c:var(--accent)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Gentle unplugged cable, calm error">
           <g class="a-sway">
@@ -209,7 +235,7 @@
     </article>
 
     <!-- 4. LOADING / PATIENCE -->
-    <article class="card" style="--c:var(--sky)">
+    <article class="card" data-cat="waiting" style="--c:var(--sky)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Playful orbiting loader">
           <circle cx="60" cy="60" r="26" fill="none" stroke="#e2e5ea" stroke-width="6"/>
@@ -232,7 +258,7 @@
     </article>
 
     <!-- 5. WELCOME / MASCOT -->
-    <article class="card" style="--c:var(--warm)">
+    <article class="card" data-cat="onboarding" style="--c:var(--warm)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Waving welcome mascot">
           <g class="a-float">
@@ -260,7 +286,7 @@
     </article>
 
     <!-- 6. 404 / LOST -->
-    <article class="card" style="--c:var(--joy)">
+    <article class="card" data-cat="recovery" style="--c:var(--joy)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Whimsical lost paper plane and 404">
           <text x="60" y="50" text-anchor="middle" font-size="30" font-weight="800" fill="#cdd6e2" font-family="-apple-system,sans-serif">404</text>
@@ -282,7 +308,7 @@
     </article>
 
     <!-- 7. SAVED / SYNCED -->
-    <article class="card" style="--c:var(--calm)">
+    <article class="card" data-cat="feedback" style="--c:var(--calm)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Cloud saved and synced confirmation">
           <g class="a-float">
@@ -307,7 +333,7 @@
     </article>
 
     <!-- 8. ACHIEVEMENT / PRIDE -->
-    <article class="card" style="--c:var(--joy)">
+    <article class="card" data-cat="feedback" style="--c:var(--joy)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Achievement medal with star">
           <path d="M52 64 L47 92 L57 83 L60 90 Z" fill="#c84d86"/>
@@ -333,7 +359,7 @@
     </article>
 
     <!-- 9. APPRECIATION / DELIGHT -->
-    <article class="card" style="--c:var(--warm)">
+    <article class="card" data-cat="delight" style="--c:var(--warm)">
       <div class="stage">
         <svg viewBox="0 0 120 120" role="img" aria-label="Beating heart of appreciation">
           <g class="a-heartbeat" style="transform-origin:60px 60px">
@@ -354,6 +380,8 @@
     </article>
 
   </div>
+
+  <p class="empty-note" id="emptyNote">No assets in this stage yet.</p>
 
   <footer>
     <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
@@ -459,6 +487,30 @@
     });
 
     card.querySelector('.body').appendChild(btn);
+  });
+
+  // ---- Journey-stage filtering ----
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.filterbar .chip'));
+  var countEl = document.getElementById('fbCount');
+  var emptyNote = document.getElementById('emptyNote');
+
+  function applyFilter(filter) {
+    var shown = 0;
+    cards.forEach(function (card) {
+      var match = filter === 'all' || card.getAttribute('data-cat') === filter;
+      card.classList.toggle('hide', !match);
+      if (match) shown++;
+    });
+    chips.forEach(function (chip) {
+      chip.setAttribute('aria-pressed', String(chip.getAttribute('data-filter') === filter));
+    });
+    countEl.textContent = shown + (shown === 1 ? ' asset' : ' assets');
+    emptyNote.style.display = shown === 0 ? 'block' : 'none';
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () { applyFilter(chip.getAttribute('data-filter')); });
   });
 })();
 </script>
