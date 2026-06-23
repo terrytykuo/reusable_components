@@ -86,3 +86,17 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - `animation-play-state: paused` applied via a body-level class freezes the current frame without restart, which is the right primitive for an inspect-a-frame feature (vs. `animation: none` which resets); a single `.stage svg *` selector covers every per-asset animation class at once without enumerating them
 - The filterbar's `.fb-count` used `margin-left:auto` to push right; inserting another right-aligned control required moving the `auto` margin onto the new toggle and giving the count a fixed small margin, since only one flex child can claim the auto margin
 - agent-browser's `find text` is a reliable toggle-state verifier here: 'Pause motion' then 'Play motion' both resolving to clickable elements confirms the label/state actually flipped, unlike transient toasts which fade before they can be asserted
+
+### Iteration 7
+
+**Summary:** Added a per-asset hover "Replay" control to the Mood kit that restarts each asset's animation from frame 0, letting designers re-watch the one-shot success/medal/cloud animations that previously only played once on load.
+
+**Changes:**
+- Added a Replay pill button to every asset stage (hover/focus-revealed, tinted with the card's emotion accent, with a full aria-label) that re-runs the asset's animation on click
+- Implemented a replayAnimations() helper using the animation:none → forced-reflow → restore trick via a single .anim-off class on the SVG, restarting all of an asset's animations (one-shots and infinites) without enumerating animation names
+- Verified in-browser: all 9 Replay buttons generate correctly, clicking re-triggers the one-shot draw/confetti animation, and there are zero console errors
+
+**Learnings:**
+- The kit's .a-pop and .draw animations are one-shot (fire once on load then sit static), so for an inspect-the-asset library a replay affordance was the highest-value remaining gap — copy/download/filter/pause were already shipped in iterations 2-6
+- The restart trick needs a forced reflow between removing and re-adding animations; reading svg.getBoundingClientRect() after toggling .anim-off (which sets animation:none !important on all SVG descendants) reliably flushes layout so the animations restart instead of being coalesced away
+- A single '.stage svg.anim-off *' selector covers every per-asset animation class at once — same one-selector pattern the iteration-6 pause toggle used — so replay needed no per-animation wiring
