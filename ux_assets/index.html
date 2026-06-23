@@ -56,6 +56,24 @@
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 999px; font-weight: 600; }
 
+  .copy-btn {
+    margin-top: 14px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    color: var(--c); background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
+    transition: .15s; -webkit-font-smoothing: antialiased;
+  }
+  .copy-btn:hover { background: #fff; border-color: var(--c); transform: translateY(-1px); }
+  .copy-btn:active { transform: translateY(0); }
+  .copy-btn svg.ic { width: 15px; height: 15px; overflow: visible; }
+  .copy-btn.done { color: var(--care); border-color: var(--care); background: #eef9f3; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: #fff; font-size: 13px; font-weight: 600; padding: 11px 18px; border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(20,30,50,.22); opacity: 0; pointer-events: none; transition: .25s; z-index: 50;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   footer { margin-top: 56px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--border); padding-top: 22px; }
   footer b { color: var(--muted); }
 
@@ -263,8 +281,106 @@
 
   <footer>
     <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
-    <code>prefers-reduced-motion</code>. Drop a card's <code>&lt;svg&gt;</code> straight into any project.
+    <code>prefers-reduced-motion</code>. Hit <b>Copy SVG</b> on any card — the copied markup embeds its own animation
+    <code>&lt;style&gt;</code>, so it stays self-animating the moment you paste it into any project.
   </footer>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
+
+<script>
+(function () {
+  // The minimal animation stylesheet each asset depends on. Embedded inside the
+  // copied <svg> so the asset stays self-animating when dropped into any project.
+  var ANIM_CSS = [
+    '@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}',
+    '@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}',
+    '@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}',
+    '@keyframes pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}',
+    '@keyframes draw{to{stroke-dashoffset:0}}',
+    '@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(-46px) rotate(220deg);opacity:0}}',
+    '@keyframes spin{to{transform:rotate(360deg)}}',
+    '@keyframes pulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.12);opacity:.5}}',
+    '@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(8deg)}75%{transform:rotate(-8deg)}}',
+    '@keyframes orbit{to{transform:rotate(-360deg)}}',
+    '@keyframes rise{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}',
+    '.a-float{animation:float 4s ease-in-out infinite;transform-origin:center}',
+    '.a-blink{animation:blink 5s ease-in-out infinite;transform-origin:center}',
+    '.a-sway{animation:sway 4.5s ease-in-out infinite;transform-origin:50% 90%}',
+    '.a-pop{animation:pop .7s cubic-bezier(.2,1.3,.4,1) both}',
+    '.a-spin{animation:spin 1.4s linear infinite;transform-origin:center}',
+    '.a-pulse{animation:pulse 2.6s ease-in-out infinite;transform-origin:center}',
+    '.a-wiggle{animation:wiggle 3.5s ease-in-out infinite;transform-origin:50% 80%}',
+    '.a-orbit{animation:orbit 6s linear infinite;transform-origin:center}',
+    '.a-rise{animation:rise 3s ease-in-out infinite;transform-origin:center}',
+    '.draw{stroke-dasharray:90;stroke-dashoffset:90;animation:draw 1s ease-out .25s forwards}',
+    '.conf{animation:confetti 1.3s ease-out infinite}',
+    '.conf:nth-child(odd){animation-duration:1.6s}',
+    '@media (prefers-reduced-motion:reduce){.a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.conf{animation:none}.draw{stroke-dashoffset:0}}'
+  ].join('');
+
+  // Build standalone, self-animating SVG markup for one card's stage <svg>.
+  function buildSvg(svg) {
+    var clone = svg.cloneNode(true);
+    var style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = ANIM_CSS;
+    clone.insertBefore(style, clone.firstChild);
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    return clone.outerHTML.replace(/></g, '>\n<');
+  }
+
+  var toast = document.getElementById('toast'), toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+  }
+
+  var COPY_IC = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  var DONE_IC = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta); return ok;
+  }
+
+  document.querySelectorAll('.card').forEach(function (card) {
+    var svg = card.querySelector('.stage svg');
+    if (!svg) return;
+    var name = (card.querySelector('.name') || {}).textContent || 'asset';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.innerHTML = COPY_IC + '<span>Copy SVG</span>';
+    btn.setAttribute('aria-label', 'Copy SVG markup for ' + name);
+
+    btn.addEventListener('click', function () {
+      var markup = buildSvg(svg);
+      var done = function () {
+        btn.classList.add('done');
+        btn.innerHTML = DONE_IC + '<span>Copied!</span>';
+        showToast('SVG copied — paste it anywhere');
+        setTimeout(function () {
+          btn.classList.remove('done');
+          btn.innerHTML = COPY_IC + '<span>Copy SVG</span>';
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(markup).then(done, function () {
+          if (fallbackCopy(markup)) done(); else showToast('Copy failed — select manually');
+        });
+      } else {
+        if (fallbackCopy(markup)) done(); else showToast('Copy failed — select manually');
+      }
+    });
+
+    card.querySelector('.body').appendChild(btn);
+  });
+})();
+</script>
 </body>
 </html>
