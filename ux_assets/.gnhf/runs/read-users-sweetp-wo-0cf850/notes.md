@@ -33,3 +33,17 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - The cat_toxin_app has a rich care-tracking surface (feeding/weight/medication/claw-trim/vet micro-forms, weight timeline, recalls, paywall) beyond the search/verdict core — these map cleanly onto a distinct 'Care' journey stage and a recall 'Alert' under emergency, giving authentic moments for future asset batches
 - Adding a new animation requires touching four places in mewguard.html to stay consistent: the <style> @keyframes + class, the @media prefers-reduced-motion list, the body.motion-reduced preview selectors, and the JS ANIM_CSS export array
 - 20 assets in a 3-column grid fit within a single 1200x2400 headless Chrome capture, so one full-page screenshot is enough to visually verify the whole kit at this scale
+
+### Iteration 3
+
+**Summary:** Extended the MewGuard sentimental-design asset kit from 20 to 28 of 40 assets by adding 8 app-grounded animated SVG illustrations, three new animations, and updating all gallery counts and INDEX.md.
+
+**Changes:**
+- Added 8 new brand-tagged animated SVG assets to mewguard.html (Never heard of that one, Scan the label, How much matters, Stay hydrated, Feeling better day by day, Call your vet now, Brave little patient, With love from us), rebalancing search/verdict/care/recovery/emergency/delight stage coverage
+- Introduced 3 new keyframe animations (nod, ripple, scan) wired through all four required places: the <style> @keyframes + .a- class, the prefers-reduced-motion list, the body.motion-reduced preview selectors, and the exportable ANIM_CSS array
+- Updated all journey-stage filter chip counts, the 'All' count, the live fb-count label, and the footer progress to reflect 28 of 40
+- Updated INDEX.md with rows 21-28, the 28/40 status, and the new a-nod/a-ripple/a-scan classes in the conventions section
+
+**Learnings:**
+- The full 28-card gallery at 1200px wide is ~5300px tall (10 rows of 3), so a headless Chrome --screenshot needs window height >=5600 to avoid silently clipping the last cards — earlier 3400/4800 captures cut off the new assets and required re-rendering
+- sips crop offset flags (--cropOffset / --cropToHeightWidth) did not crop on this macOS build; Python PIL Image.crop is the reliable way to inspect specific gallery rows from a tall full-page screenshot
