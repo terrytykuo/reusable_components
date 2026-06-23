@@ -71,8 +71,9 @@
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 999px; font-weight: 600; }
 
+  .actions { display: flex; gap: 8px; margin-top: 14px; }
   .copy-btn {
-    margin-top: 14px; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
     font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
     color: var(--c); background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px;
     transition: .15s; -webkit-font-smoothing: antialiased;
@@ -81,6 +82,16 @@
   .copy-btn:active { transform: translateY(0); }
   .copy-btn svg.ic { width: 15px; height: 15px; overflow: visible; }
   .copy-btn.done { color: var(--care); border-color: var(--care); background: #eef9f3; }
+
+  .dl-btn {
+    flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; cursor: pointer; color: var(--c);
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+    transition: .15s; -webkit-font-smoothing: antialiased;
+  }
+  .dl-btn:hover { background: #fff; border-color: var(--c); transform: translateY(-1px); }
+  .dl-btn:active { transform: translateY(0); }
+  .dl-btn svg.ic { width: 16px; height: 16px; overflow: visible; }
 
   .toast {
     position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
@@ -385,8 +396,9 @@
 
   <footer>
     <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
-    <code>prefers-reduced-motion</code>. Hit <b>Copy SVG</b> on any card — the copied markup embeds its own animation
-    <code>&lt;style&gt;</code>, so it stays self-animating the moment you paste it into any project.
+    <code>prefers-reduced-motion</code>. <b>Copy SVG</b> drops self-animating markup onto your clipboard, or hit the
+    <b>download</b> button to save a standalone <code>.svg</code> file — both embed their own animation
+    <code>&lt;style&gt;</code>, so the asset stays alive the moment you paste or open it.
   </footer>
 </div>
 
@@ -447,6 +459,24 @@
 
   var COPY_IC = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
   var DONE_IC = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+  var DL_IC   = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
+
+  // "Nothing here — yet" -> "nothing-here-yet" for a friendly .svg filename
+  function slugify(name) {
+    return (name || 'asset').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'asset';
+  }
+
+  // Save a standalone .svg document (self-animating markup + XML prolog) to disk.
+  function downloadSvg(markup, filename) {
+    var doc = '<?xml version="1.0" encoding="UTF-8"?>\n' + markup;
+    var blob = new Blob([doc], { type: 'image/svg+xml' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
 
   function fallbackCopy(text) {
     var ta = document.createElement('textarea');
@@ -486,7 +516,22 @@
       }
     });
 
-    card.querySelector('.body').appendChild(btn);
+    var dl = document.createElement('button');
+    dl.type = 'button';
+    dl.className = 'dl-btn';
+    dl.innerHTML = DL_IC;
+    dl.setAttribute('aria-label', 'Download ' + name + ' as an SVG file');
+    dl.title = 'Download .svg';
+    dl.addEventListener('click', function () {
+      downloadSvg(buildSvg(svg), slugify(name) + '.svg');
+      showToast('Downloaded ' + slugify(name) + '.svg');
+    });
+
+    var actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(btn);
+    actions.appendChild(dl);
+    card.querySelector('.body').appendChild(actions);
   });
 
   // ---- Journey-stage filtering ----

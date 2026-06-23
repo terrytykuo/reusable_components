@@ -46,3 +46,16 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - Adding any new asset animation requires three synchronized edits to keep the kit consistent: the page <style> block, the prefers-reduced-motion list (in both <style> and ANIM_CSS), and the JS ANIM_CSS export array — missing the export array would make copied assets render statically
 - The grid (auto-fill minmax(330px,1fr)) cleanly absorbed 9 cards into a balanced 3x3 layout with no layout changes needed, so the kit can keep growing without touching CSS structure
 - Hand-computed 5-point star path coordinates (outer r=13 / inner r=5.2 around center 60,52) produced a clean medal star without needing a path-generation library
+
+### Iteration 4
+
+**Summary:** Added a journey-stage filter bar that maps the 9 emotional-design assets to product-journey moments (Onboarding/Waiting/Feedback/Recovery/Delight) with live per-stage counts, making the growing asset library navigable while reinforcing the emotional-design narrative.
+
+**Changes:**
+- Added a dependency-free filter bar with one chip per journey stage (All + 5 stages), each showing its asset count, styled to match the existing light-mode design language with the accent color as the active state
+- Tagged all 9 asset cards with data-cat journey-stage categories and added JS that filters cards on chip click, toggles aria-pressed for accessibility, updates a live result count, and shows an empty-state note when a stage has no assets
+- Verified in-browser: chips render with correct counts, Feedback filter shows exactly its 3 cards, All restores all 9, and there are zero console errors
+
+**Learnings:**
+- Multiple cards shared identical style="--c:var(--...)" attributes (e.g. two --warm, two --joy, two --calm), so editing the card opening tags required matching on the preceding HTML comment as unique context rather than the style attribute alone
+- Mapping the 9 existing assets onto 5 emotional journey stages produced a naturally balanced, meaningful taxonomy (Feedback being the largest at 3), so the filter doubles as narrative reinforcement rather than just a utility
