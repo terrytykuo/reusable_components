@@ -59,3 +59,16 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 **Learnings:**
 - Multiple cards shared identical style="--c:var(--...)" attributes (e.g. two --warm, two --joy, two --calm), so editing the card opening tags required matching on the preceding HTML comment as unique context rather than the style attribute alone
 - Mapping the 9 existing assets onto 5 emotional journey stages produced a naturally balanced, meaningful taxonomy (Feedback being the largest at 3), so the filter doubles as narrative reinforcement rather than just a utility
+
+### Iteration 5
+
+**Summary:** Added a per-card "Download .svg" button alongside Copy SVG, letting designers save each emotional-design asset as a standalone, self-animating SVG file — turning the kit into a fully take-away asset library.
+
+**Changes:**
+- Added a per-card download button next to Copy SVG (restructured into an .actions flex row), tinted with each card's emotion accent, exporting a standalone .svg file with XML prolog, xmlns, and embedded animation <style> via Blob + object URL
+- Derived friendly kebab-case filenames from each asset's display name (e.g. 'Nothing here — yet' -> nothing-here-yet.svg) and surfaced a 'Downloaded ...' toast confirmation
+- Updated footer copy to describe both clipboard-copy and file-download take-away paths
+
+**Learnings:**
+- The existing buildSvg() helper already produced fully self-animating standalone markup, so the download feature reused it verbatim — only an XML prolog and Blob/object-URL plumbing were new, keeping copy and download exports identical and DRY
+- Verified the exported file with xmllint --noout (well-formed XML) in addition to browser checks; agent-browser's find-text on a transient toast fails because the toast is covered/faded, so a downloaded-file inspection is the reliable verification path for download features
