@@ -89,6 +89,8 @@
   @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(8deg); } 75% { transform: rotate(-8deg); } }
   @keyframes orbit { to { transform: rotate(-360deg); } }
   @keyframes rise { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  @keyframes twinkle { 0%,100% { opacity: .2; transform: scale(.6); } 50% { opacity: 1; transform: scale(1); } }
+  @keyframes heartbeat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.13); } 30% { transform: scale(1); } 45% { transform: scale(1.08); } }
 
   .a-float { animation: float 4s ease-in-out infinite; transform-origin: center; }
   .a-blink { animation: blink 5s ease-in-out infinite; transform-origin: center; }
@@ -99,13 +101,15 @@
   .a-wiggle{ animation: wiggle 3.5s ease-in-out infinite; transform-origin: 50% 80%; }
   .a-orbit { animation: orbit 6s linear infinite; transform-origin: center; }
   .a-rise  { animation: rise 3s ease-in-out infinite; transform-origin: center; }
+  .a-twinkle { animation: twinkle 2s ease-in-out infinite; transform-origin: center; }
+  .a-heartbeat { animation: heartbeat 2.4s ease-in-out infinite; transform-origin: center; }
 
   .draw { stroke-dasharray: 90; stroke-dashoffset: 90; animation: draw 1s ease-out .25s forwards; }
   .conf { animation: confetti 1.3s ease-out infinite; }
   .conf:nth-child(odd) { animation-duration: 1.6s; }
 
   @media (prefers-reduced-motion: reduce) {
-    .a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.conf { animation: none; }
+    .a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.conf { animation: none; }
     .draw { stroke-dashoffset: 0; }
   }
 </style>
@@ -277,6 +281,78 @@
       </div>
     </article>
 
+    <!-- 7. SAVED / SYNCED -->
+    <article class="card" style="--c:var(--calm)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cloud saved and synced confirmation">
+          <g class="a-float">
+            <ellipse cx="62" cy="66" rx="32" ry="17" fill="#cfe0f4"/>
+            <circle cx="46" cy="60" r="14" fill="#cfe0f4"/>
+            <circle cx="66" cy="52" r="19" fill="#cfe0f4"/>
+            <circle cx="80" cy="62" r="13" fill="#cfe0f4"/>
+            <ellipse cx="62" cy="66" rx="32" ry="17" fill="#bcd3ef" opacity=".0"/>
+            <path d="M51 62 L58 70 L74 53" stroke="#2f7dc4" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+          </g>
+          <path d="M38 30 l3 0 m-1.5 -1.5 l0 3" stroke="#6aa9e9" stroke-width="2" stroke-linecap="round" class="a-twinkle"/>
+          <path d="M90 36 l3 0 m-1.5 -1.5 l0 3" stroke="#f5a623" stroke-width="2" stroke-linecap="round" class="a-twinkle" style="animation-delay:.7s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Saved · Synced</div>
+        <div class="name">Safe in the cloud</div>
+        <p class="goal">A cloud that quietly draws its own check tells users their work landed — no save button anxiety.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Builds trust in autosave and removes the "did it save?" double-check.</span></div>
+        <div class="tags"><span class="tag">autosave</span><span class="tag">sync</span><span class="tag">backup</span></div>
+      </div>
+    </article>
+
+    <!-- 8. ACHIEVEMENT / PRIDE -->
+    <article class="card" style="--c:var(--joy)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Achievement medal with star">
+          <path d="M52 64 L47 92 L57 83 L60 90 Z" fill="#c84d86"/>
+          <path d="M68 64 L73 92 L63 83 L60 90 Z" fill="#c84d86"/>
+          <g class="a-pop">
+            <circle cx="60" cy="52" r="23" fill="#f5a623"/>
+            <circle cx="60" cy="52" r="23" fill="none" stroke="#e08e12" stroke-width="3"/>
+            <circle cx="60" cy="52" r="17" fill="none" stroke="#fff" stroke-width="1.5" opacity=".55"/>
+            <path d="M60 39 L63.06 47.79 L72.36 47.98 L64.95 53.61 L67.64 62.52 L60 57.2 L52.36 62.52 L55.05 53.61 L47.64 47.98 L56.94 47.79 Z" fill="#fff"/>
+          </g>
+          <path d="M30 44 l3 0 m-1.5 -1.5 l0 3" stroke="#f5a623" stroke-width="2.2" stroke-linecap="round" class="a-twinkle"/>
+          <path d="M92 48 l3 0 m-1.5 -1.5 l0 3" stroke="#c84d86" stroke-width="2.2" stroke-linecap="round" class="a-twinkle" style="animation-delay:.5s"/>
+          <path d="M88 28 l3 0 m-1.5 -1.5 l0 3" stroke="#2f7dc4" stroke-width="2.2" stroke-linecap="round" class="a-twinkle" style="animation-delay:1s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Achievement · Pride</div>
+        <div class="name">You earned this</div>
+        <p class="goal">A medal that springs in with twinkling sparkles marks a milestone and makes mastery feel rewarded.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Taps intrinsic motivation, reinforcing progress and habit formation.</span></div>
+        <div class="tags"><span class="tag">milestone</span><span class="tag">gamification</span><span class="tag">level-up</span></div>
+      </div>
+    </article>
+
+    <!-- 9. APPRECIATION / DELIGHT -->
+    <article class="card" style="--c:var(--warm)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Beating heart of appreciation">
+          <g class="a-heartbeat" style="transform-origin:60px 60px">
+            <path d="M60 88 C 24 62, 32 30, 60 48 C 88 30, 96 62, 60 88 Z" fill="#c84d86"/>
+            <ellipse cx="47" cy="52" rx="5" ry="8" fill="#fff" opacity=".28" transform="rotate(-28 47 52)"/>
+          </g>
+          <path d="M30 78 C 22 66, 28 56, 36 64 C 44 56, 50 66, 36 78 Z" fill="#f29ec0" class="a-rise" opacity=".8"/>
+          <path d="M86 44 C 80 35, 85 28, 91 34 C 97 28, 101 35, 91 44 Z" fill="#f29ec0" class="a-rise" style="animation-delay:.8s" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Appreciation · Delight</div>
+        <div class="name">Thanks for being here</div>
+        <p class="goal">A gently beating heart turns a like, a thank-you, or a renewal into a warm, human moment.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Deepens emotional attachment and lifts retention at feel-good touchpoints.</span></div>
+        <div class="tags"><span class="tag">like</span><span class="tag">thank-you</span><span class="tag">renewal</span></div>
+      </div>
+    </article>
+
   </div>
 
   <footer>
@@ -304,6 +380,8 @@
     '@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(8deg)}75%{transform:rotate(-8deg)}}',
     '@keyframes orbit{to{transform:rotate(-360deg)}}',
     '@keyframes rise{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}',
+    '@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}',
+    '@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.13)}30%{transform:scale(1)}45%{transform:scale(1.08)}}',
     '.a-float{animation:float 4s ease-in-out infinite;transform-origin:center}',
     '.a-blink{animation:blink 5s ease-in-out infinite;transform-origin:center}',
     '.a-sway{animation:sway 4.5s ease-in-out infinite;transform-origin:50% 90%}',
@@ -313,10 +391,12 @@
     '.a-wiggle{animation:wiggle 3.5s ease-in-out infinite;transform-origin:50% 80%}',
     '.a-orbit{animation:orbit 6s linear infinite;transform-origin:center}',
     '.a-rise{animation:rise 3s ease-in-out infinite;transform-origin:center}',
+    '.a-twinkle{animation:twinkle 2s ease-in-out infinite;transform-origin:center}',
+    '.a-heartbeat{animation:heartbeat 2.4s ease-in-out infinite;transform-origin:center}',
     '.draw{stroke-dasharray:90;stroke-dashoffset:90;animation:draw 1s ease-out .25s forwards}',
     '.conf{animation:confetti 1.3s ease-out infinite}',
     '.conf:nth-child(odd){animation-duration:1.6s}',
-    '@media (prefers-reduced-motion:reduce){.a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.conf{animation:none}.draw{stroke-dashoffset:0}}'
+    '@media (prefers-reduced-motion:reduce){.a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.conf{animation:none}.draw{stroke-dashoffset:0}}'
   ].join('');
 
   // Build standalone, self-animating SVG markup for one card's stage <svg>.

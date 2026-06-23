@@ -17,3 +17,18 @@ Objective: see .gnhf/runs/build-an-asset-of-no-065138/prompt.md
 - The working dir ux_assets/ started empty (only .gnhf); the parent repo is a cross-project reusable-component library with an existing overview.html establishing a reusable light-mode design system and palette (--accent #e07b39 etc.) worth matching for visual consistency
 - agent-browser screenshot saves relative to an unpredictable cwd — pass an absolute path ("$(pwd)/file.png") to reliably locate the output
 - Notes.md is empty so this is genuinely iteration 1; future iterations could expand the kit (more assets, a copy-to-clipboard SVG export, or downloadable .svg files) and add it to the parent overview.html navigation
+
+### Iteration 2
+
+**Summary:** Added one-click "Copy SVG" to each asset card that exports self-animating, standalone SVG markup, turning the emotional-design gallery from a display-only page into an actually reusable asset library.
+
+**Changes:**
+- Added a per-card 'Copy SVG' button (styled with each card's emotion accent color) plus a bottom toast, with a 'Copied!' success state on click
+- Copy logic clones the card's SVG and injects an embedded <style> containing only the animation keyframes/classes the asset uses, so pasted SVGs stay self-animating in any project while honoring prefers-reduced-motion
+- Implemented navigator.clipboard with an execCommand textarea fallback so copy works under restricted contexts like file://
+- Updated the footer copy to describe the new self-contained copy capability instead of telling users to hand-grab the <svg>
+
+**Learnings:**
+- The iteration-1 page already shipped 6 polished assets and rendered cleanly, so the highest-value increment was usability (extraction) rather than adding more assets
+- Embedding the animation CSS as an SVG-namespaced <style> inside the cloned SVG is what makes copied assets drop-in functional — without it the .a-* classes are dead outside this page
+- agent-browser's 'find text click' confirms success ('Done') but clipboard read isn't directly exposed; visual screenshot + zero console errors + correct aria-labels were sufficient to verify the feature
