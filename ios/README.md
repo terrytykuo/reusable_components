@@ -12,9 +12,13 @@
 ios/
 ├── README.md                          ← 本文件
 ├── INDEX.md                           ← 每個元件的完整說明
+├── app-store-launch-checklist.md      ← App Store 上架逐項清單（圖示/簽章/隱私政策/送審）
 │
 ├── location/
 │   └── LocationManager.swift          ← 背景 geofence 監控（region 上限排序 + cooldown）
+│
+├── mapsearch/
+│   └── MapPlaceSearch.swift           ← 地址自動完成 + 分類 POI 搜尋（MapKit，免金鑰）
 │
 ├── notifications/
 │   └── NotificationManager.swift      ← 本機通知：授權 + 時間提醒 + 即時地點提醒 + 點擊回調

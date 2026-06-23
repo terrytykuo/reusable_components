@@ -4,6 +4,21 @@
 
 ---
 
+## 流程文件
+
+### `app-store-launch-checklist.md`
+
+**分類**: 上架流程 / checklist
+**依賴**: 無（純文件）
+
+**功能說明**:
+把 iOS app 從「程式能跑」推到「能送審上架」的逐項清單。涵蓋硬性阻擋（App Icon、簽章 Team、正式 Bundle ID）、審查高風險（隱私政策 URL + 隱私問卷、權限失效引導、背景定位）、送審 metadata（截圖/描述/分級）、裝置設定一致性（`TARGETED_DEVICE_FAMILY`），以及 Archive → 送審流程與一頁速查表。每開新 app 上架前照表打勾。
+
+**使用情境**: 任何 iOS app 第一次（或重新）送 App Store 審查前的準備
+**來源**: `onmyway`（順路 EnRoute）首次上架時整理
+
+---
+
 ## location/
 
 ### `location/LocationManager.swift`
@@ -30,6 +45,33 @@ iOS 同時最多監控 20 個 region（可由 `maxRegions` 調整）；超過上
 
 **使用情境**: 任何需要「經過某地點時提醒」的 app（待辦、優惠券、打卡、安全圍欄）
 **來源**: `onmyway/EnRoute/Managers/LocationManager.swift`
+
+---
+
+## mapsearch/
+
+### `mapsearch/MapPlaceSearch.swift`
+
+**分類**: 地圖 / 地點搜尋
+**依賴**: `MapKit`, `CoreLocation`, `Combine`, `Foundation`
+
+**介面/API**:
+- `class AddressSearchCompleter`（`ObservableObject`）— 地址／地點自動完成
+  - `init(resultTypes: MKLocalSearchCompleter.ResultType = [.address, .pointOfInterest], debounce: Int = 250)`
+  - `@Published query: String` / `@Published results: [MKLocalSearchCompletion]`
+  - `resolve(_:handler:)`：把選中建議解析成座標（回呼主執行緒）。
+  - `biasRegion(to:meters:)`：讓建議以某座標附近優先。
+- `enum PlaceCategorySearch` — 分類 POI 搜尋
+  - `static search(query:region:limit:handler:)`：在地圖範圍內用自然語言查某類店家。
+  - `struct Result: Identifiable { name; coordinate }`：可直接在 Map 裡 `ForEach` 成 Annotation。
+
+**功能說明**:
+兩個互補的地點搜尋工具，全用 Apple MapKit（**免金鑰、免帳單、免 SDK**，不需 Google Maps API）。`AddressSearchCompleter` 給「知道店名／地址」的使用者邊打邊跳建議；`PlaceCategorySearch` 給「不知地址、只想找家附近某類店」的使用者——傳「便利商店」「超市」「郵局」等自然語言字，在目前地圖範圍內找出店家標成圖釘讓人點選。兩者皆與 domain 模型無關，回呼皆在主執行緒。
+
+> 註：點選地圖上 Apple **原生**店家標籤（`MapSelection` / `MapFeature`）需 iOS 18+；本元件用自家 `Annotation` 圖釘，iOS 17 即可點選。
+
+**使用情境**: 任何要讓使用者在地圖上挑地點的 app（常用地點、外送地址、打卡、店家收藏）
+**來源**: `onmyway/EnRoute/Views/PlaceEditView.swift`
 
 ---
 
