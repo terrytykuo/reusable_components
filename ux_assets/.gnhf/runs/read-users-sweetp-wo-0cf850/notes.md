@@ -173,3 +173,19 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - 毛線球的纏繞線不必手刻 bezier:兩個正交的細 stroke 橢圓(64×32 與 32×64,cream)疊在 coral 球體上即讀作交叉纏繞;球體 ellipse 最後加入(在下層)確保線在上方
 - 彈跳動畫用純垂直 position 關鍵幀(150 地面 ↔ 92 頂點)即可乾淨 loop,並以 scale 在落地幀壓扁(116×86)、頂點還圓(100×100)做 squash & stretch;rotation 0→360 的連續自轉讓毛線球更顯活潑
 - 補完本批後 Lottie 七階段分布趨於平衡(各 2-3 個),onboarding 與 recovery 不再是 1 個的失衡點;比對 Lottie 與 SVG 各階段數量仍是挑選下一批最有依據的方法
+
+### Iteration 12
+
+**Summary:** 將 MewGuard Lottie 動畫集從 16 個擴充到 18 個,新增 Verdict·How much matters(傾斜的平衡秤)與 Verdict·Reviewed by vets(彈入的獸醫審核獎章),補強相對 SVG 套件最薄弱的 verdict 階段。
+
+**Changes:**
+- 新增 mw-dose-scale.json(Verdict·Nuance):以中央支點為樞紐左右傾斜後穩定的平衡秤,對應 SVG『How much matters』,將 verdict 階段 Lottie 從 1 個專屬補到 2 個
+- 新增 mw-vet-rosette.json(Verdict·Trust):12 點扇貝邊獎章彈入、白色勾選經 Trim 自描繪、coral 緞帶尾淡入,對應 SVG『Reviewed by vets』,使 verdict 階段 Lottie 共達 4 個(含共用 heartbeat)
+- 在 lottie/_build.py 新增 build_vet_rosette 與 build_dose_scale 兩個 builder 並接入 BUILDERS,複用既有 ellipse/rounded_rect/Star/Trim 輔助,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(於 verdict 區塊插入兩檔)並重新產生含 18 張卡的 gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 18 檔、表格新增兩個 verdict 列、預覽說明改為 18 個動畫
+
+**Learnings:**
+- python-lottie 的 Star 以 points=12、outer_radius=70、inner_radius=58(小幅內外半徑差)即可做出扇貝/勳章邊緣,免手刻 bezier;搭配內層 ellipse 圓盤與 Trim 描繪的勾選即成完整獎章
+- 平衡秤『傾斜』效果用單一圖層 transform.anchor_point=Point(0,0) 設於支點頂端、整層含 beam+兩 pan+hanger 一起 rotation 擺動最乾淨;pan 隨 beam 一起傾斜反而更像真實天秤,免逐 pan 做反向補償
+- verdict 是 Lottie 相對 SVG 最失衡的階段(SVG 5 個、Lottie 原本僅 safe-check 1 個專屬);比對兩者 stage 分布仍是挑選下一批 Lottie 最有依據的方法,本批補完後 verdict 達 4 個

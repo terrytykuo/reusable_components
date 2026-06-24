@@ -898,6 +898,107 @@ def build_dose_scale():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 19. Vet day booked — a check stamps onto a calendar date (care·confirmation)
+# ----------------------------------------------------------------------------
+def build_vet_calendar():
+    a = new_anim(
+        "MewGuard — Vet day booked",
+        "care, confirmation, appointment",
+        "A check stamps onto a highlighted calendar date — closes the loop on care "
+        "planning when a vet visit is booked.",
+        op=60, theme=GREEN,
+    )
+    # the stamp: a coral date highlight with a white check that pops + rotates in,
+    # like a rubber stamp landing on the chosen day. Drawn first → on top.
+    stamp = shape_layer(a, 120 + 12, 120 + 34)
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.add_point(Point(-9, 1))
+    b.add_point(Point(-2, 9))
+    b.add_point(Point(12, -8))
+    p.shape.value = b
+    g.add_shape(p)
+    st = Stroke(col(WHITE), 5)
+    st.line_cap = 2
+    st.line_join = 2
+    g.add_shape(st)
+    tr = Trim()
+    tr.start.value = 0
+    tr.end.add_keyframe(22, 0, EASE_OUT)
+    tr.end.add_keyframe(34, 100, EASE_IN)
+    g.add_shape(tr)
+    stamp.add_shape(g)
+    stamp.add_shape(ellipse(0, 0, 28, 28, CORAL))    # date highlight disc
+    ssc = stamp.transform.scale
+    ssc.add_keyframe(0, Point(0, 0), EASE_OUT)
+    ssc.add_keyframe(14, Point(0, 0), EASE_OUT)
+    ssc.add_keyframe(22, Point(128, 128), EASE_IN)   # stamp lands with an overshoot
+    ssc.add_keyframe(30, Point(100, 100), EASE_IO)
+    ssc.add_keyframe(60, Point(100, 100))
+    srot = stamp.transform.rotation
+    srot.add_keyframe(14, -22, EASE_OUT)
+    srot.add_keyframe(30, 0, EASE_IO)
+    # day grid dots, muted, in a 4-column × 3-row sheet
+    dots = shape_layer(a)
+    for ry in (-12, 12, 34):
+        for rx in (-36, -12, 12, 36):
+            dots.add_shape(ellipse(rx, ry, 12, 12, GREEN, opacity=20))
+    # green header bar across the top of the card
+    head = shape_layer(a)
+    head.add_shape(rounded_rect(0, -44, 132, 28, GREEN, 8))
+    # binder rings poking above the header, drawn before the card → on top
+    rings = shape_layer(a)
+    for rx in (-34, 34):
+        rings.add_shape(rounded_rect(rx, -62, 7, 22, GREEN_L, 3))
+    # white calendar card behind everything
+    card = shape_layer(a)
+    card.add_shape(rounded_rect(0, 0, 132, 132, WHITE, 16))
+    add_bg(a, 184)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 20. Picking up where you left off — a clock rewinds its hands (search·history)
+# ----------------------------------------------------------------------------
+def build_clock_history():
+    a = new_anim(
+        "MewGuard — Picking up where you left off",
+        "search, history, resume",
+        "A clock's hands sweep backward as if rewinding to a recent check — lets a "
+        "worried owner resume a frantic search without retyping.",
+        op=60, theme=GREEN,
+    )
+    # center hub, drawn first → on top of the hands
+    hub = shape_layer(a)
+    hub.add_shape(ellipse(0, 0, 16, 16, CORAL))
+    # minute hand (long, coral) sweeps a full turn backward = rewinding history
+    minute = shape_layer(a)
+    minute.transform.anchor_point.value = Point(0, 0)
+    minute.add_shape(rounded_rect(0, -42, 7, 84, CORAL, 3))
+    mrot = minute.transform.rotation
+    mrot.add_keyframe(0, 0)
+    mrot.add_keyframe(60, -360)
+    # hour hand (short, green) eases backward a little over the same span
+    hour = shape_layer(a)
+    hour.transform.anchor_point.value = Point(0, 0)
+    hour.add_shape(rounded_rect(0, -24, 9, 48, GREEN, 4))
+    hrot = hour.transform.rotation
+    hrot.add_keyframe(0, 0)
+    hrot.add_keyframe(60, -90)
+    # four tick marks, then the green ring and white face behind them
+    ticks = shape_layer(a)
+    for tx, ty in ((0, -74), (74, 0), (0, 74), (-74, 0)):
+        ticks.add_shape(ellipse(tx, ty, 9, 9, GREEN, opacity=55))
+    ring = shape_layer(a)
+    ring.add_shape(stroke_circle(0, 0, 168, 168, GREEN, 7))
+    face = shape_layer(a)
+    face.add_shape(ellipse(0, 0, 176, 176, WHITE))
+    add_bg(a, 196)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -917,6 +1018,8 @@ BUILDERS = {
     "mw-chase-toy": build_chase_toy,
     "mw-vet-rosette": build_vet_rosette,
     "mw-dose-scale": build_dose_scale,
+    "mw-vet-calendar": build_vet_calendar,
+    "mw-clock-history": build_clock_history,
 }
 
 

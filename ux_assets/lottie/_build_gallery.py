@@ -91,6 +91,14 @@ META = {
         title="Reviewed by vets", stage="Verdict · Trust",
         motion="Rosette pops in, check draws",
         payoff="Anchors trust in the verdict at the moment certainty matters most."),
+    "mw-vet-calendar.json": dict(
+        title="Vet day booked", stage="Care · Confirmation",
+        motion="A check stamps onto a calendar date",
+        payoff="Closes the loop on care planning when a vet visit is booked."),
+    "mw-clock-history.json": dict(
+        title="Picking up where you left off", stage="Search · History",
+        motion="Clock hands sweep backward, rewinding",
+        payoff="Lets a worried owner resume a frantic search without retyping."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
@@ -99,6 +107,7 @@ ORDER = [
     "mw-name-tag.json",
     "mw-paw-loading.json",
     "mw-scan-label.json",
+    "mw-clock-history.json",
     "mw-safe-check.json",
     "mw-dose-scale.json",
     "mw-heartbeat.json",
@@ -106,6 +115,7 @@ ORDER = [
     "mw-meal-bowl.json",
     "mw-water-ripple.json",
     "mw-meds-reminder.json",
+    "mw-vet-calendar.json",
     "mw-recovery-arc.json",
     "mw-chase-toy.json",
     "mw-bell-recall.json",
