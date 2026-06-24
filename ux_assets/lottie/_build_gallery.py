@@ -107,6 +107,14 @@ META = {
         title="Brave little patient", stage="Recovery · Reassurance",
         motion="Heart beats softly under a band-aid, healing ring expands",
         payoff="Closes a health scare with warmth and pride."),
+    "mw-first-aid.json": dict(
+        title="While you wait", stage="Emergency · Guidance",
+        motion="First-aid steps check off one by one",
+        payoff="Channels panic into ordered, doable action while help is on the way."),
+    "mw-spread-word.json": dict(
+        title="Spread the word", stage="Delight · Referral",
+        motion="Hearts pop out along threads from a central one",
+        payoff="Frames sharing MewGuard as protecting more cats, not marketing."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
@@ -130,8 +138,10 @@ ORDER = [
     "mw-brave-patient.json",
     "mw-bell-recall.json",
     "mw-call-vet.json",
+    "mw-first-aid.json",
     "mw-heart-pop.json",
     "mw-star-rating.json",
+    "mw-spread-word.json",
     "mw-purr-cat.json",
 ]
 

@@ -81,7 +81,7 @@ tag inside its `meta.k` (keywords) field along with author, description, and `th
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
 is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 
-**Status:** 22 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
+**Status:** 24 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
 moments, spanning **all seven journey stages**.
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
@@ -106,11 +106,13 @@ moments, spanning **all seven journey stages**.
 | `mw-brave-patient.json` | Recovery · Reassurance | Heart beats softly under a band-aid, healing ring expands | Closes a health scare with warmth and pride |
 | `mw-bell-recall.json` | Emergency · Alert | Bell rings then settles | Flags a product recall as important, not catastrophic |
 | `mw-call-vet.json` | Emergency · Action | Warm handset pulses, sound waves ring | Makes the one critical action unmissable without a red alarm |
+| `mw-first-aid.json` | Emergency · Guidance | First-aid steps check off one by one | Channels panic into ordered, doable action while help is on the way |
 | `mw-heart-pop.json` | Delight | Heart scales in + sparkle burst | Rewards saving a substance to a cat's profile |
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
+| `mw-spread-word.json` | Delight · Referral | Hearts pop out along threads from a central one | Frames sharing MewGuard as protecting more cats, not marketing |
 | `mw-purr-cat.json` | Delight · Ambient | Mascot breathes + blinks | Resting cat is visual proof that all is well |
 
-**Preview:** open `lottie/gallery.html` in a browser to see all 22 animations playing side by side
+**Preview:** open `lottie/gallery.html` in a browser to see all 24 animations playing side by side
 with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
 into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
 is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`

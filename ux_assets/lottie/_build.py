@@ -1112,6 +1112,114 @@ def build_brave_patient():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 23. While you wait — first-aid steps check off one by one (emergency·guidance)
+# ----------------------------------------------------------------------------
+def build_first_aid():
+    a = new_anim(
+        "MewGuard — While you wait",
+        "emergency, guidance, first-aid",
+        "First-aid steps check off one by one on a calm card — channels panic into "
+        "ordered, doable action while help is on the way.",
+        op=66, theme=GREEN,
+    )
+    rows_y = (-34, 0, 34)
+    # checked discs (with a white check drawn-on via Trim), staggered, on top
+    for i, ry in enumerate(rows_y):
+        d = 8 + i * 16
+        fill = shape_layer(a, 120 - 46, 120 + ry)
+        g = Group()
+        p = Path()
+        b = Bezier()
+        b.add_point(Point(-7, 1))
+        b.add_point(Point(-2, 7))
+        b.add_point(Point(9, -6))
+        p.shape.value = b
+        g.add_shape(p)
+        st = Stroke(col(WHITE), 4)
+        st.line_cap = 2
+        st.line_join = 2
+        g.add_shape(st)
+        tr = Trim()
+        tr.start.value = 0
+        tr.end.add_keyframe(d + 6, 0, EASE_OUT)
+        tr.end.add_keyframe(d + 14, 100, EASE_IN)
+        g.add_shape(tr)
+        fill.add_shape(g)
+        fill.add_shape(ellipse(0, 0, 28, 28, GREEN))   # disc behind the check
+        fsc = fill.transform.scale
+        fsc.add_keyframe(0, Point(0, 0))
+        fsc.add_keyframe(d, Point(0, 0), EASE_OUT)      # hold empty until its turn
+        fsc.add_keyframe(d + 6, Point(122, 122), EASE_IN)
+        fsc.add_keyframe(d + 12, Point(100, 100), EASE_IO)
+        fsc.add_keyframe(66, Point(100, 100))
+    # steady step content: empty checkboxes + text bars, below the fills
+    content = shape_layer(a)
+    for ry in rows_y:
+        content.add_shape(rounded_rect(20, ry, 84, 9, GREEN_L, 4))      # text bar
+        content.add_shape(stroke_circle(-46, ry, 28, 28, GREEN_L, 3))   # empty box
+    # white checklist card behind everything
+    card = shape_layer(a)
+    card.add_shape(rounded_rect(0, 0, 160, 142, WHITE, 18))
+    add_bg(a, 196)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 24. Spread the word — connected hearts radiate outward (delight·referral)
+# ----------------------------------------------------------------------------
+def build_spread_word():
+    a = new_anim(
+        "MewGuard — Spread the word",
+        "delight, referral, share",
+        "Smaller hearts pop out along threads from a central one — frames sharing "
+        "MewGuard as protecting more cats, not marketing.",
+        op=60, theme=CORAL,
+    )
+    center = Point(0, 8)
+    sats = [(-66, -14), (66, -14), (0, -66)]
+    # satellite hearts, on top, pop in after their thread draws
+    for i, (sx, sy) in enumerate(sats):
+        h = shape_layer(a, 120 + sx, 120 + sy)
+        h.add_shape(heart_group(CORAL, 0.34))
+        sc = h.transform.scale
+        d = 18 + i * 8
+        sc.add_keyframe(0, Point(0, 0))
+        sc.add_keyframe(d, Point(0, 0), EASE_OUT)
+        sc.add_keyframe(d + 8, Point(122, 122), EASE_IN)
+        sc.add_keyframe(d + 14, Point(100, 100), EASE_IO)
+        sc.add_keyframe(60, Point(100, 100))
+    # central heart with a gentle warm pulse, covering the thread origins
+    ch = shape_layer(a, 120, 120)
+    ch.add_shape(heart_group(CORAL, 0.62))
+    csc = ch.transform.scale
+    csc.add_keyframe(0, Point(94, 94), EASE_IO)
+    csc.add_keyframe(30, Point(106, 106), EASE_IO)
+    csc.add_keyframe(60, Point(94, 94))
+    # connecting threads, drawn-on via Trim, behind the central heart
+    for i, (sx, sy) in enumerate(sats):
+        ln = shape_layer(a)
+        g = Group()
+        p = Path()
+        b = Bezier()
+        b.add_point(center)
+        b.add_point(Point(sx, sy))
+        p.shape.value = b
+        st = Stroke(col(GREEN_L), 4)
+        st.line_cap = 2
+        g.add_shape(p)
+        g.add_shape(st)
+        tr = Trim()
+        tr.start.value = 0
+        d = 4 + i * 8
+        tr.end.add_keyframe(d, 0, EASE_OUT)
+        tr.end.add_keyframe(d + 10, 100, EASE_IN)
+        g.add_shape(tr)
+        ln.add_shape(g)
+    add_bg(a, 176)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -1135,6 +1243,8 @@ BUILDERS = {
     "mw-clock-history": build_clock_history,
     "mw-guardian-crown": build_guardian_crown,
     "mw-brave-patient": build_brave_patient,
+    "mw-first-aid": build_first_aid,
+    "mw-spread-word": build_spread_word,
 }
 
 

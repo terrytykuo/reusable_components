@@ -206,3 +206,20 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - 連續旋轉(時鐘/倒帶)用線性插值(add_keyframe 不帶 easing)才能等速且 loop 無縫銜接;chase-toy 那種起點帶 EASE_IO 的寫法適合彈跳但不適合等速連續自轉
 - 蓋章式入場效果用 scale 過衝(0→128→100)搭配 rotation(-22→0)兩條 transform 同時作用,比單純 pop 更像橡皮章落下;前段 scale 維持 0 的 hold 幀可讓蓋章延後到卡片就位後再發生
 - 補完本批後 care 達 4 個、search 達 3 個 Lottie;相對 SVG(care 8、search 6)仍有差距,比對兩者 stage 分布持續是挑選下一批 Lottie 最有依據的方法,onboarding/recovery(各 2)為下一個可補強的失衡點
+
+### Iteration 14
+
+**Summary:** 將 MewGuard Lottie 動畫集從 20 個擴充到 22 個,新增 Onboarding·Guardian+ unlocked(金王冠落定+星芒)與 Recovery·Brave little patient(OK繃下柔和跳動的心+擴散療癒環),補強相對 SVG 套件最薄弱的 onboarding 與 recovery 階段。
+
+**Changes:**
+- 新增 mw-guardian-crown.json(Onboarding·Premium):三峰金王冠從上方帶過衝落定並輕微擺正,落定後峰頂依序彈出白色星芒,對應 SVG 第 19 號『Guardian+ unlocked』,將 onboarding 階段 Lottie 從 2 補到 3
+- 新增 mw-brave-patient.json(Recovery·Reassurance):coral 愛心在傾斜 OK 繃下做柔和(緩於急救心跳)的療癒式跳動,背後綠色療癒環擴散淡出,對應 SVG 第 27 號『Brave little patient』,將 recovery 階段 Lottie 從 2 補到 3
+- 在 lottie/_build.py 新增 build_guardian_crown 與 build_brave_patient 兩個 builder 並接入 BUILDERS,複用既有 heart_group/ellipse/stroke_circle/rounded_rect/Star 輔助,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 onboarding/recovery)並重新產生含 22 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 22 檔、表格新增兩列、預覽說明改為 22 個動畫
+
+**Learnings:**
+- 王冠『落定』效果用 transform.position 的 y 軸過衝(72→130→122)搭配 rotation 擺正(-8→5→0)兩條 keyframe 同時作用,比單純 pop 更像實體王冠落到頭上;搭配延後到第 24 幀才開始的星芒 scale pop 可讓星光在王冠就位後才綻放
+- OK 繃要『斜貼』在愛心上,最乾淨做法是把整個 band-aid 圖層 transform.rotation.value 設為固定 -30(非 keyframe),圖層內以 cream 外框 rounded_rect+WHITE 中央 pad+兩端低透明度小圓孔由後往前疊;因 band-aid 圖層先加入會疊在愛心上方,視覺正確
+- 療癒式柔和心跳要與 heartbeat 的急促雙跳區隔:用單次、慢節奏的 scale pulse(94→104→94 跨 22 幀)即可讀作『安穩康復』而非『緊急』;搭配獨立圖層的綠色 stroke ring 同步 scale 放大+opacity 淡出做療癒擴散環
+- 補完本批後 onboarding 與 recovery 各達 3 個 Lottie;相對 SVG(各 5 個)仍有差距,emergency(2)與 delight(3)為下一個可補強的失衡點,比對 Lottie 與 SVG 各階段數量持續是挑選下一批最有依據的方法
