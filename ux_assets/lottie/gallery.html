@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MewGuard — Lottie kit preview</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<style>
+  :root{
+    --bg:#F1ECE3; --surface:#EFE8DB; --card:#FBF8F2;
+    --ink:#2C1810; --ink2:#7A5C4A; --muted:#B8967A;
+    --green:#1b9150; --green-d:#146b3c; --coral:#E76953; --gold:#E8A33D;
+    --line:#E2D7C5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);background:var(--bg)}
+  header.top{padding:30px 28px 18px;max-width:1180px;margin:0 auto}
+  header.top h1{margin:0 0 6px;font-size:26px;letter-spacing:-.02em}
+  header.top p{margin:0;color:var(--ink2);max-width:62ch}
+  .pill{display:inline-block;background:var(--green);color:#fff;border-radius:999px;
+    padding:2px 11px;font-size:12px;font-weight:600;vertical-align:middle;margin-left:8px}
+  .toolbar{position:sticky;top:0;z-index:5;background:rgba(241,236,227,.92);
+    backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+    padding:12px 28px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .toolbar .grp{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);
+    color:var(--ink);border-radius:9px;padding:7px 13px;transition:.15s}
+  button:hover{border-color:var(--green);color:var(--green-d)}
+  button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .toolbar label{color:var(--ink2);font-size:13px}
+  .toolbar select,.toolbar input[type=range]{vertical-align:middle}
+  main{max-width:1180px;margin:0 auto;padding:22px 28px 60px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px;display:flex;flex-direction:column;gap:8px;
+    box-shadow:0 1px 2px rgba(44,24,16,.04)}
+  .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .card-h h2{font-size:16px;margin:0;letter-spacing:-.01em}
+  .stage{font-size:11px;color:var(--green-d);background:#e6f3ec;border-radius:6px;
+    padding:2px 7px;white-space:nowrap}
+  .stage-box{border-radius:12px;background:var(--surface);display:flex;
+    align-items:center;justify-content:center;transition:.2s}
+  .player{width:200px;height:200px}
+  .motion{margin:2px 0 0;font-size:13px;color:var(--ink2)}
+  .motion b{color:var(--ink)}
+  .payoff{margin:0;font-size:13px;color:var(--ink2)}
+  .card-f{display:flex;justify-content:space-between;align-items:center;
+    border-top:1px dashed var(--line);padding-top:9px;margin-top:auto;gap:8px}
+  .fname{font-size:11px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .mini{padding:4px 10px;font-size:12px}
+  .tags{display:flex;gap:5px;flex-wrap:wrap}
+  .tag{font-size:10px;font-weight:600;color:#fff;background:var(--coral);
+    border-radius:5px;padding:1px 7px}
+  .tag.dim{background:transparent;color:var(--muted);border:1px solid var(--line);font-weight:500}
+  /* dark stage */
+  body.dark .stage-box{background:#241a14}
+  .note{max-width:1180px;margin:0 auto;padding:0 28px 24px;color:var(--muted);font-size:12px}
+  .note code{font-family:ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>MewGuard — Lottie kit <span class="pill">8 files · mewguard</span></h1>
+    <p>In-browser preview of the genuine Lottie JSON animations in this folder. Each one is
+    inlined below (works straight from <code>file://</code>); they drop into
+    <code>lottie-react-native</code> or any web Lottie player unchanged. Non-functional,
+    sentimental-design only.</p>
+  </header>
+  <div class="toolbar">
+    <div class="grp">
+      <button id="playToggle" class="on">⏸ Pause all</button>
+      <button id="replayAll">↺ Replay all</button>
+      <button id="darkToggle">🌙 Dark stage</button>
+    </div>
+    <div class="grp">
+      <label for="speed">Speed</label>
+      <input id="speed" type="range" min="0.25" max="2" step="0.25" value="1">
+      <span id="speedVal">1×</span>
+    </div>
+  </div>
+  <main id="grid">
+      <article class="card" data-file="mw-paw-loading.json">
+        <header class="card-h">
+          <h2>Checking the database</h2>
+          <span class="stage">Search</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-paw-loading.json"></div></div>
+        <p class="motion"><b>Motion:</b> Paw-pad dots pulse in sequence</p>
+        <p class="payoff">Branded loader reframes toxin-database latency as active care.</p>
+        <footer class="card-f">
+          <code class="fname">mw-paw-loading.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-paw-loading.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">search</span><span class="tag dim">loading</span><span class="tag dim">spinner</span></div>
+      </article>
+      <article class="card" data-file="mw-safe-check.json">
+        <header class="card-h">
+          <h2>All clear</h2>
+          <span class="stage">Verdict · Safe</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-safe-check.json"></div></div>
+        <p class="motion"><b>Motion:</b> Ring fills, check draws in</p>
+        <p class="payoff">Green ring + self-drawing check delivers instant relief on a safe verdict.</p>
+        <footer class="card-f">
+          <code class="fname">mw-safe-check.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-safe-check.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">verdict</span><span class="tag dim">safe</span><span class="tag dim">result</span></div>
+      </article>
+      <article class="card" data-file="mw-heartbeat.json">
+        <header class="card-h">
+          <h2>Steady heartbeat</h2>
+          <span class="stage">Verdict · Toxic / Emergency</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-heartbeat.json"></div></div>
+        <p class="motion"><b>Motion:</b> Double-thump heart pulse</p>
+        <p class="payoff">Steady coral heartbeat holds a worried owner's nerve — urgent, not panic.</p>
+        <footer class="card-f">
+          <code class="fname">mw-heartbeat.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-heartbeat.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">verdict</span><span class="tag dim">emergency</span><span class="tag dim">reassurance</span></div>
+      </article>
+      <article class="card" data-file="mw-bell-recall.json">
+        <header class="card-h">
+          <h2>Recall watch</h2>
+          <span class="stage">Emergency · Alert</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-bell-recall.json"></div></div>
+        <p class="motion"><b>Motion:</b> Bell rings then settles</p>
+        <p class="payoff">Flags a product recall as important, not catastrophic.</p>
+        <footer class="card-f">
+          <code class="fname">mw-bell-recall.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-bell-recall.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">emergency</span><span class="tag dim">alert</span><span class="tag dim">recall</span></div>
+      </article>
+      <article class="card" data-file="mw-water-ripple.json">
+        <header class="card-h">
+          <h2>Stay hydrated</h2>
+          <span class="stage">Care · Reminder</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-water-ripple.json"></div></div>
+        <p class="motion"><b>Motion:</b> Ripples spread across a bowl</p>
+        <p class="payoff">Makes a hydration nudge caring rather than naggy.</p>
+        <footer class="card-f">
+          <code class="fname">mw-water-ripple.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-water-ripple.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">care</span><span class="tag dim">reminder</span><span class="tag dim">hydration</span></div>
+      </article>
+      <article class="card" data-file="mw-heart-pop.json">
+        <header class="card-h">
+          <h2>Saved to My Cats</h2>
+          <span class="stage">Delight</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-heart-pop.json"></div></div>
+        <p class="motion"><b>Motion:</b> Heart scales in + sparkle burst</p>
+        <p class="payoff">Rewards saving a substance to a cat's profile.</p>
+        <footer class="card-f">
+          <code class="fname">mw-heart-pop.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-heart-pop.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">delight</span><span class="tag dim">feedback</span><span class="tag dim">success</span></div>
+      </article>
+      <article class="card" data-file="mw-star-rating.json">
+        <header class="card-h">
+          <h2>Rate your peace of mind</h2>
+          <span class="stage">Delight · Feedback</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-star-rating.json"></div></div>
+        <p class="motion"><b>Motion:</b> Five stars pop in one by one</p>
+        <p class="payoff">Invites warm feedback framed as peace of mind.</p>
+        <footer class="card-f">
+          <code class="fname">mw-star-rating.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-star-rating.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">delight</span><span class="tag dim">feedback</span><span class="tag dim">rating</span></div>
+      </article>
+      <article class="card" data-file="mw-purr-cat.json">
+        <header class="card-h">
+          <h2>Resting easy</h2>
+          <span class="stage">Delight · Ambient</span>
+        </header>
+        <div class="stage-box"><div class="player" data-file="mw-purr-cat.json"></div></div>
+        <p class="motion"><b>Motion:</b> Mascot breathes + blinks</p>
+        <p class="payoff">Resting cat is visual proof that all is well.</p>
+        <footer class="card-f">
+          <code class="fname">mw-purr-cat.json</code>
+          <div class="btns">
+            <button class="mini" data-act="replay" data-file="mw-purr-cat.json">Replay</button>
+          </div>
+        </footer>
+        <div class="tags"><span class="tag">mewguard</span><span class="tag dim">sentimental</span><span class="tag dim">delight</span><span class="tag dim">ambient</span><span class="tag dim">mascot</span></div>
+      </article>
+  </main>
+  <p class="note">Player: <code>lottie-web 5.12.2</code> via CDN (needs a network connection the
+  first time). Animation data is embedded in this file. Regenerate with
+  <code>python3 lottie/_build_gallery.py</code>.</p>
+
+<script>
+const DATA = {"mw-paw-loading.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[90,102],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[40]},{"t":8,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100]},{"t":16,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[40]},{"t":45,"s":[40]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[24,26],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.22745098039215686,0.6666666666666666,0.42745098039215684,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[110,86],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":4,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[40]},{"t":12,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100]},{"t":20,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[40]},{"t":45,"s":[40]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[24,26],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.22745098039215686,0.6666666666666666,0.42745098039215684,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[132,86],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":8,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[40]},{"t":16,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100]},{"t":24,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[40]},{"t":45,"s":[40]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[24,26],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.22745098039215686,0.6666666666666666,0.42745098039215684,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":3,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[152,104],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":12,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[40]},{"t":20,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100]},{"t":28,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[40]},{"t":45,"s":[40]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[24,26],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.22745098039215686,0.6666666666666666,0.42745098039215684,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":4,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,18],"a":0},"s":{"k":[46,40],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":5,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Checking the database","v":"5.5.2","fr":30,"ip":0,"op":45,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, search, loading, spinner","d":"Paw-pad dots pulse in sequence while MewGuard checks the toxin database \u2014 reframes lookup latency as active care.","tc":"#1b9150"}},"mw-safe-check.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":50,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[130,130],"a":0}},{"ty":"st","lc":2,"lj":2,"ml":0,"o":{"k":100,"a":0},"w":{"k":10,"a":0},"c":{"k":[0.13333333333333333,0.7725490196078432,0.3686274509803922,1],"a":0}},{"ty":"tm","s":{"k":0,"a":0},"e":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0]},{"t":20,"s":[100]}]},"o":{"k":90,"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":false,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-30,4],[-8,26],[34,-22]]},"a":0}},{"ty":"st","lc":2,"lj":2,"ml":0,"o":{"k":100,"a":0},"w":{"k":11,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tm","s":{"k":0,"a":0},"e":{"a":1,"k":[{"t":18,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0]},{"t":34,"s":[100]}]},"o":{"k":0,"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":50,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 All clear","v":"5.5.2","fr":30,"ip":0,"op":50,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, verdict, safe, result","d":"A green ring fills and a check draws itself in: instant relief for a safe verdict.","tc":"#22C55E"}},"mw-heartbeat.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[86,86]},{"t":6,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[108,108]},{"t":12,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[92,92]},{"t":18,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[104,104]},{"t":26,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[86,86]},{"t":45,"s":[86,86]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":true,"i":[[0,0],[-18,-16],[4,-14],[26,6],[6,20],[-20,18]],"o":[[0,0],[20,18],[-6,20],[-26,6],[-4,-14],[18,-16]],"v":[[0,-16],[34,-40],[40,2],[0,44],[-40,2],[-34,-40]]},"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9058823529411765,0.4117647058823529,0.3254901960784314,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Heartbeat","v":"5.5.2","fr":30,"ip":0,"op":45,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, verdict, emergency, reassurance","d":"A steady coral heartbeat: keeps a worried owner's nerve during a serious verdict or an emergency \u2014 urgent, not panic-inducing.","tc":"#E76953"}},"mw-bell-recall.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":50,"st":0,"ks":{"a":{"k":[0,-44],"a":0},"p":{"k":[120,60],"a":0},"s":{"k":[100,100],"a":0},"r":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0]},{"t":8,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[16]},{"t":18,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[-14]},{"t":28,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[9]},{"t":38,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[-5]},{"t":50,"s":[0]}]},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":true,"i":[[-14,0],[-6,-28],[-4,-4],[0,0],[-8,8]],"o":[[14,0],[8,8],[0,0],[0,0],[6,-28]],"v":[[0,-44],[34,30],[44,42],[-44,42],[-34,30]]},"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9607843137254902,0.6196078431372549,0.043137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":50,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,158],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[18,18],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":50,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Recall watch","v":"5.5.2","fr":30,"ip":0,"op":50,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, emergency, alert, recall","d":"A friendly bell rings then settles \u2014 flags a product recall as important, not catastrophic.","tc":"#F59E0B"}},"mw-water-ripple.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":60,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,132],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[20,20]},{"t":40,"s":[150,150]}]},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[90]},{"t":40,"s":[0]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[30,12],"a":0}},{"ty":"st","lc":2,"lj":2,"ml":0,"o":{"k":100,"a":0},"w":{"k":4,"a":0},"c":{"k":[1,1,1,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":60,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,132],"a":0},"s":{"a":1,"k":[{"t":20,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[20,20]},{"t":60,"s":[150,150]}]},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":20,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[90]},{"t":60,"s":[0]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[30,12],"a":0}},{"ty":"st","lc":2,"lj":2,"ml":0,"o":{"k":100,"a":0},"w":{"k":4,"a":0},"c":{"k":[1,1,1,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":60,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,132],"a":0},"s":{"a":1,"k":[{"t":40,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[20,20]},{"t":80,"s":[150,150]}]},"r":{"k":0,"a":0},"o":{"a":1,"k":[{"t":40,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[90]},{"t":80,"s":[0]}]},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[30,12],"a":0}},{"ty":"st","lc":2,"lj":2,"ml":0,"o":{"k":100,"a":0},"w":{"k":4,"a":0},"c":{"k":[1,1,1,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":3,"sr":1,"ip":0,"op":60,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,18],"a":0},"s":{"k":[120,44],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.3568627450980392,0.5411764705882353,0.47843137254901963,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,28],"a":0},"s":{"k":[150,60],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":4,"sr":1,"ip":0,"op":60,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Stay hydrated","v":"5.5.2","fr":30,"ip":0,"op":60,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, care, reminder, hydration","d":"Ripples spread across a water bowl \u2014 makes a hydration nudge caring rather than naggy.","tc":"#5B8A7A"}},"mw-heart-pop.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":12,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[116,116]},{"t":20,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":45,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":true,"i":[[0,0],[-17.099999999999998,-15.2],[3.8,-13.299999999999999],[24.7,5.699999999999999],[5.699999999999999,19],[-19,17.099999999999998]],"o":[[0,0],[19,17.099999999999998],[-5.699999999999999,19],[-24.7,5.699999999999999],[-3.8,-13.299999999999999],[17.099999999999998,-15.2]],"v":[[0,-15.2],[32.3,-38],[38,1.9],[0,41.8],[-38,1.9],[-32.3,-38]]},"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9058823529411765,0.4117647058823529,0.3254901960784314,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[68,84],"a":0},"s":{"a":1,"k":[{"t":10,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":18,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[130,130]},{"t":28,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[0,0]},{"t":45,"s":[0,0]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":4,"a":0},"is":{"k":0,"a":0},"or":{"k":11,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":4,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[170,90],"a":0},"s":{"a":1,"k":[{"t":12,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":20,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[130,130]},{"t":30,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[0,0]},{"t":45,"s":[0,0]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":4,"a":0},"is":{"k":0,"a":0},"or":{"k":11,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":4,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":3,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[164,160],"a":0},"s":{"a":1,"k":[{"t":14,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":22,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[130,130]},{"t":32,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[0,0]},{"t":45,"s":[0,0]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":4,"a":0},"is":{"k":0,"a":0},"or":{"k":11,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":4,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":4,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[74,164],"a":0},"s":{"a":1,"k":[{"t":16,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":24,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[130,130]},{"t":34,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[0,0]},{"t":45,"s":[0,0]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":4,"a":0},"is":{"k":0,"a":0},"or":{"k":11,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":4,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":5,"sr":1,"ip":0,"op":45,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Saved to My Cats","v":"5.5.2","fr":30,"ip":0,"op":45,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, delight, feedback, success","d":"A heart pops in with a sparkle burst \u2014 rewards saving a substance to a cat's profile.","tc":"#E76953"}},"mw-star-rating.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[48,120],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":6,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[128,128]},{"t":12,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":55,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":8,"a":0},"is":{"k":0,"a":0},"or":{"k":18,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":5,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[84,120],"a":0},"s":{"a":1,"k":[{"t":7,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":13,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[128,128]},{"t":19,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":55,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":8,"a":0},"is":{"k":0,"a":0},"or":{"k":18,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":5,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"a":1,"k":[{"t":14,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":20,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[128,128]},{"t":26,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":55,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":8,"a":0},"is":{"k":0,"a":0},"or":{"k":18,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":5,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":3,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[156,120],"a":0},"s":{"a":1,"k":[{"t":21,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":27,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[128,128]},{"t":33,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":55,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":8,"a":0},"is":{"k":0,"a":0},"or":{"k":18,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":5,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":4,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[192,120],"a":0},"s":{"a":1,"k":[{"t":28,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[0,0]},{"t":34,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[128,128]},{"t":40,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,100]},{"t":55,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sr","d":1,"p":{"k":[0,0],"a":0},"ir":{"k":8,"a":0},"is":{"k":0,"a":0},"or":{"k":18,"a":0},"os":{"k":0,"a":0},"r":{"k":0,"a":0},"pt":{"k":5,"a":0},"sy":1},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.5058823529411764,0.43137254901960786,0.047058823529411764,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":5,"sr":1,"ip":0,"op":55,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[150,150],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Rate your peace of mind","v":"5.5.2","fr":30,"ip":0,"op":55,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, delight, feedback, rating","d":"Five stars pop in one by one \u2014 invites warm feedback framed as peace of mind at a calm emotional high point.","tc":"#816e0c"}},"mw-purr-cat.json":{"layers":[{"ddd":0,"ty":4,"ind":0,"sr":1,"ip":0,"op":72,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[1],"y":[1]},"o":{"x":[0],"y":[0]},"s":[100,100]},{"t":28,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[100,100]},{"t":31,"i":{"x":[1],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[100,12]},{"t":34,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0],"y":[0]},"s":[100,100]},{"t":72,"s":[100,100]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[-26,-2],"a":0},"s":{"k":[18,18],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[26,-2],"a":0},"s":{"k":[18,18],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":1,"sr":1,"ip":0,"op":72,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"a":1,"k":[{"t":0,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[98,98]},{"t":36,"i":{"x":[0.6666666666666667],"y":[1]},"o":{"x":[0.3333333333333333],"y":[0]},"s":[103,103]},{"t":72,"s":[98,98]}]},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[-44,-54],[-28,-18],[-4,-26]]},"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"sh","d":1,"ks":{"k":{"c":true,"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[44,-54],[28,-18],[4,-26]]},"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,18],"a":0},"s":{"k":[14,10],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9058823529411765,0.4117647058823529,0.3254901960784314,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]},{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,6],"a":0},"s":{"k":[120,110],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.10588235294117647,0.5686274509803921,0.3137254901960784,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]},{"ddd":0,"ty":4,"ind":2,"sr":1,"ip":0,"op":72,"st":0,"ks":{"a":{"k":[0,0],"a":0},"p":{"k":[120,120],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}},"ao":0,"bm":0,"shapes":[{"ty":"gr","it":[{"ty":"el","d":1,"p":{"k":[0,0],"a":0},"s":{"k":[160,160],"a":0}},{"ty":"fl","o":{"k":100,"a":0},"c":{"k":[0.9450980392156862,0.9254901960784314,0.8901960784313725,1],"a":0}},{"ty":"tr","a":{"k":[0,0],"a":0},"p":{"k":[0,0],"a":0},"s":{"k":[100,100],"a":0},"r":{"k":0,"a":0},"o":{"k":100,"a":0},"sk":{"k":0,"a":0},"sa":{"k":0,"a":0}}]}]}],"nm":"MewGuard \u2014 Resting easy","v":"5.5.2","fr":30,"ip":0,"op":72,"w":240,"h":240,"ddd":0,"assets":[],"meta":{"a":"MewGuard","g":"mewguard ux_assets / python-lottie","k":"mewguard, sentimental, delight, ambient, mascot","d":"The MewGuard mascot breathes softly and blinks \u2014 visual proof that all is well.","tc":"#1b9150"}}};
+const anims = {};
+function build(){
+  document.querySelectorAll('.player').forEach(el=>{
+    const file = el.getAttribute('data-file');
+    if(!DATA[file]) return;
+    anims[file] = lottie.loadAnimation({
+      container: el, renderer:'svg', loop:true, autoplay:true,
+      animationData: JSON.parse(JSON.stringify(DATA[file]))
+    });
+  });
+}
+function eachAnim(fn){ Object.values(anims).forEach(fn); }
+
+document.addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.id==='playToggle'){
+    const playing = b.classList.toggle('on');
+    b.textContent = playing ? '⏸ Pause all' : '▶ Play all';
+    eachAnim(a=> playing ? a.play() : a.pause());
+  } else if(b.id==='replayAll'){
+    eachAnim(a=>{ a.goToAndPlay(0,true); });
+    const pt=document.getElementById('playToggle'); pt.classList.add('on'); pt.textContent='⏸ Pause all';
+  } else if(b.id==='darkToggle'){
+    document.body.classList.toggle('dark'); b.classList.toggle('on');
+  } else if(b.dataset.act==='replay'){
+    const a=anims[b.dataset.file]; if(a){ a.goToAndPlay(0,true); }
+  }
+});
+
+const speed=document.getElementById('speed'), sv=document.getElementById('speedVal');
+speed.addEventListener('input',()=>{ sv.textContent=speed.value+'×'; eachAnim(a=>a.setSpeed(parseFloat(speed.value))); });
+
+build();
+</script>
+</body>
+</html>

@@ -9,7 +9,7 @@ as a standalone self-animating `.svg` straight from its gallery.
 Open any `*.html` file in a browser. Each gallery offers journey-stage filters and three preview
 toggles — **Pause motion**, **Dark stage**, and **Reduce motion** — plus per-asset **Replay**,
 **Copy SVG**, and **Download** controls. The `lottie/` files drop straight into `lottie-react-native`
-or a web Lottie player.
+or a web Lottie player, and `lottie/gallery.html` previews all of them playing in the browser.
 
 ---
 
@@ -94,6 +94,12 @@ is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 | `mw-bell-recall.json` | Emergency · Alert | Bell rings then settles | Flags a product recall as important, not catastrophic |
 | `mw-water-ripple.json` | Care · Reminder | Ripples spread across a bowl | Makes a hydration nudge caring rather than naggy |
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
+
+**Preview:** open `lottie/gallery.html` in a browser to see all 8 animations playing side by side
+with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
+into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
+is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`
+(re-run `python3 lottie/_build_gallery.py` after editing any Lottie file).
 
 **Usage:** load any file with `lottie-react-native` (`<LottieView source={require('./mw-heartbeat.json')} autoPlay loop />`),
 the `lottie-web`/`@lottiefiles/lottie-player` web player, or import into After Effects / LottieFiles. No external

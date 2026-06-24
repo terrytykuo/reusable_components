@@ -77,3 +77,19 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - 五點星形以 <g class='a-pop' transform-origin> 包裹帶有靜態 transform='translate() scale()' 的 path,可同時兼顧入場縮放動畫與精確定位,且 transform-origin 套在外層 g、靜態 transform 套在內層 path 不會互相干擾
 - 40 張卡(約 14 列×3)的全頁 headless Chrome 截圖需 window 高度約 8200px;以 PIL 從底部裁切(h-1700 至 h-300)是檢視最後幾列新卡的可靠方式
 - 驗證 stage 分布最快的方法是 grep -o 'data-cat=...' | sort | uniq -c 直接比對各 chip 計數,確保 article 數與 filterbar 計數一致(本次 40 全對齊)
+
+### Iteration 6
+
+**Summary:** 補上目標明確要求但前幾次迭代缺漏的 Lottie 檔案:新增 lottie/ 資料夾與 8 個結構合法、帶 mewguard 標籤的 Lottie JSON 動畫及其產生器,並更新 INDEX.md。
+
+**Changes:**
+- 新增 lottie/ 資料夾,內含 8 個真正合法的 Lottie JSON 動畫(心跳/安全勾選/貓掌載入/愛心彈出/貓咪呼吸/召回鈴鐺/補水漣漪/五星評分),v5.5、240×240、30fps、可循環,全部以 cat_toxin_app 調色盤並在 meta.k 帶 mewguard 標籤
+- 撰寫 lottie/_build.py 產生器,以 python-lottie 物件模型建構並匯出,保證輸出 schema 合法且可重現(python3 lottie/_build.py)
+- 更新 INDEX.md:新增 lottie/ 段落(8 列資產表 + lottie-react-native/web player 用法),並修正導言由『Lottie-style』改為實際存在的 Lottie 檔案
+- 以 parse_tgs 重新解析驗證全部 8 檔合法、帶標籤、可循環,並用 headless Chrome 渲染 mid-frame 確認圖層與品牌色正確
+
+**Learnings:**
+- 目標同時要求 illustrations 與 lottie files,但前 5 次迭代只產出 SVG+CSS 而從未產生任何 .json Lottie——達成 40/40 計數不等於滿足全部目標需求,檢視目標原文找出未涵蓋的交付物是有價值的增量工作
+- Lottie 繪製順序與直覺相反:陣列中先加入的 shape/layer 位於上層(後繪製),因此背景必須最後加入且獨立成不參與動畫的圖層,否則初版會渲染出全空白卡片
+- 環境無 Lottie 工具但可離線 pip install python-lottie 0.7.2,其物件模型能程式化建構保證合法的 Lottie 並 export_svg 渲染單幀(has_cairo=False 時 PNG 不可用,但 SVG 可,再用既有 headless Chrome 截圖驗證)
+- python-lottie 的 Metadata.keywords (meta.k) 是放品牌標籤的正確欄位;Star 類別需手動設定 star_type/points/inner_radius/outer_radius,Rect 而非 Rectangle
