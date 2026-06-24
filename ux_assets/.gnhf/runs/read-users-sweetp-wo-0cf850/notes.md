@@ -156,3 +156,20 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - 乾糧『掉落』效果用 transform.position 的 y 軸關鍵幀(高處 EASE_IN 加速 → 略過頭 EASE_OUT → 回彈定位 EASE_IO)即可,搭配 opacity 在起點快速淡入,落點需設在碗的內表面 ellipse 之上;因 kibble 圖層先加入(在上層)會疊在碗面上方,視覺正確
 - 掃描光束用半透明 rounded_rect 沿 y 軸往返並在兩端 opacity 淡出,比固定亮帶更能讓每次 loop 讀起來像一次新的掃描;文字列以 cx = -55 + lw/2 在 150 寬卡片內左對齊,比置中更像真實標籤
 - Lottie 子集相對 SVG 套件的階段失衡仍在(補完後 search 2、care 3,但 SVG 各為 6、8);比對兩者 stage 分布持續是挑選下一批 Lottie 最有依據的方法
+
+### Iteration 11
+
+**Summary:** 將 MewGuard Lottie 動畫集從 14 個擴充到 16 個,新增 Onboarding·Name your cat(擺動的愛心項圈吊牌)與 Recovery·Back to chasing toys(彈跳旋轉的毛線球),補強相對 SVG 套件最薄弱的兩個階段。
+
+**Changes:**
+- 新增 mw-name-tag.json(Onboarding·Empty profile):刻有 coral 愛心的綠色項圈吊牌以頂端掛環為樞紐鐘擺式擺動,對應 SVG『Name your cat』空白個人檔狀態,將 onboarding 階段 Lottie 從 1 補到 2
+- 新增 mw-chase-toy.json(Recovery·Milestone):coral 毛線球(含交叉 cream 纏繞線與鬆脫線尾)垂直彈跳並連續旋轉、落地時 squash 壓扁,對應 SVG『Back to chasing toys』康復里程碑,將 recovery 階段 Lottie 從 1 補到 2
+- 在 lottie/_build.py 新增 build_name_tag 與 build_chase_toy 兩個 builder 並接入 BUILDERS,複用既有 heart_group/ellipse/stroke_circle 輔助函式,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 onboarding/recovery)並重新產生含 16 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 16 檔、表格新增兩列、預覽說明改為 16 個動畫
+
+**Learnings:**
+- 以 transform.anchor_point 設於圖層內某一點(此處掛環上方 Point(0,-48))即可讓整層繞該樞紐做鐘擺旋轉,免拆成父子圖層;搭配對稱的 rotation 關鍵幀(-16→16→-16,起訖同值)可乾淨循環
+- 毛線球的纏繞線不必手刻 bezier:兩個正交的細 stroke 橢圓(64×32 與 32×64,cream)疊在 coral 球體上即讀作交叉纏繞;球體 ellipse 最後加入(在下層)確保線在上方
+- 彈跳動畫用純垂直 position 關鍵幀(150 地面 ↔ 92 頂點)即可乾淨 loop,並以 scale 在落地幀壓扁(116×86)、頂點還圓(100×100)做 squash & stretch;rotation 0→360 的連續自轉讓毛線球更顯活潑
+- 補完本批後 Lottie 七階段分布趨於平衡(各 2-3 個),onboarding 與 recovery 不再是 1 個的失衡點;比對 Lottie 與 SVG 各階段數量仍是挑選下一批最有依據的方法

@@ -83,6 +83,14 @@ META = {
         title="Back to chasing toys", stage="Recovery · Milestone",
         motion="Yarn ball bounces and spins",
         payoff="Celebrates the milestone of a recovered cat back to play."),
+    "mw-dose-scale.json": dict(
+        title="How much matters", stage="Verdict · Nuance",
+        motion="Balance scale tips, then settles",
+        payoff="Frames toxicity as dose-dependent, easing panic over a tiny nibble."),
+    "mw-vet-rosette.json": dict(
+        title="Reviewed by vets", stage="Verdict · Trust",
+        motion="Rosette pops in, check draws",
+        payoff="Anchors trust in the verdict at the moment certainty matters most."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
@@ -92,7 +100,9 @@ ORDER = [
     "mw-paw-loading.json",
     "mw-scan-label.json",
     "mw-safe-check.json",
+    "mw-dose-scale.json",
     "mw-heartbeat.json",
+    "mw-vet-rosette.json",
     "mw-meal-bowl.json",
     "mw-water-ripple.json",
     "mw-meds-reminder.json",

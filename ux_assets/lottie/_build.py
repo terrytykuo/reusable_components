@@ -776,6 +776,128 @@ def build_chase_toy():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 17. Reviewed by vets — a rosette badge pops in and a check draws (verdict·trust)
+# ----------------------------------------------------------------------------
+def build_vet_rosette():
+    a = new_anim(
+        "MewGuard — Reviewed by vets",
+        "verdict, trust, credibility",
+        "A vet-reviewed rosette pops in and a check draws itself — anchors trust in "
+        "the verdict at the moment certainty matters most.",
+        op=55, theme=GREEN,
+    )
+    # medal: check (on top) + inner disc + scalloped rosette, all in one layer that
+    # pops in then gives a gentle confirming bob. Ribbon tails sit behind it.
+    medal = shape_layer(a, 120, 108)
+    # check mark, drawn-on via Trim after the medal lands, on top
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.add_point(Point(-22, 2))
+    b.add_point(Point(-6, 20))
+    b.add_point(Point(26, -16))
+    p.shape.value = b
+    g.add_shape(p)
+    st = Stroke(col(WHITE), 9)
+    st.line_cap = 2
+    st.line_join = 2
+    g.add_shape(st)
+    tr = Trim()
+    tr.start.value = 0
+    tr.end.add_keyframe(16, 0, EASE_OUT)
+    tr.end.add_keyframe(30, 100, EASE_IN)
+    g.add_shape(tr)
+    medal.add_shape(g)
+    medal.add_shape(ellipse(0, 0, 92, 92, GREEN_L))   # inner disc
+    # scalloped rosette edge: a many-pointed star with a small inner/outer gap
+    ros = Group()
+    star = Star()
+    star.star_type = StarType.Star
+    star.points.value = 12
+    star.outer_radius.value = 70
+    star.inner_radius.value = 58
+    star.rotation.value = 0
+    star.position.value = Point(0, 0)
+    ros.add_shape(star)
+    ros.add_shape(Fill(col(GREEN)))
+    medal.add_shape(ros)
+    sc = medal.transform.scale
+    sc.add_keyframe(0, Point(0, 0), EASE_OUT)
+    sc.add_keyframe(12, Point(110, 110), EASE_IN)
+    sc.add_keyframe(20, Point(100, 100), EASE_IO)
+    sc.add_keyframe(40, Point(100, 100), EASE_IO)
+    sc.add_keyframe(47, Point(103, 103), EASE_IO)   # gentle confirming bob
+    sc.add_keyframe(55, Point(100, 100))
+    # ribbon tails hanging below, on their own layer behind the medal, fading in
+    rib = shape_layer(a, 120, 108)
+    for rx in (-22, 22):
+        tail = Group()
+        p2 = Path()
+        b2 = Bezier()
+        b2.closed = True
+        b2.add_point(Point(rx - 15, 58))
+        b2.add_point(Point(rx + 15, 58))
+        b2.add_point(Point(rx + 15, 112))
+        b2.add_point(Point(rx, 98))
+        b2.add_point(Point(rx - 15, 112))
+        p2.shape.value = b2
+        tail.add_shape(p2)
+        tail.add_shape(Fill(col(CORAL)))
+        rib.add_shape(tail)
+    rop = rib.transform.opacity
+    rop.add_keyframe(0, 0, EASE_OUT)
+    rop.add_keyframe(10, 0, EASE_OUT)
+    rop.add_keyframe(18, 100, EASE_IN)
+    rop.add_keyframe(55, 100)
+    add_bg(a, 172)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 18. How much matters — a balance scale tips gently back and forth (verdict·nuance)
+# ----------------------------------------------------------------------------
+def build_dose_scale():
+    a = new_anim(
+        "MewGuard — How much matters",
+        "verdict, nuance, dose",
+        "A balance scale tips gently back and forth then settles — frames toxicity as "
+        "dose-dependent, easing panic over a tiny nibble.",
+        op=72, theme=CAUTION,
+    )
+    # beam + two pans + hangers in one layer that pivots about the central fulcrum,
+    # so the whole balance tips. Drawn first → on top of the fulcrum post.
+    beam = shape_layer(a, 120, 102)
+    beam.transform.anchor_point.value = Point(0, 0)
+    for px, fill in ((-70, GREEN_L), (70, CAUTION)):
+        beam.add_shape(ellipse(px, 32, 48, 15, fill))           # pan dish
+        beam.add_shape(rounded_rect(px, 17, 3, 28, GREEN, 1))   # hanger string
+    beam.add_shape(ellipse(0, 0, 18, 18, GREEN))                # pivot knob
+    beam.add_shape(rounded_rect(0, 0, 158, 9, GREEN, 4))        # the beam bar
+    rot = beam.transform.rotation
+    rot.add_keyframe(0, -11, EASE_IO)
+    rot.add_keyframe(20, 11, EASE_IO)
+    rot.add_keyframe(40, -6, EASE_IO)
+    rot.add_keyframe(56, 4, EASE_IO)
+    rot.add_keyframe(72, -11)
+    # fulcrum post + base, steady, on a layer behind the tipping beam
+    post = shape_layer(a, 120, 102)
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.closed = True
+    b.add_point(Point(0, 4))
+    b.add_point(Point(30, 80))
+    b.add_point(Point(-30, 80))
+    p.shape.value = b
+    g.add_shape(p)
+    g.add_shape(Fill(col(GREEN)))
+    post.add_shape(g)
+    post.add_shape(ellipse(0, 86, 96, 18, GREEN))   # base
+    add_bg(a, 172)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -793,6 +915,8 @@ BUILDERS = {
     "mw-meal-bowl": build_meal_bowl,
     "mw-name-tag": build_name_tag,
     "mw-chase-toy": build_chase_toy,
+    "mw-vet-rosette": build_vet_rosette,
+    "mw-dose-scale": build_dose_scale,
 }
 
 
