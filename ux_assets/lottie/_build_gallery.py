@@ -59,6 +59,14 @@ META = {
         title="Feeling better, day by day", stage="Recovery · Tracking",
         motion="Climbing line draws up, dots rise",
         payoff="Turns symptom logging into a hopeful recovery ritual, not a clinical chart."),
+    "mw-meds-reminder.json": dict(
+        title="Time for meds", stage="Care · Reminder",
+        motion="Capsule pulses inside a breathing halo",
+        payoff="Nudges on-time dosing without alarm."),
+    "mw-call-vet.json": dict(
+        title="Call your vet now", stage="Emergency · Action",
+        motion="Warm handset pulses, sound waves ring",
+        payoff="Makes the one critical action unmissable without a red alarm."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
@@ -68,8 +76,10 @@ ORDER = [
     "mw-safe-check.json",
     "mw-heartbeat.json",
     "mw-water-ripple.json",
+    "mw-meds-reminder.json",
     "mw-recovery-arc.json",
     "mw-bell-recall.json",
+    "mw-call-vet.json",
     "mw-heart-pop.json",
     "mw-star-rating.json",
     "mw-purr-cat.json",

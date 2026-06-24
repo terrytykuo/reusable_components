@@ -14,7 +14,7 @@ import os
 from lottie import Color, Point
 from lottie.objects import Animation, ShapeLayer
 from lottie.objects.shapes import (
-    Ellipse, Fill, Stroke, Group, Star, StarType, Path, Trim,
+    Ellipse, Fill, Stroke, Group, Star, StarType, Path, Trim, Rect,
 )
 from lottie.objects.bezier import Bezier
 from lottie.objects.helpers import Transform  # noqa: F401  (kept for reference)
@@ -85,6 +85,17 @@ def ellipse(cx, cy, w, h, fill_hex, opacity=100):
     f = Fill(col(fill_hex))
     f.opacity.value = opacity
     g.add_shape(f)
+    return g
+
+
+def rounded_rect(cx, cy, w, h, fill_hex, radius):
+    g = Group()
+    r = Rect()
+    r.position.value = Point(cx, cy)
+    r.size.value = Point(w, h)
+    r.rounded.value = radius
+    g.add_shape(r)
+    g.add_shape(Fill(col(fill_hex)))
     return g
 
 
@@ -524,6 +535,91 @@ def build_recovery_arc():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 11. Meds reminder — capsule pill pulses inside a soft reminder halo (care·reminder)
+# ----------------------------------------------------------------------------
+def build_meds_reminder():
+    a = new_anim(
+        "MewGuard — Time for meds",
+        "care, reminder, medication",
+        "A two-tone capsule pulses softly inside a breathing halo — nudges on-time "
+        "dosing without alarm.",
+        op=60, theme=GREEN,
+    )
+    # capsule, drawn first → on top. Cream divider band added before the green body
+    # so it paints over it, reading as a two-part pill. The whole layer tilts -32deg.
+    pill = shape_layer(a)
+    pill.add_shape(rounded_rect(0, 0, 13, 46, CREAM, 6))     # divider (on top)
+    pill.add_shape(rounded_rect(0, 0, 132, 46, GREEN, 23))   # capsule body
+    pill.transform.rotation.value = -32
+    sc = pill.transform.scale
+    sc.add_keyframe(0, Point(97, 97), EASE_IO)
+    sc.add_keyframe(18, Point(106, 106), EASE_IO)
+    sc.add_keyframe(36, Point(97, 97), EASE_IO)
+    sc.add_keyframe(60, Point(97, 97))
+    # soft reminder halo behind the pill: a green ring breathing in opacity
+    halo = shape_layer(a)
+    halo.add_shape(stroke_circle(0, 0, 168, 168, GREEN_L, 6))
+    op = halo.transform.opacity
+    op.add_keyframe(0, 0, EASE_OUT)
+    op.add_keyframe(18, 42, EASE_IN)
+    op.add_keyframe(40, 0, EASE_IO)
+    op.add_keyframe(60, 0)
+    add_bg(a, 160)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 12. Call vet — warm pulsing handset with ringing sound waves (emergency·action)
+# ----------------------------------------------------------------------------
+def build_call_vet():
+    a = new_anim(
+        "MewGuard — Call your vet now",
+        "emergency, action, call",
+        "A warm coral handset pulses while sound waves ring out — makes the one "
+        "critical action unmissable without a red alarm.",
+        op=50, theme=CORAL,
+    )
+    # handset (smile-arc receiver with two bulb ends), tilted like an answered call
+    # and pulsing to read as urgent-but-warm. Drawn first → on top.
+    hs = shape_layer(a, 120, 128)
+    arc = Group()
+    p = Path()
+    b = Bezier()
+    b.add_point(Point(-44, 6), Point(0, 0), Point(14, 28))
+    b.add_point(Point(0, 40), Point(-24, 0), Point(24, 0))
+    b.add_point(Point(44, 6), Point(-14, 28), Point(0, 0))
+    p.shape.value = b
+    arc.add_shape(p)
+    st = Stroke(col(CORAL), 18)
+    st.line_cap = 2
+    st.line_join = 2
+    arc.add_shape(st)
+    hs.add_shape(arc)
+    hs.add_shape(ellipse(-44, 6, 30, 30, CORAL))   # ear piece
+    hs.add_shape(ellipse(44, 6, 30, 30, CORAL))    # mouth piece
+    hs.transform.rotation.value = -40
+    sc = hs.transform.scale
+    sc.add_keyframe(0, Point(94, 94), EASE_IO)
+    sc.add_keyframe(12, Point(108, 108), EASE_IO)
+    sc.add_keyframe(24, Point(94, 94), EASE_IO)
+    sc.add_keyframe(50, Point(94, 94))
+    # ringing sound waves emanating top-right, fading in and out in sequence
+    waves = shape_layer(a, 176, 70)
+    for i, d in enumerate((22, 40)):
+        ring = stroke_circle(0, 0, d, d, CORAL, 4)
+        waves.add_shape(ring)
+    wop = waves.transform.opacity
+    wop.add_keyframe(0, 0, EASE_OUT)
+    wop.add_keyframe(10, 80, EASE_IN)
+    wop.add_keyframe(24, 0, EASE_OUT)
+    wop.add_keyframe(34, 80, EASE_IN)
+    wop.add_keyframe(48, 0, EASE_IO)
+    wop.add_keyframe(50, 0)
+    add_bg(a)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -535,6 +631,8 @@ BUILDERS = {
     "mw-star-rating": build_star_rating,
     "mw-wave-hello": build_wave_hello,
     "mw-recovery-arc": build_recovery_arc,
+    "mw-meds-reminder": build_meds_reminder,
+    "mw-call-vet": build_call_vet,
 }
 
 

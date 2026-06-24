@@ -107,3 +107,20 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - 前 6 次迭代產出 8 個合法 Lottie JSON,但沒有任何瀏覽器預覽方式——檔案存在不等於可驗證/可用,補上預覽工具是真實的增量價值
 - lottie-web 的 loadAnimation 用 path: 從 file:// 載入 JSON 會踩 CORS,改用 animationData 內嵌(透過產生器把 JSON 直接嵌入 HTML)即可離線開啟;只有播放器需從 CDN 載入
 - headless Chrome 搭配 --virtual-time-budget 可實際抓到 CDN 載入後的 lottie 渲染幀,確認 8 個動畫(貓掌點/綠環打勾/coral 心跳/金鈴/補水碗/心形/星星/貓臉)都正確繪製
+
+### Iteration 8
+
+**Summary:** 將 MewGuard Lottie 動畫集從 8 個擴充到 10 個,補齊先前缺漏的 Onboarding 與 Recovery 兩個 journey stage,讓 Lottie 集涵蓋全部七個情感旅程階段。
+
+**Changes:**
+- 新增 mw-wave-hello.json(Onboarding·Welcome):吉祥物揮手 + 頭部輕點,以 anchor_point 設於手腕讓貓掌繞固定樞紐擺動
+- 新增 mw-recovery-arc.json(Recovery·Tracking):以 Trim 逐段繪出向上攀升折線、綠點依序彈入、頂端金點收尾的康復趨勢圖
+- 在 lottie/_build.py 加入兩個對應 builder 並接入 BUILDERS,維持輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 重排)並重新產生含 10 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 10 檔、新增兩列資產表、重排為 journey 順序、註明涵蓋全部七個 stage,預覽說明改為 10 個動畫
+
+**Learnings:**
+- python-lottie 的 parse_tgs 將 metadata.keywords 以字元清單形式 repr 顯示,但 JSON meta.k 實際是逗號分隔字串;驗證標籤應直接讀 JSON 的 meta.k 而非看 parser repr
+- grep '"k":"mewguard' 會因 lottie JSON 輸出在冒號後帶空格("k": "...")而誤判為 0,字串比對標籤要用 json.load 後 in 判斷
+- python-lottie 可用 export_svg(anim, path, frame=N) 直接匯出指定幀的靜態 SVG,再以 headless Chrome 截圖,是逐一驗證單一新 Lottie 渲染最快的方式(免開整個 gallery)
+- 先前 8 個 Lottie 只覆蓋 5 個 stage(缺 onboarding/recovery);40 個 SVG 達標不代表 Lottie 子集也均衡,比對 SVG 的 stage 分布能找出 Lottie 的真實覆蓋缺口
