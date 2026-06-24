@@ -999,6 +999,119 @@ def build_clock_history():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 21. Guardian+ unlocked — a crown settles in with sparkles (onboarding·premium)
+# ----------------------------------------------------------------------------
+def build_guardian_crown():
+    a = new_anim(
+        "MewGuard — Guardian+ unlocked",
+        "onboarding, premium, upgrade",
+        "A gold crown settles down with a sparkle — frames the Guardian+ paywall as "
+        "richer care unlocked, not a wall hit.",
+        op=60, theme=GOLD,
+    )
+    # crown: a three-peak path that drops in from above and settles with a rock.
+    crown = shape_layer(a, 120, 120)
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.closed = True
+    b.add_point(Point(-50, 22))
+    b.add_point(Point(-50, -30))
+    b.add_point(Point(-22, -4))
+    b.add_point(Point(0, -40))
+    b.add_point(Point(22, -4))
+    b.add_point(Point(50, -30))
+    b.add_point(Point(50, 22))
+    p.shape.value = b
+    g.add_shape(p)
+    g.add_shape(Fill(col(GOLD)))
+    crown.add_shape(g)
+    # three jewels along the band
+    for jx, jc in ((-28, CORAL), (0, GREEN), (28, CORAL)):
+        crown.add_shape(ellipse(jx, 12, 12, 12, jc))
+    cpos = crown.transform.position
+    cpos.add_keyframe(0, Point(120, 72), EASE_OUT)      # drops from above
+    cpos.add_keyframe(16, Point(120, 130), EASE_IN)     # lands with overshoot
+    cpos.add_keyframe(26, Point(120, 122), EASE_IO)
+    cpos.add_keyframe(60, Point(120, 122))
+    crot = crown.transform.rotation
+    crot.add_keyframe(0, -8, EASE_OUT)
+    crot.add_keyframe(18, 5, EASE_IO)
+    crot.add_keyframe(30, 0, EASE_IO)
+    crot.add_keyframe(60, 0)
+    # sparkles pop at the peak tips after the crown lands
+    for i, (sx, sy) in enumerate([(0, 58), (-50, 70), (50, 70)]):
+        sg = shape_layer(a, 120 + sx, 120 - sy)
+        star = Star()
+        star.star_type = StarType.Star
+        star.points.value = 4
+        star.outer_radius.value = 12
+        star.inner_radius.value = 4
+        star.rotation.value = 0
+        star.position.value = Point(0, 0)
+        grp = Group()
+        grp.add_shape(star)
+        grp.add_shape(Fill(col(WHITE)))
+        sg.add_shape(grp)
+        s2 = sg.transform.scale
+        d = 24 + i * 3
+        s2.add_keyframe(d, Point(0, 0), EASE_OUT)
+        s2.add_keyframe(d + 8, Point(120, 120), EASE_IN)
+        s2.add_keyframe(d + 18, Point(0, 0), EASE_IO)
+        s2.add_keyframe(60, Point(0, 0))
+    add_bg(a, 176)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 22. Brave little patient — a band-aid heals a heart, gentle beat (recovery·reassurance)
+# ----------------------------------------------------------------------------
+def build_brave_patient():
+    a = new_anim(
+        "MewGuard — Brave little patient",
+        "recovery, reassurance, healing",
+        "A coral heart beats softly under a tilted band-aid while a green healing ring "
+        "expands — closes a scare with warmth and pride.",
+        op=72, theme=CORAL,
+    )
+    # band-aid: a cream plaster tilted across the heart, with a paler pad and holes.
+    # drawn first → sits on top of the heart.
+    aid = shape_layer(a)
+    aid.transform.rotation.value = -30
+    for hx in (-30, 30):
+        for hy in (-6, 6):
+            aid.add_shape(ellipse(hx, hy, 6, 6, GREEN_L, opacity=55))
+    aid.add_shape(rounded_rect(0, 0, 36, 30, WHITE, 8))       # center pad
+    aid.add_shape(rounded_rect(0, 0, 92, 30, CREAM, 14))      # plaster body (back of layer)
+    asc = aid.transform.scale
+    asc.add_keyframe(0, Point(96, 96), EASE_IO)
+    asc.add_keyframe(36, Point(101, 101), EASE_IO)
+    asc.add_keyframe(72, Point(96, 96))
+    # heart beats gently (slow, healing — not the urgent heartbeat)
+    heart = shape_layer(a)
+    heart.add_shape(heart_group(CORAL, 1.05))
+    hsc = heart.transform.scale
+    hsc.add_keyframe(0, Point(94, 94), EASE_OUT)
+    hsc.add_keyframe(10, Point(104, 104), EASE_IN)
+    hsc.add_keyframe(22, Point(94, 94), EASE_IO)
+    hsc.add_keyframe(72, Point(94, 94))
+    # green healing ring expands and fades behind the heart
+    ring = shape_layer(a)
+    ring.add_shape(stroke_circle(0, 0, 120, 120, GREEN, 6))
+    rsc = ring.transform.scale
+    rop = ring.transform.opacity
+    rsc.add_keyframe(0, Point(70, 70), EASE_OUT)
+    rsc.add_keyframe(48, Point(140, 140), EASE_IN)
+    rsc.add_keyframe(72, Point(70, 70))
+    rop.add_keyframe(0, 0, EASE_OUT)
+    rop.add_keyframe(20, 70, EASE_IO)
+    rop.add_keyframe(48, 0, EASE_IN)
+    rop.add_keyframe(72, 0)
+    add_bg(a, 168)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -1020,6 +1133,8 @@ BUILDERS = {
     "mw-dose-scale": build_dose_scale,
     "mw-vet-calendar": build_vet_calendar,
     "mw-clock-history": build_clock_history,
+    "mw-guardian-crown": build_guardian_crown,
+    "mw-brave-patient": build_brave_patient,
 }
 
 

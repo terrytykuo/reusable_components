@@ -189,3 +189,20 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - python-lottie 的 Star 以 points=12、outer_radius=70、inner_radius=58(小幅內外半徑差)即可做出扇貝/勳章邊緣,免手刻 bezier;搭配內層 ellipse 圓盤與 Trim 描繪的勾選即成完整獎章
 - 平衡秤『傾斜』效果用單一圖層 transform.anchor_point=Point(0,0) 設於支點頂端、整層含 beam+兩 pan+hanger 一起 rotation 擺動最乾淨;pan 隨 beam 一起傾斜反而更像真實天秤,免逐 pan 做反向補償
 - verdict 是 Lottie 相對 SVG 最失衡的階段(SVG 5 個、Lottie 原本僅 safe-check 1 個專屬);比對兩者 stage 分布仍是挑選下一批 Lottie 最有依據的方法,本批補完後 verdict 達 4 個
+
+### Iteration 13
+
+**Summary:** 將 MewGuard Lottie 動畫集從 18 個擴充到 20 個,新增 Care·Vet day booked(蓋章式行事曆勾選)與 Search·Picking up where you left off(指針倒轉的時鐘),補強相對 SVG 套件最薄弱的 care 與 search 兩個階段。
+
+**Changes:**
+- 新增 mw-vet-calendar.json(Care·Confirmation):coral 日期高亮圓盤帶白色勾選以 scale+rotation 蓋章式彈入並經 Trim 自描繪,搭配白色行事曆卡、綠色標題列、活頁圈與淡化日期格,對應 SVG 第 17 號『Vet day booked』,將 care 階段 Lottie 從 3 補到 4
+- 新增 mw-clock-history.json(Search·History):白色錶面+綠色外環+四個刻度點,coral 長分針整圈逆時針掃過、綠色短時針同步小幅倒退,以指針倒轉隱喻倒帶至近期查詢,對應 SVG 第 37 號『Picking up where you left off』,將 search 階段 Lottie 從 2 補到 3
+- 在 lottie/_build.py 新增 build_vet_calendar 與 build_clock_history 兩個 builder 並接入 BUILDERS,複用既有 rounded_rect/ellipse/stroke_circle/Trim 輔助,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 search/care)並重新產生含 20 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 20 檔、表格新增兩列、預覽說明改為 20 個動畫
+
+**Learnings:**
+- 時鐘指針要繞錶面中心旋轉,最乾淨的做法是把指針圖層 position 設在中心 (120,120)、anchor_point 設 (0,0),再以 rounded_rect(0, -length/2, ...) 讓指針本體從中心向上延伸;rotation 關鍵幀直接旋轉整層即繞中心轉,免拆父子圖層
+- 連續旋轉(時鐘/倒帶)用線性插值(add_keyframe 不帶 easing)才能等速且 loop 無縫銜接;chase-toy 那種起點帶 EASE_IO 的寫法適合彈跳但不適合等速連續自轉
+- 蓋章式入場效果用 scale 過衝(0→128→100)搭配 rotation(-22→0)兩條 transform 同時作用,比單純 pop 更像橡皮章落下;前段 scale 維持 0 的 hold 幀可讓蓋章延後到卡片就位後再發生
+- 補完本批後 care 達 4 個、search 達 3 個 Lottie;相對 SVG(care 8、search 6)仍有差距,比對兩者 stage 分布持續是挑選下一批 Lottie 最有依據的方法,onboarding/recovery(各 2)為下一個可補強的失衡點

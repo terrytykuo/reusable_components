@@ -81,7 +81,7 @@ tag inside its `meta.k` (keywords) field along with author, description, and `th
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
 is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 
-**Status:** 20 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
+**Status:** 22 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
 moments, spanning **all seven journey stages**.
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
@@ -89,6 +89,7 @@ moments, spanning **all seven journey stages**.
 |------|-------|--------|-----------|
 | `mw-wave-hello.json` | Onboarding · Welcome | Mascot waves, head bobs | Builds trust and warmth before a worried owner's first search |
 | `mw-name-tag.json` | Onboarding · Empty profile | Heart-engraved collar tag swings on its ring | Invites a worried owner to name and claim their cat's profile |
+| `mw-guardian-crown.json` | Onboarding · Premium | Gold crown settles in, sparkles pop | Frames the Guardian+ paywall as richer care unlocked, not a wall hit |
 | `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |
 | `mw-scan-label.json` | Search · Action | Scan beam sweeps down a label card | Invites the faster scan input when a worried hand can't type |
 | `mw-clock-history.json` | Search · History | Clock hands sweep backward, rewinding | Lets a worried owner resume a frantic search without retyping |
@@ -102,13 +103,14 @@ moments, spanning **all seven journey stages**.
 | `mw-vet-calendar.json` | Care · Confirmation | A check stamps onto a calendar date | Closes the loop on care planning when a vet visit is booked |
 | `mw-recovery-arc.json` | Recovery · Tracking | Climbing line draws up, dots rise | Turns symptom logging into a hopeful recovery ritual, not a clinical chart |
 | `mw-chase-toy.json` | Recovery · Milestone | Yarn ball bounces and spins | Celebrates the milestone of a recovered cat back to play |
+| `mw-brave-patient.json` | Recovery · Reassurance | Heart beats softly under a band-aid, healing ring expands | Closes a health scare with warmth and pride |
 | `mw-bell-recall.json` | Emergency · Alert | Bell rings then settles | Flags a product recall as important, not catastrophic |
 | `mw-call-vet.json` | Emergency · Action | Warm handset pulses, sound waves ring | Makes the one critical action unmissable without a red alarm |
 | `mw-heart-pop.json` | Delight | Heart scales in + sparkle burst | Rewards saving a substance to a cat's profile |
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
 | `mw-purr-cat.json` | Delight · Ambient | Mascot breathes + blinks | Resting cat is visual proof that all is well |
 
-**Preview:** open `lottie/gallery.html` in a browser to see all 20 animations playing side by side
+**Preview:** open `lottie/gallery.html` in a browser to see all 22 animations playing side by side
 with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
 into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
 is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`

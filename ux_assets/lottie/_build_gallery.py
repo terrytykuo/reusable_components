@@ -99,12 +99,21 @@ META = {
         title="Picking up where you left off", stage="Search · History",
         motion="Clock hands sweep backward, rewinding",
         payoff="Lets a worried owner resume a frantic search without retyping."),
+    "mw-guardian-crown.json": dict(
+        title="Guardian+ unlocked", stage="Onboarding · Premium",
+        motion="Gold crown settles in, sparkles pop",
+        payoff="Frames the Guardian+ paywall as richer care unlocked, not a wall hit."),
+    "mw-brave-patient.json": dict(
+        title="Brave little patient", stage="Recovery · Reassurance",
+        motion="Heart beats softly under a band-aid, healing ring expands",
+        payoff="Closes a health scare with warmth and pride."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
 ORDER = [
     "mw-wave-hello.json",
     "mw-name-tag.json",
+    "mw-guardian-crown.json",
     "mw-paw-loading.json",
     "mw-scan-label.json",
     "mw-clock-history.json",
@@ -118,6 +127,7 @@ ORDER = [
     "mw-vet-calendar.json",
     "mw-recovery-arc.json",
     "mw-chase-toy.json",
+    "mw-brave-patient.json",
     "mw-bell-recall.json",
     "mw-call-vet.json",
     "mw-heart-pop.json",
