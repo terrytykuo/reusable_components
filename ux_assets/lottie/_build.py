@@ -427,6 +427,103 @@ def build_star_rating():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 9. Wave hello — mascot waves at first launch (onboarding·welcome)
+# ----------------------------------------------------------------------------
+def build_wave_hello():
+    a = new_anim(
+        "MewGuard — Meet your guardian",
+        "onboarding, welcome, mascot",
+        "The MewGuard mascot waves hello at first launch — builds trust and warmth "
+        "before a worried owner's first search.",
+        op=60, theme=GREEN,
+    )
+    # waving paw — drawn first so it sits on top; anchored at the wrist so the
+    # whole paw rotates about a fixed pivot beside the head.
+    paw = shape_layer(a)
+    paw.add_shape(ellipse(0, 0, 30, 34, GREEN_L))   # paw pad
+    paw.transform.anchor_point.value = Point(0, 34)  # wrist below the pad
+    paw.transform.position.value = Point(120 + 72, 120 - 6 + 34)
+    rot = paw.transform.rotation
+    rot.add_keyframe(0, -20, EASE_IO)
+    rot.add_keyframe(12, 18, EASE_IO)
+    rot.add_keyframe(24, -20, EASE_IO)
+    rot.add_keyframe(36, 18, EASE_IO)
+    rot.add_keyframe(48, -20, EASE_IO)
+    rot.add_keyframe(60, -20)
+    # eyes layer on top of the head
+    eyes = shape_layer(a)
+    for ex in (-24, 24):
+        eyes.add_shape(ellipse(ex, -4, 16, 18, CREAM))
+    # head: ears + nose + face, with a gentle welcoming bob
+    head = shape_layer(a)
+    for ex in (-42, 42):
+        g = Group()
+        p = Path()
+        b = Bezier()
+        b.closed = True
+        b.add_point(Point(ex, -52))
+        b.add_point(Point(ex + (16 if ex < 0 else -16), -16))
+        b.add_point(Point(ex + (40 if ex < 0 else -40), -24))
+        p.shape.value = b
+        g.add_shape(p)
+        g.add_shape(Fill(col(GREEN)))
+        head.add_shape(g)
+    head.add_shape(ellipse(0, 16, 14, 10, CORAL))   # nose
+    head.add_shape(ellipse(0, 4, 120, 110, GREEN))  # face (added last → behind)
+    sc = head.transform.scale
+    sc.add_keyframe(0, Point(99, 99), EASE_IO)
+    sc.add_keyframe(30, Point(102, 102), EASE_IO)
+    sc.add_keyframe(60, Point(99, 99))
+    add_bg(a, 170)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 10. Recovery arc — a climbing line draws upward with rising dots (recovery)
+# ----------------------------------------------------------------------------
+def build_recovery_arc():
+    a = new_anim(
+        "MewGuard — Feeling better, day by day",
+        "recovery, tracking, hopeful",
+        "A climbing line draws upward with dots rising one by one — turns symptom "
+        "logging into a hopeful recovery ritual, not a clinical chart.",
+        op=60, theme=SAFE,
+    )
+    pts = [(-72, 40), (-36, 22), (0, 2), (36, -22), (72, -44)]
+    # dots that pop in along the line, drawn first → on top of the stroke
+    for i, (x, y) in enumerate(pts):
+        d = shape_layer(a, 120 + x, 120 + y)
+        d.add_shape(ellipse(0, 0, 16, 16, GREEN if i < 4 else GOLD))
+        sc = d.transform.scale
+        t = 14 + i * 7
+        sc.add_keyframe(t, Point(0, 0), EASE_OUT)
+        sc.add_keyframe(t + 6, Point(125, 125), EASE_IN)
+        sc.add_keyframe(t + 12, Point(100, 100), EASE_IO)
+        sc.add_keyframe(60, Point(100, 100))
+    # the climbing line itself, drawn-on via Trim, sitting below the dots
+    line = shape_layer(a)
+    g = Group()
+    p = Path()
+    b = Bezier()
+    for (x, y) in pts:
+        b.add_point(Point(x, y))
+    p.shape.value = b
+    g.add_shape(p)
+    st = Stroke(col(GREEN_L), 8)
+    st.line_cap = 2
+    st.line_join = 2
+    g.add_shape(st)
+    tr = Trim()
+    tr.start.value = 0
+    tr.end.add_keyframe(4, 0, EASE_OUT)
+    tr.end.add_keyframe(44, 100, EASE_IN)
+    g.add_shape(tr)
+    line.add_shape(g)
+    add_bg(a)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -436,6 +533,8 @@ BUILDERS = {
     "mw-bell-recall": build_bell,
     "mw-water-ripple": build_water_ripple,
     "mw-star-rating": build_star_rating,
+    "mw-wave-hello": build_wave_hello,
+    "mw-recovery-arc": build_recovery_arc,
 }
 
 

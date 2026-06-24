@@ -93,3 +93,17 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - Lottie 繪製順序與直覺相反:陣列中先加入的 shape/layer 位於上層(後繪製),因此背景必須最後加入且獨立成不參與動畫的圖層,否則初版會渲染出全空白卡片
 - 環境無 Lottie 工具但可離線 pip install python-lottie 0.7.2,其物件模型能程式化建構保證合法的 Lottie 並 export_svg 渲染單幀(has_cairo=False 時 PNG 不可用,但 SVG 可,再用既有 headless Chrome 截圖驗證)
 - python-lottie 的 Metadata.keywords (meta.k) 是放品牌標籤的正確欄位;Star 類別需手動設定 star_type/points/inner_radius/outer_radius,Rect 而非 Rectangle
+
+### Iteration 7
+
+**Summary:** 新增自包含的 lottie/gallery.html 預覽頁與其產生器,讓 8 個 MewGuard Lottie JSON 動畫首次能在瀏覽器中即時播放與驗證,並更新 INDEX.md。
+
+**Changes:**
+- 新增 lottie/gallery.html:把 8 個 Lottie JSON 以 animationData 內嵌(可直接從 file:// 開啟、無 fetch/CORS 問題),以 lottie-web 播放器渲染,並提供 Pause/Replay all、Dark stage 切換與 Speed 滑桿,風格對齊既有 SVG gallery 的品牌調色盤,每張卡顯示 stage/motion/payoff 與 mewguard 標籤
+- 新增 lottie/_build_gallery.py 產生器:讀取 mw-*.json 並依 journey 順序內嵌產出 gallery.html,metadata 表對齊 INDEX.md 的 Lottie 表格以避免文件漂移,可重複執行 (python3 lottie/_build_gallery.py)
+- 更新 INDEX.md:在 lottie 段落新增 Preview 說明,並在導言點出 lottie/gallery.html 可在瀏覽器預覽全部 Lottie 動畫
+
+**Learnings:**
+- 前 6 次迭代產出 8 個合法 Lottie JSON,但沒有任何瀏覽器預覽方式——檔案存在不等於可驗證/可用,補上預覽工具是真實的增量價值
+- lottie-web 的 loadAnimation 用 path: 從 file:// 載入 JSON 會踩 CORS,改用 animationData 內嵌(透過產生器把 JSON 直接嵌入 HTML)即可離線開啟;只有播放器需從 CDN 載入
+- headless Chrome 搭配 --virtual-time-budget 可實際抓到 CDN 載入後的 lottie 渲染幀,確認 8 個動畫(貓掌點/綠環打勾/coral 心跳/金鈴/補水碗/心形/星星/貓臉)都正確繪製

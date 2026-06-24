@@ -51,15 +51,25 @@ META = {
         title="Rate your peace of mind", stage="Delight · Feedback",
         motion="Five stars pop in one by one",
         payoff="Invites warm feedback framed as peace of mind."),
+    "mw-wave-hello.json": dict(
+        title="Meet your guardian", stage="Onboarding · Welcome",
+        motion="Mascot waves, head bobs",
+        payoff="Builds trust and warmth before a worried owner's first search."),
+    "mw-recovery-arc.json": dict(
+        title="Feeling better, day by day", stage="Recovery · Tracking",
+        motion="Climbing line draws up, dots rise",
+        payoff="Turns symptom logging into a hopeful recovery ritual, not a clinical chart."),
 }
 
-# preserve a sensible journey order rather than alphabetical
+# preserve the MewGuard journey order rather than alphabetical
 ORDER = [
+    "mw-wave-hello.json",
     "mw-paw-loading.json",
     "mw-safe-check.json",
     "mw-heartbeat.json",
-    "mw-bell-recall.json",
     "mw-water-ripple.json",
+    "mw-recovery-arc.json",
+    "mw-bell-recall.json",
     "mw-heart-pop.json",
     "mw-star-rating.json",
     "mw-purr-cat.json",
