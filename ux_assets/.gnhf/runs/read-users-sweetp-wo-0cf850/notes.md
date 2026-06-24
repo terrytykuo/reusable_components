@@ -124,3 +124,19 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - grep '"k":"mewguard' 會因 lottie JSON 輸出在冒號後帶空格("k": "...")而誤判為 0,字串比對標籤要用 json.load 後 in 判斷
 - python-lottie 可用 export_svg(anim, path, frame=N) 直接匯出指定幀的靜態 SVG,再以 headless Chrome 截圖,是逐一驗證單一新 Lottie 渲染最快的方式(免開整個 gallery)
 - 先前 8 個 Lottie 只覆蓋 5 個 stage(缺 onboarding/recovery);40 個 SVG 達標不代表 Lottie 子集也均衡,比對 SVG 的 stage 分布能找出 Lottie 的真實覆蓋缺口
+
+### Iteration 9
+
+**Summary:** 將 MewGuard Lottie 動畫集從 10 個擴充到 12 個,新增 Care·Time for meds(膠囊藥丸)與 Emergency·Call your vet now(暖色話筒+來電聲波)兩個動畫,補強相對 SVG 套件最薄弱的兩個 stage。
+
+**Changes:**
+- 新增 mw-meds-reminder.json(Care·Reminder):雙色膠囊藥丸在呼吸式光環中柔和脈動,對應 SVG 第 15 號『Time for meds』,以 rounded_rect 建構膠囊本體與 cream 分隔帶
+- 新增 mw-call-vet.json(Emergency·Action):暖色 coral 話筒(smile-arc 受話器+兩端聽筒)脈動,搭配右上角序列淡入淡出的來電聲波環,對應 SVG 第 26 號『Call your vet now』
+- 在 lottie/_build.py 加入 Rect import、rounded_rect 輔助函式與兩個 builder 並接入 BUILDERS,保持輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 care/emergency)並重新產生含 12 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 12 檔、表格新增兩列、預覽說明改為 12 個動畫
+
+**Learnings:**
+- python-lottie 的靜態 SVG 匯出函式是 lottie.exporters.svg.export_svg(anim, file_obj, frame=N)(需傳檔案物件,非路徑),而非 exporters.core——core 只有 export_lottie/export_tgs
+- python-lottie 的 Rect 類別支援 .rounded.value 設圓角;當 rounded ≈ height/2 即可從矩形得到膠囊(capsule)形狀,免手刻 bezier
+- Care 階段在 SVG 套件有 8 個情感時刻卻只有 1 個 Lottie(water-ripple),比對 SVG 與 Lottie 的 stage 分布能找出最值得補強的失衡點——本次以 meds-reminder 補 Care、call-vet 補 Emergency

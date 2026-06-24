@@ -81,7 +81,7 @@ tag inside its `meta.k` (keywords) field along with author, description, and `th
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
 is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 
-**Status:** 12 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
+**Status:** 14 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
 moments, spanning **all seven journey stages**.
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
@@ -89,8 +89,10 @@ moments, spanning **all seven journey stages**.
 |------|-------|--------|-----------|
 | `mw-wave-hello.json` | Onboarding · Welcome | Mascot waves, head bobs | Builds trust and warmth before a worried owner's first search |
 | `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |
+| `mw-scan-label.json` | Search · Action | Scan beam sweeps down a label card | Invites the faster scan input when a worried hand can't type |
 | `mw-safe-check.json` | Verdict · Safe | Ring fills, check draws in | Green ring + self-drawing check delivers instant relief on a safe verdict |
 | `mw-heartbeat.json` | Verdict · Toxic / Emergency | Double-thump heart pulse | Steady coral heartbeat holds a worried owner's nerve — urgent, not panic |
+| `mw-meal-bowl.json` | Care · Feedback | Kibble drops into a bowl, heart pops | Rewards logging a feeding in the care tracker |
 | `mw-water-ripple.json` | Care · Reminder | Ripples spread across a bowl | Makes a hydration nudge caring rather than naggy |
 | `mw-meds-reminder.json` | Care · Reminder | Capsule pulses inside a breathing halo | Nudges on-time dosing without alarm |
 | `mw-recovery-arc.json` | Recovery · Tracking | Climbing line draws up, dots rise | Turns symptom logging into a hopeful recovery ritual, not a clinical chart |
@@ -100,7 +102,7 @@ moments, spanning **all seven journey stages**.
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
 | `mw-purr-cat.json` | Delight · Ambient | Mascot breathes + blinks | Resting cat is visual proof that all is well |
 
-**Preview:** open `lottie/gallery.html` in a browser to see all 12 animations playing side by side
+**Preview:** open `lottie/gallery.html` in a browser to see all 14 animations playing side by side
 with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
 into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
 is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`

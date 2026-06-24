@@ -67,14 +67,24 @@ META = {
         title="Call your vet now", stage="Emergency · Action",
         motion="Warm handset pulses, sound waves ring",
         payoff="Makes the one critical action unmissable without a red alarm."),
+    "mw-scan-label.json": dict(
+        title="Scan the label", stage="Search · Action",
+        motion="Scan beam sweeps down a label card",
+        payoff="Invites the faster scan input when a worried hand can't type."),
+    "mw-meal-bowl.json": dict(
+        title="Mealtime logged", stage="Care · Feedback",
+        motion="Kibble drops into a bowl, heart pops",
+        payoff="Rewards logging a feeding in the care tracker."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
 ORDER = [
     "mw-wave-hello.json",
     "mw-paw-loading.json",
+    "mw-scan-label.json",
     "mw-safe-check.json",
     "mw-heartbeat.json",
+    "mw-meal-bowl.json",
     "mw-water-ripple.json",
     "mw-meds-reminder.json",
     "mw-recovery-arc.json",

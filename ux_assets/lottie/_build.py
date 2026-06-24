@@ -620,6 +620,85 @@ def build_call_vet():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 13. Scan the label — a scan beam sweeps a product label card (search·action)
+# ----------------------------------------------------------------------------
+def build_scan_label():
+    a = new_anim(
+        "MewGuard — Scan the label",
+        "search, scan, action",
+        "A green scan beam sweeps down a product label while its text lines settle — "
+        "invites the faster scan input when a worried hand can't type.",
+        op=60, theme=GREEN,
+    )
+    # scan beam, drawn first → on top. A translucent green band that travels down
+    # the card and fades at the ends so each loop reads as a fresh pass.
+    beam = shape_layer(a, 120, 120)
+    beam.add_shape(rounded_rect(0, 0, 150, 9, GREEN_L, 4))
+    pos = beam.transform.position
+    pos.add_keyframe(0, Point(120, 120 - 52), EASE_IO)
+    pos.add_keyframe(40, Point(120, 120 + 52), EASE_IO)
+    pos.add_keyframe(60, Point(120, 120 - 52))
+    bop = beam.transform.opacity
+    bop.add_keyframe(0, 0, EASE_OUT)
+    bop.add_keyframe(8, 70, EASE_IO)
+    bop.add_keyframe(34, 70, EASE_IO)
+    bop.add_keyframe(42, 0, EASE_IN)
+    bop.add_keyframe(60, 0)
+    # label text lines (green rounded bars), left-aligned in the card, below the beam
+    lines = shape_layer(a)
+    for ly, lw in ((-30, 96), (-8, 120), (14, 120), (36, 64)):
+        lines.add_shape(rounded_rect(-55 + lw / 2, ly, lw, 9, GREEN, 4))
+    # white label card behind the text
+    card = shape_layer(a)
+    card.add_shape(rounded_rect(0, 0, 150, 116, WHITE, 16))
+    add_bg(a, 170)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 14. Mealtime logged — kibble drops into a bowl, then a heart pops (care·feedback)
+# ----------------------------------------------------------------------------
+def build_meal_bowl():
+    a = new_anim(
+        "MewGuard — Mealtime logged",
+        "care, feedback, feeding",
+        "Kibble drops into a bowl and a small heart pops — rewards logging a feeding "
+        "in the care tracker.",
+        op=60, theme=CAUTION,
+    )
+    # heart payoff, drawn first → on top, pops above the bowl near the end
+    heart = shape_layer(a, 120, 70)
+    heart.add_shape(heart_group(CORAL, 0.42))
+    hsc = heart.transform.scale
+    hsc.add_keyframe(0, Point(0, 0))
+    hsc.add_keyframe(38, Point(0, 0), EASE_OUT)
+    hsc.add_keyframe(46, Point(120, 120), EASE_IN)
+    hsc.add_keyframe(54, Point(100, 100), EASE_IO)
+    hsc.add_keyframe(60, Point(100, 100))
+    # kibble pieces drop in and settle into the bowl, staggered
+    for i, (kx, col_hex) in enumerate([(-30, CAUTION), (-8, GOLD),
+                                       (14, CAUTION), (34, GOLD)]):
+        k = shape_layer(a, 120 + kx, 120)
+        k.add_shape(ellipse(0, 0, 17, 15, col_hex))
+        pos = k.transform.position
+        ty = 120 + 14
+        t = i * 5
+        pos.add_keyframe(t, Point(120 + kx, 120 - 78), EASE_IN)
+        pos.add_keyframe(t + 11, Point(120 + kx, ty + 6), EASE_OUT)
+        pos.add_keyframe(t + 17, Point(120 + kx, ty), EASE_IO)
+        pos.add_keyframe(60, Point(120 + kx, ty))
+        op = k.transform.opacity
+        op.add_keyframe(t, 0, EASE_OUT)
+        op.add_keyframe(t + 4, 100)
+    # bowl: inner food surface first (on top), green bowl body behind it
+    bowl = shape_layer(a)
+    bowl.add_shape(ellipse(0, 14, 120, 40, SURFACE))   # inner surface
+    bowl.add_shape(ellipse(0, 22, 152, 58, GREEN))     # bowl body
+    add_bg(a)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -633,6 +712,8 @@ BUILDERS = {
     "mw-recovery-arc": build_recovery_arc,
     "mw-meds-reminder": build_meds_reminder,
     "mw-call-vet": build_call_vet,
+    "mw-scan-label": build_scan_label,
+    "mw-meal-bowl": build_meal_bowl,
 }
 
 
