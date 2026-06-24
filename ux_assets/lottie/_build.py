@@ -699,6 +699,83 @@ def build_meal_bowl():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 15. Name your cat — a heart-engraved collar tag swings on its ring (onboarding)
+# ----------------------------------------------------------------------------
+def build_name_tag():
+    a = new_anim(
+        "MewGuard — Name your cat",
+        "onboarding, empty-state, profile",
+        "A heart-engraved collar tag swings gently on its ring — invites a worried "
+        "owner to name and claim their cat's profile.",
+        op=60, theme=GREEN,
+    )
+    # pendant tag: layer pivots about the ring (anchor above the disc) so the whole
+    # tag swings like a pendulum. Heart drawn first → on top of the disc.
+    tag = shape_layer(a, 120, 122)
+    tag.transform.anchor_point.value = Point(0, -48)  # pivot at the ring above
+    tag.add_shape(heart_group(CORAL, 0.30))           # engraved heart (on top)
+    tag.add_shape(ellipse(0, 0, 66, 66, GREEN))       # the tag disc
+    tag.add_shape(stroke_circle(0, -44, 22, 22, GREEN_L, 5))  # hanging ring (behind)
+    rot = tag.transform.rotation
+    rot.add_keyframe(0, -16, EASE_IO)
+    rot.add_keyframe(15, 16, EASE_IO)
+    rot.add_keyframe(30, -16, EASE_IO)
+    rot.add_keyframe(45, 16, EASE_IO)
+    rot.add_keyframe(60, -16)
+    add_bg(a, 168)
+    return a
+
+
+# ----------------------------------------------------------------------------
+# 16. Back to chasing toys — a yarn ball bounces and spins (recovery·milestone)
+# ----------------------------------------------------------------------------
+def build_chase_toy():
+    a = new_anim(
+        "MewGuard — Back to chasing toys",
+        "recovery, milestone, play",
+        "A yarn ball bounces and spins playfully — celebrates the milestone of a "
+        "recovered cat back to chasing toys.",
+        op=60, theme=SAFE,
+    )
+    ball = shape_layer(a, 120, 150)
+    # loose yarn end trailing from the ball (drawn first → on top)
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.add_point(Point(30, 2), Point(0, 0), Point(10, -4))
+    b.add_point(Point(48, 16), Point(-2, -10), Point(4, 10))
+    b.add_point(Point(40, 32), Point(8, -4), Point(-6, 8))
+    p.shape.value = b
+    g.add_shape(p)
+    st = Stroke(col(CORAL), 3)
+    st.line_cap = 2
+    g.add_shape(st)
+    ball.add_shape(g)
+    # crossing wraps suggest wound yarn (cream over the coral body)
+    ball.add_shape(stroke_circle(0, 0, 64, 32, CREAM, 3))
+    ball.add_shape(stroke_circle(0, 0, 32, 64, CREAM, 3))
+    ball.add_shape(ellipse(0, 0, 64, 64, CORAL))   # ball body (added last → behind)
+    # bounce: pure vertical hops so the loop closes cleanly, with squash on landing
+    pos = ball.transform.position
+    pos.add_keyframe(0, Point(120, 150), EASE_OUT)
+    pos.add_keyframe(15, Point(120, 92), EASE_IN)
+    pos.add_keyframe(30, Point(120, 150), EASE_OUT)
+    pos.add_keyframe(45, Point(120, 92), EASE_IN)
+    pos.add_keyframe(60, Point(120, 150))
+    sc = ball.transform.scale
+    sc.add_keyframe(0, Point(116, 86), EASE_OUT)    # squashed on the ground
+    sc.add_keyframe(15, Point(100, 100), EASE_IO)   # round at the apex
+    sc.add_keyframe(30, Point(116, 86), EASE_OUT)
+    sc.add_keyframe(45, Point(100, 100), EASE_IO)
+    sc.add_keyframe(60, Point(116, 86))
+    rot = ball.transform.rotation                   # continuous playful spin
+    rot.add_keyframe(0, 0, EASE_IO)
+    rot.add_keyframe(60, 360)
+    add_bg(a)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -714,6 +791,8 @@ BUILDERS = {
     "mw-call-vet": build_call_vet,
     "mw-scan-label": build_scan_label,
     "mw-meal-bowl": build_meal_bowl,
+    "mw-name-tag": build_name_tag,
+    "mw-chase-toy": build_chase_toy,
 }
 
 

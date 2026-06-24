@@ -75,11 +75,20 @@ META = {
         title="Mealtime logged", stage="Care · Feedback",
         motion="Kibble drops into a bowl, heart pops",
         payoff="Rewards logging a feeding in the care tracker."),
+    "mw-name-tag.json": dict(
+        title="Name your cat", stage="Onboarding · Empty profile",
+        motion="Heart-engraved collar tag swings on its ring",
+        payoff="Invites a worried owner to name and claim their cat's profile."),
+    "mw-chase-toy.json": dict(
+        title="Back to chasing toys", stage="Recovery · Milestone",
+        motion="Yarn ball bounces and spins",
+        payoff="Celebrates the milestone of a recovered cat back to play."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
 ORDER = [
     "mw-wave-hello.json",
+    "mw-name-tag.json",
     "mw-paw-loading.json",
     "mw-scan-label.json",
     "mw-safe-check.json",
@@ -88,6 +97,7 @@ ORDER = [
     "mw-water-ripple.json",
     "mw-meds-reminder.json",
     "mw-recovery-arc.json",
+    "mw-chase-toy.json",
     "mw-bell-recall.json",
     "mw-call-vet.json",
     "mw-heart-pop.json",

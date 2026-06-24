@@ -140,3 +140,19 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - python-lottie 的靜態 SVG 匯出函式是 lottie.exporters.svg.export_svg(anim, file_obj, frame=N)(需傳檔案物件,非路徑),而非 exporters.core——core 只有 export_lottie/export_tgs
 - python-lottie 的 Rect 類別支援 .rounded.value 設圓角;當 rounded ≈ height/2 即可從矩形得到膠囊(capsule)形狀,免手刻 bezier
 - Care 階段在 SVG 套件有 8 個情感時刻卻只有 1 個 Lottie(water-ripple),比對 SVG 與 Lottie 的 stage 分布能找出最值得補強的失衡點——本次以 meds-reminder 補 Care、call-vet 補 Emergency
+
+### Iteration 10
+
+**Summary:** 將 MewGuard Lottie 動畫集從 12 個擴充到 14 個,新增 Search·Scan the label(掃描光束掃過標籤卡)與 Care·Mealtime logged(乾糧落入碗中+愛心彈出),補強相對 SVG 套件最薄弱的兩個 Lottie 階段。
+
+**Changes:**
+- 新增 mw-scan-label.json(Search·Action):半透明綠色掃描光束沿白色標籤卡(含左對齊綠色文字列)由上往下掃過並在兩端淡出,對應 SVG 第 22 號『Scan the label』,補強僅有 1 個 Lottie 的 search 階段
+- 新增 mw-meal-bowl.json(Care·Feedback):四顆雙色乾糧依序落入綠色食碗並回彈定位,結尾上方彈出 coral 愛心,對應 SVG 第 13 號『Mealtime logged』,補強 SVG 有 8 個情感時刻但 Lottie 僅 2 個的 care 階段
+- 在 lottie/_build.py 新增 build_scan_label 與 build_meal_bowl 兩個 builder 並接入 BUILDERS,複用既有 rounded_rect/ellipse/heart_group 輔助函式,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 search/care)並重新產生含 14 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 14 檔、表格新增兩列、預覽說明改為 14 個動畫
+
+**Learnings:**
+- 乾糧『掉落』效果用 transform.position 的 y 軸關鍵幀(高處 EASE_IN 加速 → 略過頭 EASE_OUT → 回彈定位 EASE_IO)即可,搭配 opacity 在起點快速淡入,落點需設在碗的內表面 ellipse 之上;因 kibble 圖層先加入(在上層)會疊在碗面上方,視覺正確
+- 掃描光束用半透明 rounded_rect 沿 y 軸往返並在兩端 opacity 淡出,比固定亮帶更能讓每次 loop 讀起來像一次新的掃描;文字列以 cx = -55 + lw/2 在 150 寬卡片內左對齊,比置中更像真實標籤
+- Lottie 子集相對 SVG 套件的階段失衡仍在(補完後 search 2、care 3,但 SVG 各為 6、8);比對兩者 stage 分布持續是挑選下一批 Lottie 最有依據的方法
