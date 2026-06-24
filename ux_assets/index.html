@@ -3,42 +3,48 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mood — Emotional Design Asset Kit</title>
+<title>UX Asset Kits — Mood &amp; MewGuard</title>
 <style>
-  :root {
-    --bg: #f6f7f9;
-    --panel: #ffffff;
-    --panel-2: #f1f3f6;
-    --border: #e2e5ea;
-    --text: #1c2026;
-    --muted: #5b6472;
-    --faint: #8a93a2;
-    --accent: #e07b39;
-    --joy: #f5a623;
-    --calm: #2f7dc4;
-    --care: #1f9d76;
-    --warm: #c84d86;
-    --sky: #6aa9e9;
-  }
+  :root { --panel: #ffffff; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: radial-gradient(1200px 600px at 70% -10%, #eef1f6 0%, var(--bg) 55%);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    transition: background .25s;
+  }
+  /* ---- per-kit palettes (each kit keeps its own brand colors) ---- */
+  body.kit-mood {
+    --bg:#f6f7f9; --panel-2:#f1f3f6; --border:#e2e5ea; --text:#1c2026; --muted:#5b6472; --faint:#8a93a2;
+    --accent:#e07b39; --joy:#f5a623; --calm:#2f7dc4; --care:#1f9d76; --warm:#c84d86; --sky:#6aa9e9;
+    background: radial-gradient(1200px 600px at 70% -10%, #eef1f6 0%, var(--bg) 55%);
+  }
+  body.kit-mewguard {
+    --bg:#F1ECE3; --panel-2:#EFE8DB; --border:#E3D8CC; --text:#2C1810; --muted:#7A5C4A; --faint:#B8967A;
+    --accent:#E76953; --green:#1b9150; --safe:#22C55E; --cautious:#F59E0B; --toxic:#EF4444; --gold:#816e0c; --sage:#5B8A7A;
+    background: radial-gradient(1200px 600px at 70% -10%, #f6f2ea 0%, var(--bg) 55%);
   }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ---- top kit switch ---- */
+  .kit-switch { display: inline-flex; gap: 4px; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 4px; margin-bottom: 30px; box-shadow: 0 1px 2px rgba(20,30,50,.05); }
+  .kit-switch button { font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 8px 18px; transition: .15s; display: inline-flex; align-items: center; gap: 8px; -webkit-font-smoothing: antialiased; }
+  .kit-switch button .kc { font-size: 11px; font-weight: 700; opacity: .65; }
+  .kit-switch button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .kit-switch button[aria-pressed="true"] .kc { opacity: .85; }
+  .kit-switch button:not([aria-pressed="true"]):hover { color: var(--text); }
+  section.kit.hidden { display: none; }
 
   header.hero { margin-bottom: 30px; }
   .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; }
   h1 { font-size: 42px; line-height: 1.08; margin: 10px 0 12px; font-weight: 800; letter-spacing: -.02em; }
-  .lede { color: var(--muted); max-width: 740px; font-size: 16px; }
+  .lede { color: var(--muted); max-width: 760px; font-size: 16px; }
   .lede b { color: var(--text); }
 
   .principles { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-  .principle { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; box-shadow: 0 1px 2px rgba(20,30,50,.04); max-width: 230px; }
+  .principle { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; box-shadow: 0 1px 2px rgba(20,30,50,.04); max-width: 240px; }
   .principle .pt { font-weight: 800; font-size: 13.5px; }
   .principle .pd { color: var(--faint); font-size: 12.5px; margin-top: 2px; }
 
@@ -62,7 +68,7 @@
   }
   .fb-toggle:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
   .fb-toggle svg.ic { width: 14px; height: 14px; overflow: visible; }
-  .stage-toggle { margin-left: auto; }       /* first of the right-grouped controls claims the gap */
+  .stage-toggle { margin-left: auto; }
 
   .motion-toggle .mt-pause { display: inline; }
   .motion-toggle .mt-play  { display: none; }
@@ -104,7 +110,6 @@
   .replay-btn:hover { background: #fff; border-color: var(--c); }
   .replay-btn:active { transform: translateY(0) scale(.96); }
   .replay-btn svg.ic { width: 12px; height: 12px; overflow: visible; }
-  /* Restart trick: kill animations, force reflow, restore — re-runs one-shots (pop/draw) and infinites from frame 0 */
   .stage svg.anim-off * { animation: none !important; }
   .body { padding: 16px 18px 20px; }
   .kind { color: var(--c); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
@@ -114,6 +119,7 @@
   .benefit .ico { flex-shrink: 0; color: var(--c); font-weight: 800; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag { font-size: 11px; color: var(--faint); background: var(--panel-2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 999px; font-weight: 600; }
+  .tag.brand { color: var(--green); border-color: #bfe4cf; background: #eaf7f0; }
 
   .actions { display: flex; gap: 8px; margin-top: 14px; }
   .copy-btn {
@@ -125,7 +131,7 @@
   .copy-btn:hover { background: #fff; border-color: var(--c); transform: translateY(-1px); }
   .copy-btn:active { transform: translateY(0); }
   .copy-btn svg.ic { width: 15px; height: 15px; overflow: visible; }
-  .copy-btn.done { color: var(--care); border-color: var(--care); background: #eef9f3; }
+  .copy-btn.done { color: var(--care, var(--green)); border-color: var(--care, var(--green)); background: #eef9f3; }
 
   .dl-btn {
     flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
@@ -146,8 +152,9 @@
 
   footer { margin-top: 56px; color: var(--faint); font-size: 13px; border-top: 1px solid var(--border); padding-top: 22px; }
   footer b { color: var(--muted); }
+  footer code { background: var(--panel-2); border: 1px solid var(--border); border-radius: 5px; padding: 1px 5px; font-size: 12px; }
 
-  /* ---------- Asset animations ---------- */
+  /* ---------- Asset animations (MewGuard superset — covers both kits) ---------- */
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
   @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
   @keyframes sway { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
@@ -161,6 +168,14 @@
   @keyframes rise { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
   @keyframes twinkle { 0%,100% { opacity: .2; transform: scale(.6); } 50% { opacity: 1; transform: scale(1); } }
   @keyframes heartbeat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.13); } 30% { transform: scale(1); } 45% { transform: scale(1.08); } }
+  @keyframes purr { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-.8px); } 75% { transform: translateX(.8px); } }
+  @keyframes tailwag { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(14deg); } }
+  @keyframes swipe { 0%,100% { transform: translateX(-10px); } 50% { transform: translateX(12px); } }
+  @keyframes nod { 0%,100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+  @keyframes ripple { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.5); opacity: 0; } }
+  @keyframes scan { 0%,100% { transform: translateY(-13px); opacity: .45; } 50% { transform: translateY(13px); opacity: 1; } }
+  @keyframes ring { 0%,60%,100% { transform: rotate(0); } 8% { transform: rotate(16deg); } 24% { transform: rotate(-13deg); } 40% { transform: rotate(8deg); } 52% { transform: rotate(-4deg); } }
+  @keyframes shine { 0% { transform: translateX(-15px); opacity: 0; } 45% { opacity: .85; } 100% { transform: translateX(15px); opacity: 0; } }
 
   .a-float { animation: float 4s ease-in-out infinite; transform-origin: center; }
   .a-blink { animation: blink 5s ease-in-out infinite; transform-origin: center; }
@@ -173,21 +188,28 @@
   .a-rise  { animation: rise 3s ease-in-out infinite; transform-origin: center; }
   .a-twinkle { animation: twinkle 2s ease-in-out infinite; transform-origin: center; }
   .a-heartbeat { animation: heartbeat 2.4s ease-in-out infinite; transform-origin: center; }
+  .a-purr  { animation: purr .25s ease-in-out infinite; transform-origin: center; }
+  .a-tailwag { animation: tailwag 2.2s ease-in-out infinite; transform-origin: 0% 100%; }
+  .a-swipe { animation: swipe 2.8s ease-in-out infinite; transform-origin: center; }
+  .a-nod   { animation: nod 3s ease-in-out infinite; transform-origin: 50% 90%; }
+  .a-ripple { animation: ripple 2s ease-out infinite; transform-origin: center; }
+  .a-scan  { animation: scan 2.4s ease-in-out infinite; transform-origin: center; }
+  .a-ring  { animation: ring 3.6s ease-in-out infinite; transform-origin: 50% 18%; }
+  .a-shine { animation: shine 3.4s ease-in-out infinite; transform-origin: center; }
 
   .draw { stroke-dasharray: 90; stroke-dashoffset: 90; animation: draw 1s ease-out .25s forwards; }
   .conf { animation: confetti 1.3s ease-out infinite; }
   .conf:nth-child(odd) { animation-duration: 1.6s; }
 
   @media (prefers-reduced-motion: reduce) {
-    .a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.conf { animation: none; }
+    .a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.a-purr,.a-tailwag,.a-swipe,.a-nod,.a-ripple,.a-scan,.a-ring,.a-shine,.conf { animation: none; }
     .draw { stroke-dashoffset: 0; }
   }
 
   /* Global motion toggle — freeze every asset animation in place for inspection */
   body.motion-paused .stage svg * { animation-play-state: paused !important; }
 
-  /* Reduce-motion preview — force the resting/static fallback that prefers-reduced-motion users see,
-     so designers can verify the still state reads as intentional (distinct from the mid-frame freeze above) */
+  /* Reduce-motion preview — force the resting/static fallback */
   body.motion-reduced .stage svg .a-float,
   body.motion-reduced .stage svg .a-blink,
   body.motion-reduced .stage svg .a-sway,
@@ -199,17 +221,32 @@
   body.motion-reduced .stage svg .a-rise,
   body.motion-reduced .stage svg .a-twinkle,
   body.motion-reduced .stage svg .a-heartbeat,
+  body.motion-reduced .stage svg .a-purr,
+  body.motion-reduced .stage svg .a-tailwag,
+  body.motion-reduced .stage svg .a-swipe,
+  body.motion-reduced .stage svg .a-nod,
+  body.motion-reduced .stage svg .a-ripple,
+  body.motion-reduced .stage svg .a-scan,
+  body.motion-reduced .stage svg .a-ring,
+  body.motion-reduced .stage svg .a-shine,
   body.motion-reduced .stage svg .conf { animation: none !important; }
   body.motion-reduced .stage svg .draw { stroke-dashoffset: 0 !important; animation: none !important; }
 
-  /* Dark-stage preview — check how each illustration reads on a dark product surface */
-  body.stage-dark .stage { background: linear-gradient(160deg, #262d39 0%, #181d26 100%); }
+  /* Dark-stage preview — per-kit surface tint */
+  body.stage-dark.kit-mood .stage { background: linear-gradient(160deg, #262d39 0%, #181d26 100%); }
+  body.stage-dark.kit-mewguard .stage { background: linear-gradient(160deg, #34281f 0%, #21180f 100%); }
   body.stage-dark .stage .replay-btn { background: rgba(38,45,57,.82); border-color: rgba(255,255,255,.16); }
   body.stage-dark .stage .replay-btn:hover { background: #2f3744; }
 </style>
 </head>
-<body>
+<body class="kit-mewguard">
 <div class="wrap">
+  <div class="kit-switch" role="tablist" aria-label="Choose an asset kit">
+    <button type="button" data-kit="mood" aria-pressed="false">Mood <span class="kc">10</span></button>
+    <button type="button" data-kit="mewguard" aria-pressed="true">MewGuard <span class="kc">40</span></button>
+  </div>
+
+  <section class="kit" data-kit="mood">
   <header class="hero">
     <div class="eyebrow">Reusable Components · UX Assets</div>
     <h1>Mood — an emotional-design asset kit</h1>
@@ -225,7 +262,7 @@
     </div>
   </header>
 
-  <nav class="filterbar" id="filterbar" aria-label="Filter assets by journey stage">
+    <nav class="filterbar" aria-label="Filter mood assets by journey stage">
     <span class="fb-label">Journey stage</span>
     <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">10</span></button>
     <button type="button" class="chip" data-filter="onboarding" aria-pressed="false">Onboarding <span class="ct">2</span></button>
@@ -233,26 +270,25 @@
     <button type="button" class="chip" data-filter="feedback" aria-pressed="false">Feedback <span class="ct">3</span></button>
     <button type="button" class="chip" data-filter="recovery" aria-pressed="false">Recovery <span class="ct">2</span></button>
     <button type="button" class="chip" data-filter="delight" aria-pressed="false">Delight <span class="ct">1</span></button>
-    <button type="button" class="fb-toggle stage-toggle" id="stageToggle" aria-pressed="false" aria-label="Preview assets on a dark surface">
+    <button type="button" class="fb-toggle stage-toggle" aria-pressed="false" aria-label="Preview assets on a dark surface">
       <svg class="ic st-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       <svg class="ic st-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
       <span class="st-dark">Dark stage</span><span class="st-light">Light stage</span>
     </button>
-    <button type="button" class="fb-toggle motion-toggle" id="motionToggle" aria-pressed="false" aria-label="Pause all asset animations">
+    <button type="button" class="fb-toggle motion-toggle" aria-pressed="false" aria-label="Pause all asset animations">
       <svg class="ic mt-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
       <svg class="ic mt-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg>
       <span class="mt-pause">Pause motion</span><span class="mt-play">Play motion</span>
     </button>
-    <button type="button" class="fb-toggle reduce-toggle" id="reduceToggle" aria-pressed="false" aria-label="Preview the reduced-motion fallback">
+    <button type="button" class="fb-toggle reduce-toggle" aria-pressed="false" aria-label="Preview the reduced-motion fallback">
       <svg class="ic rm-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.6" r="1.4"/><path d="M5 8c2.4 1.1 4.5 1.4 7 1.4S16.6 9.1 19 8"/><path d="M12 9.4v5.2"/><path d="M8.6 21l3.4-6 3.4 6"/></svg>
       <svg class="ic rm-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
       <span class="rm-on">Reduce motion</span><span class="rm-off">Full motion</span>
     </button>
-    <span class="fb-count" id="fbCount" aria-live="polite">10 assets</span>
-  </nav>
+    <span class="fb-count" aria-live="polite"></span>
+    </nav>
 
-  <div class="grid">
-
+    <div class="grid">
     <!-- 1. EMPTY STATE -->
     <article class="card" data-cat="onboarding" style="--c:var(--calm)">
       <div class="stage">
@@ -507,16 +543,1156 @@
       </div>
     </article>
 
-  </div>
+  
+    </div>
 
-  <p class="empty-note" id="emptyNote">No assets in this stage yet.</p>
+    <p class="empty-note">No assets in this stage yet.</p>
 
-  <footer>
+    <footer>
     <b>Mood</b> — emotional-design asset kit · all assets are pure inline SVG + CSS, dependency-free, and honor
     <code>prefers-reduced-motion</code> — toggle <b>Reduce motion</b> to preview that still fallback. <b>Copy SVG</b> drops self-animating markup onto your clipboard, or hit the
     <b>download</b> button to save a standalone <code>.svg</code> file — both embed their own animation
     <code>&lt;style&gt;</code>, so the asset stays alive the moment you paste or open it.
   </footer>
+  </section>
+
+  <section class="kit hidden" data-kit="mewguard">
+  <header class="hero">
+    <div class="eyebrow">Reusable Components · MewGuard UX Assets</div>
+    <h1>MewGuard — a sentimental-design asset kit</h1>
+    <p class="lede">
+      A series of <b>non-functional</b> illustrations and animated assets for <b>MewGuard</b>, the app that helps
+      cat owners check whether a substance is toxic to their cat. They render no data and gate no flow — their only
+      job is to carry the <i>feeling</i> of each moment: an anxious owner deserves calm, a clear verdict deserves warmth,
+      and an emergency deserves a steady hand. Each asset maps to one moment in the MewGuard journey, with the
+      <b>UX payoff</b> it earns.
+    </p>
+    <div class="principles">
+      <div class="principle"><div class="pt">Calm under worry</div><div class="pd">A worried owner meets soft shapes and a friendly cat — never a cold screen.</div></div>
+      <div class="principle"><div class="pt">Honest, never alarming</div><div class="pd">Toxic verdicts stay serious without spiking panic; safe verdicts feel earned.</div></div>
+      <div class="principle"><div class="pt">A guardian you trust</div><div class="pd">One recurring cat mascot the owner remembers — the face of "we've got you".</div></div>
+    </div>
+  </header>
+
+    <nav class="filterbar" aria-label="Filter mewguard assets by journey stage">
+    <span class="fb-label">Journey stage</span>
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">40</span></button>
+    <button type="button" class="chip" data-filter="onboarding" aria-pressed="false">Onboarding <span class="ct">5</span></button>
+    <button type="button" class="chip" data-filter="search" aria-pressed="false">Search <span class="ct">6</span></button>
+    <button type="button" class="chip" data-filter="verdict" aria-pressed="false">Verdict <span class="ct">5</span></button>
+    <button type="button" class="chip" data-filter="care" aria-pressed="false">Care <span class="ct">8</span></button>
+    <button type="button" class="chip" data-filter="recovery" aria-pressed="false">Recovery <span class="ct">5</span></button>
+    <button type="button" class="chip" data-filter="emergency" aria-pressed="false">Emergency <span class="ct">5</span></button>
+    <button type="button" class="chip" data-filter="delight" aria-pressed="false">Delight <span class="ct">6</span></button>
+    <button type="button" class="fb-toggle stage-toggle" aria-pressed="false" aria-label="Preview assets on a dark surface">
+      <svg class="ic st-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="ic st-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      <span class="st-dark">Dark stage</span><span class="st-light">Light stage</span>
+    </button>
+    <button type="button" class="fb-toggle motion-toggle" aria-pressed="false" aria-label="Pause all asset animations">
+      <svg class="ic mt-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      <svg class="ic mt-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg>
+      <span class="mt-pause">Pause motion</span><span class="mt-play">Play motion</span>
+    </button>
+    <button type="button" class="fb-toggle reduce-toggle" aria-pressed="false" aria-label="Preview the reduced-motion fallback">
+      <svg class="ic rm-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3.6" r="1.4"/><path d="M5 8c2.4 1.1 4.5 1.4 7 1.4S16.6 9.1 19 8"/><path d="M12 9.4v5.2"/><path d="M8.6 21l3.4-6 3.4 6"/></svg>
+      <svg class="ic rm-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      <span class="rm-on">Reduce motion</span><span class="rm-off">Full motion</span>
+    </button>
+    <span class="fb-count" aria-live="polite"></span>
+    </nav>
+
+    <div class="grid">
+    <!-- 1. WELCOME / GUARDIAN -->
+    <article class="card" data-cat="onboarding" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Friendly guardian cat peeking and waving">
+          <ellipse cx="60" cy="105" rx="30" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <path d="M40 56 L34 36 L52 48 Z" fill="#1b9150"/>
+            <path d="M80 56 L86 36 L68 48 Z" fill="#1b9150"/>
+            <path d="M44 40 L41 30 L50 38 Z" fill="#3aaa6d"/>
+            <path d="M76 40 L79 30 L70 38 Z" fill="#3aaa6d"/>
+            <circle cx="60" cy="64" r="26" fill="#3aaa6d"/>
+            <circle cx="60" cy="64" r="26" fill="none" stroke="#146b3c" stroke-width="2" opacity=".35"/>
+            <g class="a-blink">
+              <circle cx="51" cy="60" r="3.2" fill="#2C1810"/>
+              <circle cx="69" cy="60" r="3.2" fill="#2C1810"/>
+            </g>
+            <path d="M57 69 L60 72 L63 69 Z" fill="#E76953"/>
+            <path d="M60 72 Q55 77 50 74 M60 72 Q65 77 70 74" stroke="#146b3c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M34 64 L20 60 M34 69 L21 70" stroke="#816e0c" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M86 64 L100 60 M86 69 L99 70" stroke="#816e0c" stroke-width="1.4" stroke-linecap="round"/>
+          </g>
+          <g class="a-wiggle" style="transform-origin:88px 86px">
+            <path d="M84 92 q8 -10 4 -22" stroke="#1b9150" stroke-width="7" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Welcome · Onboarding</div>
+        <div class="name">Meet your guardian</div>
+        <p class="goal">First launch sets the relationship. A waving cat says "I'll watch out for yours" before a single word of copy.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Builds instant trust and warmth at the highest-stakes first impression.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">welcome</span><span class="tag">first-run</span></div>
+      </div>
+    </article>
+
+    <!-- 2. NAME YOUR CAT / EMPTY PROFILE -->
+    <article class="card" data-cat="onboarding" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Empty cat collar with a blank name tag">
+          <ellipse cx="60" cy="104" rx="30" ry="5" fill="#e3d8cc"/>
+          <path d="M30 58 Q60 78 90 58" stroke="#5B8A7A" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <g class="a-sway" style="transform-origin:60px 70px">
+            <line x1="60" y1="70" x2="60" y2="80" stroke="#5B8A7A" stroke-width="2.4"/>
+            <circle cx="60" cy="90" r="11" fill="#fff" stroke="#5B8A7A" stroke-width="2.6"/>
+            <path d="M55 90 h10 M60 85 v10" stroke="#b8d0c7" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <circle cx="44" cy="50" r="2.4" fill="#816e0c" class="a-rise"/>
+          <circle cx="78" cy="46" r="2" fill="#E76953" class="a-rise" style="animation-delay:.7s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Onboarding</div>
+        <div class="name">Name your cat</div>
+        <p class="goal">An empty "My Cats" list is an invitation, not a void. A blank collar tag asks to be filled in.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns a zero-state into a personal, low-pressure first action.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">my-cats</span><span class="tag">empty-state</span></div>
+      </div>
+    </article>
+
+    <!-- 3. SNIFFING SEARCH -->
+    <article class="card" data-cat="search" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cat nose sniffing through a magnifier with circling paw prints">
+          <circle cx="56" cy="54" r="26" fill="none" stroke="#E76953" stroke-width="6"/>
+          <line x1="74" y1="72" x2="92" y2="90" stroke="#E76953" stroke-width="7" stroke-linecap="round"/>
+          <g class="a-float">
+            <path d="M50 50 L56 50 L53 54 Z" fill="#E76953"/>
+            <path d="M53 54 Q49 59 45 57 M53 54 Q57 59 61 57" stroke="#7A5C4A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="a-orbit" style="transform-origin:56px 54px">
+            <g fill="#B8967A" opacity=".8">
+              <ellipse cx="56" cy="22" rx="3" ry="4"/>
+              <circle cx="52" cy="18" r="1.3"/><circle cx="56" cy="16.5" r="1.3"/><circle cx="60" cy="18" r="1.3"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Loading · Search</div>
+        <div class="name">On the scent</div>
+        <p class="goal">Looking up a substance takes a beat. A sniffing nose makes the wait feel like the cat is doing the work.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Reframes latency as active care, so the search bar never feels frozen.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">search</span><span class="tag">loading</span></div>
+      </div>
+    </article>
+
+    <!-- 4. CHECKING THE DATABASE -->
+    <article class="card" data-cat="search" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Spinning ring with a paw print, checking the toxin database">
+          <circle cx="60" cy="60" r="26" fill="none" stroke="#e3d8cc" stroke-width="6"/>
+          <g class="a-spin" style="transform-origin:60px 60px">
+            <path d="M60 34 a26 26 0 0 1 22 13" fill="none" stroke="#1b9150" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <g fill="#1b9150">
+            <ellipse cx="60" cy="64" rx="6" ry="7.5"/>
+            <circle cx="52" cy="55" r="2.6"/><circle cx="58.5" cy="51" r="2.6"/>
+            <circle cx="65.5" cy="51" r="2.6"/><circle cx="68" cy="55" r="2.6"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Loading · Search</div>
+        <div class="name">Checking the database</div>
+        <p class="goal">A branded paw spinner replaces a generic throbber while toxin records are fetched from Firestore.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Keeps the brand present in dead time and signals the system is working.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">spinner</span><span class="tag">fetch</span></div>
+      </div>
+    </article>
+
+    <!-- 5. SAFE VERDICT -->
+    <article class="card" data-cat="verdict" style="--c:var(--safe)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Green safety shield with a drawn checkmark and a happy cat">
+          <g class="a-pop">
+            <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="#dff3e6"/>
+            <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="none" stroke="#22C55E" stroke-width="3"/>
+            <path d="M47 60 L56 69 L74 49" stroke="#1b9150" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+          </g>
+          <rect class="conf" x="26" y="40" width="5" height="9" rx="1.5" fill="#1b9150"/>
+          <rect class="conf" x="92" y="44" width="5" height="9" rx="1.5" fill="#E76953" style="animation-delay:.2s"/>
+          <rect class="conf" x="38" y="28" width="5" height="9" rx="1.5" fill="#816e0c" style="animation-delay:.45s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Verdict · Safe</div>
+        <div class="name">All clear</div>
+        <p class="goal">When a substance is safe, relief should be instant and physical. A drawn check inside a green shield delivers it.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Resolves the owner's anxiety in one glance and rewards the lookup.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">safe</span><span class="tag">detail</span></div>
+      </div>
+    </article>
+
+    <!-- 6. CAUTION VERDICT -->
+    <article class="card" data-cat="verdict" style="--c:var(--cautious)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Amber shield with a cat raising a paw to signal caution">
+          <g class="a-pop">
+            <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="#fdf0d8"/>
+            <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="none" stroke="#F59E0B" stroke-width="3"/>
+          </g>
+          <g transform="translate(0 4)">
+            <circle cx="60" cy="62" r="15" fill="#F59E0B"/>
+            <path d="M48 56 L46 47 L54 53 Z" fill="#F59E0B"/>
+            <path d="M72 56 L74 47 L66 53 Z" fill="#F59E0B"/>
+            <circle cx="55" cy="61" r="2.2" fill="#fff"/><circle cx="65" cy="61" r="2.2" fill="#fff"/>
+            <path d="M58 66 L60 68 L62 66 Z" fill="#fff"/>
+          </g>
+          <g class="a-wiggle" style="transform-origin:80px 78px">
+            <ellipse cx="80" cy="62" rx="5" ry="6.5" fill="#F59E0B"/>
+            <circle cx="75" cy="55" r="2" fill="#F59E0B"/><circle cx="80" cy="52" r="2" fill="#F59E0B"/><circle cx="85" cy="55" r="2" fill="#F59E0B"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Verdict · Caution</div>
+        <div class="name">Worth a second look</div>
+        <p class="goal">Some substances are risky only in dose or part. A raised paw says "pause and read" without crying wolf.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Communicates middle-ground risk so caution reads as informative, not scary.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cautious</span><span class="tag">severity</span></div>
+      </div>
+    </article>
+
+    <!-- 7. TOXIC VERDICT -->
+    <article class="card" data-cat="verdict" style="--c:var(--toxic)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Red shield with a calm but alert cat, steady heartbeat">
+          <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="#fde4e4"/>
+          <path d="M60 26 L88 36 V62 Q88 86 60 96 Q32 86 32 62 V36 Z" fill="none" stroke="#EF4444" stroke-width="3"/>
+          <g class="a-heartbeat" style="transform-origin:60px 60px">
+            <circle cx="60" cy="60" r="14" fill="#EF4444"/>
+            <path d="M49 55 L47 46 L55 52 Z" fill="#EF4444"/>
+            <path d="M71 55 L73 46 L65 52 Z" fill="#EF4444"/>
+            <circle cx="55.5" cy="59" r="2.1" fill="#fff"/><circle cx="64.5" cy="59" r="2.1" fill="#fff"/>
+            <path d="M57 64 Q60 66 63 64" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </g>
+          <path d="M38 80 h8 l3 -7 4 12 3 -5 h26" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="a-pulse"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Verdict · Toxic</div>
+        <div class="name">Keep this away</div>
+        <p class="goal">A toxic result must land as serious — but a steady heartbeat keeps a frightened owner from spiraling.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Conveys urgency without panic, so the owner reads the next step instead of freezing.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">toxic</span><span class="tag">severity</span></div>
+      </div>
+    </article>
+
+    <!-- 8. EMERGENCY VET-PREP -->
+    <article class="card" data-cat="emergency" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Calm cat beside a medical cross, steady reassuring pulse">
+          <circle cx="60" cy="60" r="32" fill="#fbeae6"/>
+          <circle cx="60" cy="60" r="32" fill="none" stroke="#E76953" stroke-width="2.5" opacity=".4" class="a-pulse"/>
+          <g transform="translate(70 44)">
+            <rect x="-4" y="-11" width="8" height="22" rx="2" fill="#E76953"/>
+            <rect x="-11" y="-4" width="22" height="8" rx="2" fill="#E76953"/>
+          </g>
+          <g transform="translate(-4 8)">
+            <ellipse cx="52" cy="62" rx="14" ry="13" fill="#3aaa6d"/>
+            <path d="M41 56 L38 46 L47 53 Z" fill="#3aaa6d"/>
+            <path d="M63 56 L66 46 L57 53 Z" fill="#3aaa6d"/>
+            <g class="a-blink"><circle cx="48" cy="61" r="2.4" fill="#2C1810"/><circle cx="56" cy="61" r="2.4" fill="#2C1810"/></g>
+            <path d="M52 65 L53.6 66.6 L50.4 66.6 Z" fill="#E76953"/>
+            <path d="M44 70 q8 5 16 0" stroke="#146b3c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Emergency · Vet-prep</div>
+        <div class="name">Steady — we'll prep this for the vet</div>
+        <p class="goal">The emergency screen gathers the cat's toxic items for the clinic. A calm cat + slow pulse holds the owner's nerve.</p>
+        <div class="benefit"><span class="ico">↑</span><span>De-escalates a crisis moment so the owner can act, not panic.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">emergency</span><span class="tag">reassurance</span></div>
+      </div>
+    </article>
+
+    <!-- 9. NOTHING FOUND -->
+    <article class="card" data-cat="recovery" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cat peering into an empty food bowl, no results found">
+          <ellipse cx="60" cy="100" rx="30" ry="5" fill="#e3d8cc"/>
+          <path d="M38 82 Q60 96 82 82 L78 88 Q60 98 42 88 Z" fill="#cdbfae"/>
+          <ellipse cx="60" cy="82" rx="22" ry="7" fill="#b8a692"/>
+          <ellipse cx="60" cy="82" rx="15" ry="4.5" fill="#a3917d"/>
+          <g class="a-float">
+            <ellipse cx="60" cy="56" rx="15" ry="14" fill="#5B8A7A"/>
+            <path d="M49 50 L46 40 L55 47 Z" fill="#5B8A7A"/>
+            <path d="M71 50 L74 40 L65 47 Z" fill="#5B8A7A"/>
+            <path d="M53 57 Q55 60 57 57 M63 57 Q65 60 67 57" stroke="#2C1810" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M58 62 L60 64 L62 62 Z" fill="#E76953"/>
+          </g>
+          <text x="60" y="34" text-anchor="middle" font-size="14" fill="#B8967A" class="a-rise">?</text>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Recovery</div>
+        <div class="name">Nothing in the bowl</div>
+        <p class="goal">A search with zero matches needs a soft landing. An empty bowl says "not here" without "you failed".</p>
+        <div class="benefit"><span class="ico">↑</span><span>Softens dead-end searches and invites a reworded query or feedback report.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">no-results</span><span class="tag">search-zero</span></div>
+      </div>
+    </article>
+
+    <!-- 10. OFFLINE -->
+    <article class="card" data-cat="recovery" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cat tangled in an unplugged ball of yarn, offline">
+          <g class="a-sway" style="transform-origin:60px 50px">
+            <circle cx="60" cy="52" r="16" fill="#816e0c"/>
+            <path d="M48 46 q12 6 24 0 M46 52 q14 7 28 0 M48 58 q12 5 24 0" stroke="#a08a1a" stroke-width="1.6" fill="none"/>
+            <path d="M60 68 q-14 8 -22 2" stroke="#816e0c" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <rect x="32" y="66" width="10" height="12" rx="3" fill="#7A5C4A"/>
+          </g>
+          <circle cx="83" cy="60" r="2.2" fill="#2C1810"/>
+          <circle cx="89" cy="62" r="2.2" fill="#2C1810"/>
+          <path d="M82 68 Q86 65 90 68" stroke="#2C1810" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M76 50 L72 44 L80 47 Z" fill="#816e0c"/>
+          <ellipse cx="86" cy="60" rx="13" ry="12" fill="#9b8420" opacity=".0"/>
+          <path d="M56 40 l3 0 m-1.5 -1.5 l0 3" stroke="#E76953" stroke-width="2" stroke-linecap="round" class="a-pulse"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Error · Recovery</div>
+        <div class="name">Lost the thread</div>
+        <p class="goal">A dropped connection is framed as a tangle of yarn — playful, fixable, and clearly not the owner's fault.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Defuses offline frustration and pairs naturally with a "Try again" retry.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">offline</span><span class="tag">network</span></div>
+      </div>
+    </article>
+
+    <!-- 11. SAVED TO MY CATS -->
+    <article class="card" data-cat="delight" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Heart pops above a purring cat, saved to My Cats">
+          <g class="a-purr" style="transform-origin:60px 74px">
+            <ellipse cx="60" cy="76" rx="20" ry="15" fill="#E76953"/>
+            <path d="M44 68 L41 58 L50 65 Z" fill="#E76953"/>
+            <path d="M76 68 L79 58 L70 65 Z" fill="#E76953"/>
+            <g class="a-blink"><path d="M51 74 q3 -3 6 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M63 74 q3 -3 6 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+            <path d="M59 78 L60 79.5 L61 78 Z" fill="#fff"/>
+            <path d="M54 82 q6 4 12 0" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="a-pop" style="transform-origin:60px 38px">
+            <path d="M60 46 C54 38 44 40 44 48 C44 55 60 62 60 62 C60 62 76 55 76 48 C76 40 66 38 60 46 Z" fill="#E76953"/>
+          </g>
+          <circle cx="40" cy="44" r="2" fill="#816e0c" class="a-twinkle"/>
+          <circle cx="82" cy="40" r="2" fill="#1b9150" class="a-twinkle" style="animation-delay:.6s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Feedback · Delight</div>
+        <div class="name">Saved to My Cats</div>
+        <p class="goal">Saving a substance to a cat's profile should feel affectionate. A heart and a purr reward the bookmark.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Adds a micro-moment of delight that makes the save worth repeating.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">save</span><span class="tag">micro-delight</span></div>
+      </div>
+    </article>
+
+    <!-- 12. RESTING EASY -->
+    <article class="card" data-cat="delight" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A content cat curled up asleep with floating Z's">
+          <ellipse cx="60" cy="92" rx="34" ry="7" fill="#e3d8cc"/>
+          <g class="a-float">
+            <ellipse cx="60" cy="80" rx="30" ry="16" fill="#1b9150"/>
+            <path d="M34 80 q-6 -2 -4 -8 q6 1 8 6 Z" fill="#1b9150"/>
+            <g class="a-tailwag" style="transform-origin:88px 80px"><path d="M86 80 q12 -4 8 -16" stroke="#1b9150" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+            <ellipse cx="44" cy="76" rx="11" ry="10" fill="#3aaa6d"/>
+            <path d="M36 70 L33 62 L41 67 Z" fill="#3aaa6d"/>
+            <path d="M52 70 L55 62 L47 67 Z" fill="#3aaa6d"/>
+            <path d="M40 76 q3 2 6 0" stroke="#146b3c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M48 76 q3 2 6 0" stroke="#146b3c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M46 80 L47.4 81.4 L44.6 81.4 Z" fill="#E76953"/>
+          </g>
+          <text x="74" y="48" font-size="11" fill="#816e0c" class="a-twinkle">z</text>
+          <text x="82" y="38" font-size="14" fill="#816e0c" class="a-twinkle" style="animation-delay:.5s">Z</text>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Ambient · Delight</div>
+        <div class="name">Resting easy</div>
+        <p class="goal">A home screen with everything safe can breathe. A sleeping cat is the visual proof that all is well.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Rewards a settled state and reinforces that MewGuard is quietly keeping watch.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">ambient</span><span class="tag">reassurance</span></div>
+      </div>
+    </article>
+
+    <!-- 13. MEALTIME LOGGED -->
+    <article class="card" data-cat="care" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A full food bowl with a heart, mealtime logged">
+          <ellipse cx="60" cy="98" rx="32" ry="6" fill="#e3d8cc"/>
+          <path d="M34 76 Q60 92 86 76 L80 84 Q60 96 40 84 Z" fill="#cdbfae"/>
+          <ellipse cx="60" cy="76" rx="26" ry="9" fill="#1b9150"/>
+          <ellipse cx="60" cy="74" rx="22" ry="7" fill="#3aaa6d"/>
+          <g class="a-rise">
+            <circle cx="50" cy="73" r="3" fill="#816e0c"/>
+            <circle cx="60" cy="71" r="3.2" fill="#a08a1a"/>
+            <circle cx="70" cy="73" r="3" fill="#816e0c"/>
+            <circle cx="55" cy="76" r="2.6" fill="#a08a1a"/>
+            <circle cx="65" cy="76" r="2.6" fill="#816e0c"/>
+          </g>
+          <g class="a-pop" style="transform-origin:60px 50px">
+            <path d="M60 50 C56 44 48 45 48 51 C48 56 60 62 60 62 C60 62 72 56 72 51 C72 45 64 44 60 50 Z" fill="#E76953"/>
+          </g>
+          <circle cx="42" cy="50" r="1.8" fill="#1b9150" class="a-twinkle"/>
+          <circle cx="80" cy="46" r="1.8" fill="#816e0c" class="a-twinkle" style="animation-delay:.5s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Feedback · Care</div>
+        <div class="name">Mealtime logged</div>
+        <p class="goal">Logging a feeding in the care tracker should feel nurturing. A full bowl and a small heart reward the routine.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns a chore into a moment of care, encouraging consistent daily logs.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">feeding</span><span class="tag">care-log</span></div>
+      </div>
+    </article>
+
+    <!-- 14. WEIGHT CHECK-IN -->
+    <article class="card" data-cat="care" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A cat sitting on a scale for a weight check-in">
+          <ellipse cx="60" cy="104" rx="30" ry="5" fill="#e3d8cc"/>
+          <rect x="34" y="86" width="52" height="14" rx="4" fill="#5B8A7A"/>
+          <rect x="40" y="82" width="40" height="6" rx="3" fill="#6e9c8d"/>
+          <circle cx="60" cy="93" r="5.5" fill="#fff" stroke="#3f6e5f" stroke-width="1.5"/>
+          <g class="a-sway" style="transform-origin:60px 93px"><line x1="60" y1="93" x2="60" y2="89" stroke="#E76953" stroke-width="1.6" stroke-linecap="round"/></g>
+          <g class="a-float">
+            <ellipse cx="60" cy="68" rx="18" ry="16" fill="#3aaa6d"/>
+            <path d="M47 58 L43 46 L52 54 Z" fill="#3aaa6d"/>
+            <path d="M73 58 L77 46 L68 54 Z" fill="#3aaa6d"/>
+            <g class="a-blink"><circle cx="54" cy="66" r="2.4" fill="#2C1810"/><circle cx="66" cy="66" r="2.4" fill="#2C1810"/></g>
+            <path d="M58 70 L60 72 L62 70 Z" fill="#E76953"/>
+            <path d="M52 74 q8 4 16 0" stroke="#146b3c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M78 78 q10 -2 8 -12" stroke="#1b9150" stroke-width="5" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Care</div>
+        <div class="name">Step on the scale</div>
+        <p class="goal">The weight timeline starts empty. A cat perched on a scale invites the owner to log a first reading.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Makes health tracking feel approachable, not clinical, before any data exists.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">weight</span><span class="tag">timeline</span></div>
+      </div>
+    </article>
+
+    <!-- 15. MEDICATION REMINDER -->
+    <article class="card" data-cat="care" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A medicine capsule with a clock badge, medication reminder">
+          <circle cx="60" cy="60" r="30" fill="#fbeae6"/>
+          <circle cx="60" cy="60" r="30" fill="none" stroke="#E76953" stroke-width="2.5" opacity=".4" class="a-pulse"/>
+          <g class="a-float" style="transform-origin:60px 60px">
+            <g transform="rotate(-35 60 60)">
+              <rect x="44" y="52" width="32" height="16" rx="8" fill="#fff" stroke="#7A5C4A" stroke-width="1.5"/>
+              <path d="M60 52 h8 a8 8 0 0 1 8 8 a8 8 0 0 1 -8 8 h-8 Z" fill="#E76953"/>
+              <line x1="60" y1="52" x2="60" y2="68" stroke="#7A5C4A" stroke-width="1.5"/>
+            </g>
+          </g>
+          <g transform="translate(84 40)">
+            <circle r="11" fill="#1b9150"/>
+            <line x1="0" y1="0" x2="0" y2="-6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="0" y1="0" x2="5" y2="2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Reminder · Care</div>
+        <div class="name">Time for meds</div>
+        <p class="goal">A medication reminder needs to feel like a gentle nudge, not an alarm. A soft pulse around a friendly capsule does it.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Prompts on-time dosing without the stress of a clinical alert.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">medication</span><span class="tag">reminder</span></div>
+      </div>
+    </article>
+
+    <!-- 16. GROOMING / CLAW TRIM -->
+    <article class="card" data-cat="care" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A cat paw with sparkles after a fresh claw trim">
+          <ellipse cx="60" cy="102" rx="26" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <ellipse cx="60" cy="70" rx="20" ry="18" fill="#816e0c"/>
+            <ellipse cx="60" cy="74" rx="11" ry="9" fill="#a08a1a"/>
+            <ellipse cx="46" cy="58" rx="5" ry="6.5" fill="#a08a1a"/>
+            <ellipse cx="56" cy="52" rx="5" ry="6.5" fill="#a08a1a"/>
+            <ellipse cx="66" cy="52" rx="5" ry="6.5" fill="#a08a1a"/>
+            <ellipse cx="76" cy="58" rx="5" ry="6.5" fill="#a08a1a"/>
+          </g>
+          <g class="a-twinkle"><path d="M36 46 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5 Z" fill="#E76953"/></g>
+          <g class="a-twinkle" style="animation-delay:.6s"><path d="M86 52 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2 Z" fill="#1b9150"/></g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Feedback · Care</div>
+        <div class="name">Fresh claws</div>
+        <p class="goal">Logging a claw trim or groom should feel satisfying. A tidy paw with a sparkle marks the task done.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Gives grooming routines a small payoff, reinforcing the care habit.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">grooming</span><span class="tag">claw-trim</span></div>
+      </div>
+    </article>
+
+    <!-- 17. VET VISIT BOOKED -->
+    <article class="card" data-cat="care" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A calendar with a medical cross and checkmark, vet visit booked">
+          <ellipse cx="60" cy="102" rx="28" ry="5" fill="#e3d8cc"/>
+          <g class="a-pop" style="transform-origin:60px 64px">
+            <rect x="34" y="42" width="52" height="48" rx="6" fill="#fff" stroke="#1b9150" stroke-width="2.5"/>
+            <rect x="34" y="42" width="52" height="13" rx="6" fill="#1b9150"/>
+            <line x1="46" y1="38" x2="46" y2="48" stroke="#146b3c" stroke-width="3" stroke-linecap="round"/>
+            <line x1="74" y1="38" x2="74" y2="48" stroke="#146b3c" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(54 68)">
+            <rect x="-3" y="-8" width="6" height="16" rx="1.5" fill="#E76953"/>
+            <rect x="-8" y="-3" width="16" height="6" rx="1.5" fill="#E76953"/>
+          </g>
+          <path d="M66 76 L70 80 L78 70" stroke="#22C55E" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Confirmation · Care</div>
+        <div class="name">Vet day booked</div>
+        <p class="goal">Scheduling a vet visit deserves a confident close. A stamped calendar with a check confirms it's handled.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Closes the loop on care planning so the owner feels on top of it.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">vet</span><span class="tag">appointment</span></div>
+      </div>
+    </article>
+
+    <!-- 18. RECALL WATCH -->
+    <article class="card" data-cat="emergency" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A ringing bell alerting to a product recall">
+          <ellipse cx="60" cy="104" rx="26" ry="5" fill="#e3d8cc"/>
+          <text x="60" y="20" text-anchor="middle" font-size="15" font-weight="800" fill="#EF4444" class="a-twinkle">!</text>
+          <g class="a-wiggle" style="transform-origin:60px 34px">
+            <path d="M60 34 q-18 4 -18 30 q0 8 -5 12 h46 q-5 -4 -5 -12 q0 -26 -18 -30 Z" fill="#E76953"/>
+            <rect x="56" y="28" width="8" height="8" rx="3" fill="#c44f3c"/>
+            <circle cx="60" cy="82" r="5" fill="#c44f3c"/>
+          </g>
+          <path d="M30 54 q-5 8 0 16" stroke="#816e0c" stroke-width="2" fill="none" stroke-linecap="round" class="a-pulse"/>
+          <path d="M90 54 q5 8 0 16" stroke="#816e0c" stroke-width="2" fill="none" stroke-linecap="round" class="a-pulse" style="animation-delay:.3s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Alert · Emergency</div>
+        <div class="name">Recall watch</div>
+        <p class="goal">A product-recall notice must be noticed without panicking. A friendly ringing bell flags it as important, not catastrophic.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Draws attention to recalls while keeping the tone calm and actionable.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">recalls</span><span class="tag">alert</span></div>
+      </div>
+    </article>
+
+    <!-- 19. PREMIUM GUARDIAN -->
+    <article class="card" data-cat="onboarding" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A cat wearing a golden crown, premium guardian unlocked">
+          <ellipse cx="60" cy="104" rx="28" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <path d="M42 40 L48 52 L60 42 L72 52 L78 40 L74 58 L46 58 Z" fill="#816e0c"/>
+            <circle cx="42" cy="40" r="3" fill="#a08a1a"/><circle cx="60" cy="40" r="3" fill="#a08a1a"/><circle cx="78" cy="40" r="3" fill="#a08a1a"/>
+            <circle cx="60" cy="74" r="22" fill="#1b9150"/>
+            <path d="M44 62 L40 50 L50 58 Z" fill="#1b9150"/>
+            <path d="M76 62 L80 50 L70 58 Z" fill="#1b9150"/>
+            <g class="a-blink"><circle cx="52" cy="73" r="3" fill="#2C1810"/><circle cx="68" cy="73" r="3" fill="#2C1810"/></g>
+            <path d="M57 80 L60 83 L63 80 Z" fill="#E76953"/>
+            <path d="M60 83 q-5 4 -9 1 M60 83 q5 4 9 1" stroke="#146b3c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <circle cx="34" cy="60" r="2" fill="#816e0c" class="a-twinkle"/>
+          <circle cx="88" cy="58" r="2.2" fill="#E76953" class="a-twinkle" style="animation-delay:.5s"/>
+          <circle cx="84" cy="84" r="1.8" fill="#1b9150" class="a-twinkle" style="animation-delay:.9s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Premium · Onboarding</div>
+        <div class="name">Guardian+ unlocked</div>
+        <p class="goal">The paywall should feel like a reward, not a wall. A crowned mascot frames premium as a richer kind of care.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Makes upgrading feel aspirational and warm rather than transactional.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">paywall</span><span class="tag">premium</span></div>
+      </div>
+    </article>
+
+    <!-- 20. SWIPE TO EXPLORE -->
+    <article class="card" data-cat="onboarding" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A paw swiping across onboarding cards">
+          <rect x="30" y="40" width="44" height="40" rx="8" fill="#EFE8DB" transform="rotate(-6 52 60)"/>
+          <rect x="40" y="36" width="46" height="44" rx="8" fill="#fff" stroke="#1b9150" stroke-width="2"/>
+          <circle cx="63" cy="52" r="7" fill="#3aaa6d"/>
+          <path d="M52 70 q11 -10 22 0" stroke="#5B8A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="52" cy="92" r="2.4" fill="#1b9150"/>
+          <circle cx="60" cy="92" r="2.4" fill="#cdbfae"/>
+          <circle cx="68" cy="92" r="2.4" fill="#cdbfae"/>
+          <g class="a-swipe">
+            <ellipse cx="60" cy="64" rx="9" ry="7.5" fill="#E76953"/>
+            <circle cx="53" cy="57" r="2.6" fill="#E76953"/><circle cx="59" cy="54" r="2.6" fill="#E76953"/>
+            <circle cx="65" cy="54" r="2.6" fill="#E76953"/><circle cx="71" cy="57" r="2.6" fill="#E76953"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Intro · Onboarding</div>
+        <div class="name">Swipe to explore</div>
+        <p class="goal">The onboarding carousel needs to teach a gesture without words. A paw sweeping the cards shows the way.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Communicates the swipe affordance instantly, lowering first-run friction.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">onboarding</span><span class="tag">gesture</span></div>
+      </div>
+    </article>
+
+    <!-- 21. NO MATCH FOUND -->
+    <article class="card" data-cat="search" style="--c:var(--cautious)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A puzzled cat tilting its head beside a question mark">
+          <ellipse cx="60" cy="104" rx="28" ry="5" fill="#e3d8cc"/>
+          <g class="a-nod" style="transform-origin:60px 94px">
+            <path d="M44 64 L38 44 L56 56 Z" fill="#b8967a"/>
+            <path d="M76 64 L82 44 L64 56 Z" fill="#b8967a"/>
+            <circle cx="60" cy="72" r="24" fill="#cdbfae"/>
+            <g class="a-blink"><circle cx="51" cy="70" r="3" fill="#2C1810"/><circle cx="69" cy="70" r="3" fill="#2C1810"/></g>
+            <path d="M57 78 L60 81 L63 78 Z" fill="#E76953"/>
+            <path d="M60 81 q-4 4 -8 1 M60 81 q4 4 8 1" stroke="#7A5C4A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M36 70 l-12 -3 M36 75 l-13 4" stroke="#a78a6c" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M84 70 l12 -3 M84 75 l13 4" stroke="#a78a6c" stroke-width="1.4" stroke-linecap="round"/>
+          </g>
+          <g class="a-twinkle" style="transform-origin:93px 42px">
+            <path d="M86 36 q0 -8 7 -8 q7 0 7 7 q0 5 -7 7 v3" stroke="#F59E0B" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+            <circle cx="93" cy="57" r="2" fill="#F59E0B"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Search</div>
+        <div class="name">Never heard of that one</div>
+        <p class="goal">A "no results" screen can feel like a dead end. A curious head-tilt keeps the owner trying instead of giving up.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Softens a zero-result moment and nudges toward a re-search or "request it".</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">search</span><span class="tag">no-results</span></div>
+      </div>
+    </article>
+
+    <!-- 22. SCAN A LABEL -->
+    <article class="card" data-cat="search" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A scanner beam reading a product bottle">
+          <ellipse cx="60" cy="106" rx="26" ry="4.5" fill="#e3d8cc"/>
+          <rect x="46" y="40" width="28" height="54" rx="7" fill="#EFE8DB" stroke="#1b9150" stroke-width="2"/>
+          <rect x="53" y="32" width="14" height="10" rx="3" fill="#5B8A7A"/>
+          <rect x="51" y="52" width="18" height="22" rx="3" fill="#fff"/>
+          <line x1="55" y1="59" x2="65" y2="59" stroke="#cdbfae" stroke-width="2" stroke-linecap="round"/>
+          <line x1="55" y1="64" x2="63" y2="64" stroke="#cdbfae" stroke-width="2" stroke-linecap="round"/>
+          <g class="a-scan">
+            <line x1="40" y1="62" x2="80" y2="62" stroke="#E76953" stroke-width="2.4" stroke-linecap="round"/>
+            <rect x="40" y="58" width="40" height="8" fill="#E76953" opacity=".14"/>
+          </g>
+          <path d="M34 44 v-8 h8 M86 44 v-8 h-8 M34 90 v8 h8 M86 90 v8 h-8" stroke="#1b9150" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Action · Search</div>
+        <div class="name">Scan the label</div>
+        <p class="goal">Typing a long ingredient name is hard with a worried hand. A scanning frame invites the faster, calmer path.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Signals an effortless input mode at the exact moment stress is highest.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">scan</span><span class="tag">input</span></div>
+      </div>
+    </article>
+
+    <!-- 23. HOW MUCH MATTERS -->
+    <article class="card" data-cat="verdict" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A balance scale weighing a single drop against a leaf">
+          <ellipse cx="60" cy="106" rx="26" ry="4.5" fill="#e3d8cc"/>
+          <line x1="60" y1="42" x2="60" y2="94" stroke="#816e0c" stroke-width="3"/>
+          <rect x="49" y="94" width="22" height="6" rx="3" fill="#816e0c"/>
+          <g class="a-sway" style="transform-origin:60px 42px">
+            <line x1="32" y1="42" x2="88" y2="42" stroke="#816e0c" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="60" cy="42" r="4" fill="#a08a1a"/>
+            <path d="M32 42 l-8 15 h16 z" fill="none" stroke="#a08a1a" stroke-width="2"/>
+            <path d="M88 42 l-8 15 h16 z" fill="none" stroke="#a08a1a" stroke-width="2"/>
+            <path d="M88 50 q-4 6 0 11 q4 -5 0 -11z" fill="#E76953"/>
+            <path d="M32 51 q-7 1 -7 7 q7 0 7 -7z" fill="#1b9150"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Nuance · Verdict</div>
+        <div class="name">How much matters</div>
+        <p class="goal">"Toxic" is rarely all-or-nothing. A tipping scale tells the owner that dose and weight shape the real risk.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Frames severity as contextual, reducing panic over a tiny, accidental nibble.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">verdict</span><span class="tag">dosage</span></div>
+      </div>
+    </article>
+
+    <!-- 24. STAY HYDRATED -->
+    <article class="card" data-cat="care" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A water bowl with gentle ripples and a paw print">
+          <ellipse cx="60" cy="100" rx="30" ry="6" fill="#e3d8cc"/>
+          <path d="M34 74 q26 14 52 0 l-5 16 q-21 9 -42 0 z" fill="#5B8A7A"/>
+          <ellipse cx="60" cy="74" rx="26" ry="8" fill="#7fb0a1"/>
+          <ellipse cx="60" cy="74" rx="26" ry="8" fill="none" stroke="#4a7468" stroke-width="2"/>
+          <ellipse class="a-ripple" cx="60" cy="74" rx="11" ry="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
+          <ellipse class="a-ripple" cx="60" cy="74" rx="11" ry="3.4" fill="none" stroke="#fff" stroke-width="1.6" style="animation-delay:1s"/>
+          <circle cx="60" cy="44" r="3" fill="#5B8A7A" class="a-rise"/>
+          <g fill="#1b9150" class="a-float"><ellipse cx="90" cy="56" rx="4" ry="5"/><circle cx="85" cy="49" r="1.8"/><circle cx="90" cy="47" r="1.8"/><circle cx="95" cy="49" r="1.8"/></g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Reminder · Care</div>
+        <div class="name">Stay hydrated</div>
+        <p class="goal">Water intake is easy to forget and quietly vital. Soft ripples make a hydration nudge feel caring, not naggy.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns a routine reminder into a calm, repeatable ritual of good care.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">hydration</span><span class="tag">reminder</span></div>
+      </div>
+    </article>
+
+    <!-- 25. SYMPTOM CHECK-IN -->
+    <article class="card" data-cat="recovery" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A care journal showing a rising recovery line">
+          <ellipse cx="60" cy="104" rx="26" ry="4.5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <rect x="38" y="30" width="44" height="58" rx="6" fill="#fff" stroke="#1b9150" stroke-width="2"/>
+            <rect x="52" y="26" width="16" height="8" rx="3" fill="#1b9150"/>
+            <line x1="46" y1="44" x2="68" y2="44" stroke="#e3d8cc" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="46" y1="51" x2="60" y2="51" stroke="#e3d8cc" stroke-width="2.4" stroke-linecap="round"/>
+            <polyline class="draw" points="46,74 54,66 62,70 74,54" fill="none" stroke="#1b9150" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="74" cy="54" r="3" fill="#22C55E"/>
+          </g>
+          <circle cx="92" cy="42" r="2" fill="#22C55E" class="a-twinkle"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Tracking · Recovery</div>
+        <div class="name">Feeling better, day by day</div>
+        <p class="goal">After a scare, owners watch for small signs. A gently climbing line says the worst has passed.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Visualizes progress so logging symptoms feels hopeful, not clinical.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">recovery</span><span class="tag">symptom-log</span></div>
+      </div>
+    </article>
+
+    <!-- 26. CALL THE VET -->
+    <article class="card" data-cat="emergency" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A phone handset ringing for the vet with a steady pulse">
+          <g class="a-pulse" style="transform-origin:60px 60px">
+            <circle cx="60" cy="60" r="33" fill="none" stroke="#E76953" stroke-width="2" opacity=".4"/>
+          </g>
+          <circle cx="60" cy="60" r="24" fill="#E76953"/>
+          <g class="a-heartbeat" style="transform-origin:60px 60px">
+            <path d="M50 50 q-3 0 -3 4 q1 13 17 18 q4 1 4 -3 l-1 -6 q-1 -3 -4 -2 l-4 1 q-5 -3 -7 -8 l1 -4 q1 -3 -3 -4 z" fill="#fff"/>
+          </g>
+          <g fill="#E76953" opacity=".55" class="a-float"><ellipse cx="90" cy="36" rx="4" ry="5"/><circle cx="85" cy="29" r="1.8"/><circle cx="90" cy="27" r="1.8"/><circle cx="95" cy="29" r="1.8"/></g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Action · Emergency</div>
+        <div class="name">Call your vet now</div>
+        <p class="goal">In a true emergency the next tap must be obvious. A warm, pulsing handset is a steady hand pointing the way.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Makes the one critical action unmissable without flashing red alarm.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">emergency</span><span class="tag">call-vet</span></div>
+      </div>
+    </article>
+
+    <!-- 27. BRAVE LITTLE PATIENT -->
+    <article class="card" data-cat="recovery" style="--c:var(--safe)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A recovering cat with a small bandage and a healing heart">
+          <ellipse cx="60" cy="105" rx="28" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <path d="M42 58 L36 38 L54 50 Z" fill="#cdbfae"/>
+            <path d="M78 58 L84 38 L66 50 Z" fill="#cdbfae"/>
+            <circle cx="60" cy="66" r="25" fill="#ddd0bf"/>
+            <g class="a-blink"><circle cx="51" cy="64" r="3" fill="#2C1810"/><circle cx="69" cy="64" r="3" fill="#2C1810"/></g>
+            <path d="M57 72 L60 75 L63 72 Z" fill="#E76953"/>
+            <path d="M60 75 q-5 4 -9 1 M60 75 q5 4 9 1" stroke="#7A5C4A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <g transform="rotate(-18 72 50)"><rect x="64" y="46" width="16" height="9" rx="3" fill="#fff" stroke="#5B8A7A" stroke-width="1.6"/><line x1="68" y1="48" x2="76" y2="53" stroke="#5B8A7A" stroke-width="1"/><line x1="68" y1="53" x2="76" y2="48" stroke="#5B8A7A" stroke-width="1"/></g>
+          </g>
+          <path class="a-heartbeat" d="M90 50 C87 46 81 47 81 51 C81 55 90 60 90 60 C90 60 99 55 99 51 C99 47 93 46 90 50 Z" fill="#22C55E" style="transform-origin:90px 54px"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Reassurance · Recovery</div>
+        <div class="name">Brave little patient</div>
+        <p class="goal">Once the danger passes, the tone should turn tender. A bandaged, healing cat honors what the pair just went through.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Closes the scare with warmth and pride rather than lingering dread.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">recovery</span><span class="tag">reassurance</span></div>
+      </div>
+    </article>
+
+    <!-- 28. WITH LOVE, FROM US -->
+    <article class="card" data-cat="delight" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A grateful cat blowing a kiss with a floating heart">
+          <ellipse cx="58" cy="104" rx="28" ry="5" fill="#e3d8cc"/>
+          <g class="a-purr" style="transform-origin:54px 70px">
+            <path d="M38 56 L32 38 L50 50 Z" fill="#E76953"/>
+            <path d="M70 56 L76 38 L58 50 Z" fill="#E76953"/>
+            <circle cx="54" cy="66" r="22" fill="#E76953"/>
+            <g class="a-blink"><path d="M44 64 q3 -3 6 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M58 64 q3 -3 6 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+            <path d="M53 70 L54 71.5 L55 70 Z" fill="#fff"/>
+            <path d="M48 74 q6 4 12 0" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="a-rise" style="transform-origin:84px 52px">
+            <path d="M84 50 C81 46 75 47 75 51 C75 56 84 62 84 62 C84 62 93 56 93 51 C93 47 87 46 84 50 Z" fill="#E76953"/>
+          </g>
+          <circle cx="74" cy="40" r="2" fill="#816e0c" class="a-twinkle"/>
+          <circle cx="96" cy="66" r="1.8" fill="#1b9150" class="a-twinkle" style="animation-delay:.6s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Gratitude · Delight</div>
+        <div class="name">With love, from us</div>
+        <p class="goal">A thank-you after a review, rating, or referral should feel personal. A cat blowing a kiss returns the affection.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Rewards advocacy with genuine warmth, deepening the bond with the brand.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">gratitude</span><span class="tag">micro-delight</span></div>
+      </div>
+    </article>
+
+    <!-- 29. SAVED FOR LATER -->
+    <article class="card" data-cat="search" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A glowing bookmark saving an entry for later">
+          <ellipse cx="60" cy="106" rx="28" ry="5" fill="#e3d8cc"/>
+          <rect x="34" y="34" width="52" height="62" rx="8" fill="#fff" stroke="#E3D8CC" stroke-width="2"/>
+          <line x1="44" y1="52" x2="70" y2="52" stroke="#E3D8CC" stroke-width="3" stroke-linecap="round"/>
+          <line x1="44" y1="62" x2="64" y2="62" stroke="#EFE8DB" stroke-width="3" stroke-linecap="round"/>
+          <line x1="44" y1="72" x2="68" y2="72" stroke="#EFE8DB" stroke-width="3" stroke-linecap="round"/>
+          <g class="a-heartbeat" style="transform-origin:74px 42px">
+            <path d="M66 28 h16 v28 l-8 -7 -8 7 Z" fill="#E76953"/>
+          </g>
+          <circle cx="30" cy="36" r="2" fill="#816e0c" class="a-twinkle"/>
+          <circle cx="92" cy="46" r="1.8" fill="#1b9150" class="a-twinkle" style="animation-delay:.6s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Saved · Search</div>
+        <div class="name">Saved for later</div>
+        <p class="goal">Not every check ends in action. A bookmark lets an owner keep a substance close without searching it twice.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Cuts repeat effort and shows the app remembers what matters to them.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">saved</span><span class="tag">bookmark</span></div>
+      </div>
+    </article>
+
+    <!-- 30. YOUR ACCOUNT, READY -->
+    <article class="card" data-cat="onboarding" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A friendly cat avatar inside a profile badge with a confirmation check">
+          <ellipse cx="60" cy="106" rx="26" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <circle cx="60" cy="58" r="29" fill="#EFE8DB" stroke="#5B8A7A" stroke-width="2.5"/>
+            <path d="M46 50 L42 36 L56 46 Z" fill="#5B8A7A"/>
+            <path d="M74 50 L78 36 L64 46 Z" fill="#5B8A7A"/>
+            <circle cx="60" cy="56" r="16" fill="#6fa495"/>
+            <g class="a-blink"><circle cx="54" cy="55" r="2.4" fill="#2C1810"/><circle cx="66" cy="55" r="2.4" fill="#2C1810"/></g>
+            <path d="M58 60 L60 62 L62 60 Z" fill="#E76953"/>
+            <path d="M53 64 q7 4 14 0" stroke="#46695d" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="a-pop" style="transform-origin:82px 38px">
+            <circle cx="82" cy="38" r="9" fill="#1b9150"/>
+            <path d="M78 38 l3 3 5 -6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Account · Onboarding</div>
+        <div class="name">Your account, ready</div>
+        <p class="goal">Creating an account should feel like being welcomed in, not filling a form. A cat avatar makes the profile feel like theirs.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns sign-up into a personal moment instead of a chore.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">account</span><span class="tag">profile</span></div>
+      </div>
+    </article>
+
+    <!-- 31. REMINDER SET -->
+    <article class="card" data-cat="care" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A reminder bell ringing with a confirmation check">
+          <ellipse cx="60" cy="106" rx="24" ry="5" fill="#e3d8cc"/>
+          <g class="a-ring" style="transform-origin:60px 30px">
+            <path d="M60 30 v5" stroke="#816e0c" stroke-width="3" stroke-linecap="round"/>
+            <path d="M44 80 q0 -36 16 -45 q16 9 16 45 Z" fill="#f0c419" stroke="#816e0c" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M40 80 h40" stroke="#816e0c" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="60" cy="88" r="5" fill="#816e0c"/>
+          </g>
+          <path d="M30 52 q-6 7 0 16" stroke="#f0c419" stroke-width="2.2" fill="none" stroke-linecap="round" class="a-pulse"/>
+          <path d="M90 52 q6 7 0 16" stroke="#f0c419" stroke-width="2.2" fill="none" stroke-linecap="round" class="a-pulse" style="animation-delay:.4s"/>
+          <g class="a-pop" style="transform-origin:84px 38px">
+            <circle cx="84" cy="38" r="9" fill="#1b9150"/>
+            <path d="M80 38 l3 3 5 -6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Reminder · Care</div>
+        <div class="name">Reminder set</div>
+        <p class="goal">Meds and vet visits slip the mind. A bell that rings, then settles, confirms MewGuard is keeping watch so the owner doesn't have to.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Offloads mental load — they trust the app to remember for them.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">reminder</span><span class="tag">notification</span></div>
+      </div>
+    </article>
+
+    <!-- 32. FOUR DAYS STRONG -->
+    <article class="card" data-cat="care" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A care calendar with a streak of logged days and a star">
+          <ellipse cx="60" cy="106" rx="28" ry="5" fill="#e3d8cc"/>
+          <rect x="30" y="36" width="60" height="58" rx="8" fill="#fff" stroke="#E3D8CC" stroke-width="2"/>
+          <rect x="30" y="36" width="60" height="14" rx="8" fill="#1b9150"/>
+          <rect x="30" y="44" width="60" height="6" fill="#1b9150"/>
+          <line x1="42" y1="32" x2="42" y2="42" stroke="#146b3c" stroke-width="3" stroke-linecap="round"/>
+          <line x1="78" y1="32" x2="78" y2="42" stroke="#146b3c" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="42" cy="62" r="3.4" fill="#1b9150" class="a-pop"/>
+          <circle cx="54" cy="62" r="3.4" fill="#1b9150" class="a-pop" style="animation-delay:.12s"/>
+          <circle cx="66" cy="62" r="3.4" fill="#1b9150" class="a-pop" style="animation-delay:.24s"/>
+          <circle cx="78" cy="62" r="3.4" fill="#1b9150" class="a-pop" style="animation-delay:.36s"/>
+          <circle cx="42" cy="76" r="3.4" fill="#E3D8CC"/>
+          <circle cx="54" cy="76" r="3.4" fill="#E3D8CC"/>
+          <g class="a-twinkle" style="transform-origin:71px 78px">
+            <path d="M71 71 l1.8 4.5 4.8 .3 -3.7 3.1 1.2 4.7 -4.1 -2.6 -4.1 2.6 1.2 -4.7 -3.7 -3.1 4.8 -.3 Z" fill="#f0c419"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Streak · Care</div>
+        <div class="name">Four days strong</div>
+        <p class="goal">A logged-care streak is a quiet win. Filling dots and a little star celebrate consistency without ever nagging.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns routine care into a gentle, rewarding habit.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">calendar</span><span class="tag">streak</span></div>
+      </div>
+    </article>
+
+    <!-- 33. HOME IS WHERE THE CAT IS -->
+    <article class="card" data-cat="delight" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A cozy home with a contented cat in the window">
+          <ellipse cx="60" cy="106" rx="30" ry="5" fill="#e3d8cc"/>
+          <g class="a-float">
+            <path d="M28 56 L60 30 L92 56 Z" fill="#E76953"/>
+            <rect x="36" y="56" width="48" height="40" rx="4" fill="#fff" stroke="#E3D8CC" stroke-width="2"/>
+            <rect x="44" y="62" width="32" height="26" rx="3" fill="#1b9150" opacity=".12"/>
+            <path d="M52 78 L49 70 L56 76 Z" fill="#3aaa6d"/>
+            <path d="M68 78 L71 70 L64 76 Z" fill="#3aaa6d"/>
+            <circle cx="60" cy="80" r="9" fill="#3aaa6d"/>
+            <g class="a-blink"><circle cx="56.5" cy="79" r="1.5" fill="#2C1810"/><circle cx="63.5" cy="79" r="1.5" fill="#2C1810"/></g>
+            <path d="M59 82 l1 1.4 1 -1.4 Z" fill="#E76953"/>
+          </g>
+          <circle cx="80" cy="44" r="2" fill="#816e0c" class="a-rise"/>
+          <circle cx="38" cy="42" r="1.8" fill="#1b9150" class="a-rise" style="animation-delay:.6s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Home · Delight</div>
+        <div class="name">Home is where the cat is</div>
+        <p class="goal">The My&nbsp;Home tab is the heart of the app. A warm house with a cat in the window makes "home base" feel like exactly that.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Gives the landing surface a cozy, belonging-here identity.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">my-home</span><span class="tag">cozy</span></div>
+      </div>
+    </article>
+
+    <!-- 34. SPREAD THE WORD -->
+    <article class="card" data-cat="delight" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Sharing MewGuard along connected nodes with a rising heart">
+          <ellipse cx="60" cy="106" rx="26" ry="5" fill="#e3d8cc"/>
+          <g class="a-pulse" style="transform-origin:44px 60px">
+            <line x1="44" y1="60" x2="78" y2="42" stroke="#E76953" stroke-width="2.4"/>
+            <line x1="44" y1="60" x2="78" y2="78" stroke="#E76953" stroke-width="2.4"/>
+          </g>
+          <circle cx="78" cy="42" r="8" fill="#1b9150"/>
+          <circle cx="78" cy="78" r="8" fill="#5B8A7A"/>
+          <circle cx="44" cy="60" r="11" fill="#E76953"/>
+          <ellipse cx="40" cy="56" rx="4" ry="2.4" fill="#fff" opacity=".55" class="a-shine" style="transform-origin:44px 60px"/>
+          <g class="a-rise" style="transform-origin:44px 60px"><path d="M44 56 C42 53 38 54 38 57 C38 60 44 64 44 64 C44 64 50 60 50 57 C50 54 46 53 44 56 Z" fill="#fff"/></g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Referral · Delight</div>
+        <div class="name">Spread the word</div>
+        <p class="goal">An owner who trusts MewGuard wants other cats safe too. Connected hearts make sharing feel like an act of care, not marketing.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Frames referral as protecting more cats — warm, not transactional.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">share</span><span class="tag">referral</span></div>
+      </div>
+    </article>
+
+    <!-- 35. ALL CLEAR -->
+    <article class="card" data-cat="emergency" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A reassuring shield confirming a recall is resolved">
+          <ellipse cx="60" cy="106" rx="26" ry="5" fill="#e3d8cc"/>
+          <circle cx="60" cy="58" r="22" fill="none" stroke="#1b9150" stroke-width="2" class="a-ripple" style="transform-origin:60px 58px"/>
+          <circle cx="60" cy="58" r="22" fill="none" stroke="#1b9150" stroke-width="2" class="a-ripple" style="transform-origin:60px 58px;animation-delay:1s"/>
+          <g class="a-pop" style="transform-origin:60px 58px">
+            <path d="M60 30 L84 40 V60 C84 76 72 86 60 90 C48 86 36 76 36 60 V40 Z" fill="#1b9150"/>
+            <path d="M49 59 l8 8 15 -17" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Resolved · Emergency</div>
+        <div class="name">All clear</div>
+        <p class="goal">After a recall scare, an owner needs to exhale. A shield-check with a soft ripple says the danger has passed.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Closes an anxious loop with definitive, calming reassurance.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">recall</span><span class="tag">resolved</span></div>
+      </div>
+    </article>
+
+    <!-- 36. REVIEWED BY VETS -->
+    <article class="card" data-cat="verdict" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A vet-reviewed trust rosette with a drawn check">
+          <ellipse cx="60" cy="108" rx="22" ry="4.5" fill="#e3d8cc"/>
+          <path d="M52 72 L48 98 L57 91 L61 99 L65 75 Z" fill="#5B8A7A"/>
+          <g class="a-pop" style="transform-origin:60px 52px">
+            <circle cx="60" cy="52" r="24" fill="#6fa495" stroke="#46695d" stroke-width="2"/>
+            <circle cx="60" cy="52" r="15" fill="#EFE8DB"/>
+          </g>
+          <path d="M51 53 l7 7 13 -16" stroke="#1b9150" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" class="draw"/>
+          <circle cx="34" cy="38" r="2" fill="#816e0c" class="a-twinkle"/>
+          <circle cx="86" cy="42" r="1.8" fill="#E76953" class="a-twinkle" style="animation-delay:.6s"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Trust · Verdict</div>
+        <div class="name">Reviewed by vets</div>
+        <p class="goal">A verdict is only as calming as its source. A vet-reviewed rosette tells the owner this answer is backed by people who know cats.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Anchors trust in the verdict at the moment certainty matters most.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">trust</span><span class="tag">vet-reviewed</span></div>
+      </div>
+    </article>
+
+    <!-- 37. PICKING UP WHERE YOU LEFT OFF -->
+    <article class="card" data-cat="search" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A clock badge over a short list of recently checked foods">
+          <ellipse cx="60" cy="108" rx="26" ry="4.5" fill="#e3d8cc"/>
+          <rect x="28" y="42" width="64" height="56" rx="9" fill="#fff" stroke="#E3D8CC" stroke-width="2"/>
+          <g class="a-rise"><circle cx="40" cy="58" r="4" fill="#f3d9b0"/><rect x="49" y="55" width="34" height="6" rx="3" fill="#f0e3cf"/></g>
+          <g class="a-rise" style="animation-delay:.4s"><circle cx="40" cy="72" r="4" fill="#f3d9b0"/><rect x="49" y="69" width="26" height="6" rx="3" fill="#f0e3cf"/></g>
+          <g class="a-rise" style="animation-delay:.8s"><circle cx="40" cy="86" r="4" fill="#f3d9b0"/><rect x="49" y="83" width="30" height="6" rx="3" fill="#f0e3cf"/></g>
+          <g class="a-pop" style="transform-origin:82px 36px">
+            <circle cx="82" cy="36" r="17" fill="#E76953" stroke="#fff" stroke-width="2.5"/>
+            <path d="M82 28 v8 l6 4" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Continuity · Search</div>
+        <div class="name">Picking up where you left off</div>
+        <p class="goal">Worry rarely stops at one food. Surfacing recent checks lets an anxious owner resume a frantic search without retyping a thing.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Lowers effort on repeat visits and signals the app remembered their concern.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">history</span><span class="tag">continuity</span></div>
+      </div>
+    </article>
+
+    <!-- 38. BACK TO CHASING TOYS -->
+    <article class="card" data-cat="recovery" style="--c:var(--green)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A recovered cat playfully batting a ball of yarn">
+          <ellipse cx="60" cy="104" rx="32" ry="6" fill="#e3d8cc"/>
+          <g class="a-float">
+            <g class="a-tailwag" style="transform-origin:74px 86px"><path d="M74 86 q14 -2 12 -16" stroke="#1b9150" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+            <ellipse cx="56" cy="84" rx="20" ry="16" fill="#1b9150"/>
+            <circle cx="48" cy="62" r="14" fill="#3aaa6d"/>
+            <path d="M40 54 L37 44 L46 51 Z" fill="#3aaa6d"/>
+            <path d="M56 54 L59 44 L50 51 Z" fill="#3aaa6d"/>
+            <circle cx="44" cy="62" r="2" fill="#fff" class="a-blink"/>
+            <circle cx="52" cy="62" r="2" fill="#fff" class="a-blink"/>
+            <path d="M46 67 q2 2 4 0" stroke="#146b3c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M48 64 L49.2 65.2 L46.8 65.2 Z" fill="#E76953"/>
+          </g>
+          <g class="a-wiggle" style="transform-origin:88px 90px">
+            <circle cx="88" cy="90" r="10" fill="#E76953"/>
+            <path d="M80 86 q8 5 16 0 M80 92 q8 5 16 0 M84 82 q4 8 0 16 M92 82 q4 8 0 16" stroke="#fff" stroke-width="1" fill="none" opacity=".55"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Milestone · Recovery</div>
+        <div class="name">Back to chasing toys</div>
+        <p class="goal">The end of a scare is play resumed. A cat batting yarn marks the moment recovery turns back into ordinary joy.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Celebrates full recovery and closes the worry loop on a warm, hopeful note.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">recovery</span><span class="tag">joy</span></div>
+      </div>
+    </article>
+
+    <!-- 39. WHILE YOU WAIT -->
+    <article class="card" data-cat="emergency" style="--c:var(--accent)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A first-aid checklist of calm steps to take before reaching the vet">
+          <ellipse cx="60" cy="108" rx="26" ry="4.5" fill="#e3d8cc"/>
+          <rect x="30" y="26" width="60" height="74" rx="9" fill="#fff" stroke="#E3D8CC" stroke-width="2"/>
+          <rect x="30" y="26" width="60" height="16" rx="9" fill="#E76953"/>
+          <rect x="44" y="31.5" width="32" height="5" rx="2.5" fill="#fff" opacity=".85"/>
+          <path class="draw" d="M40 57 l4 4 7 -8" stroke="#1b9150" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="56" y="55" width="26" height="5" rx="2.5" fill="#f0e3cf"/>
+          <path class="draw" d="M40 73 l4 4 7 -8" stroke="#1b9150" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:.9s"/>
+          <rect x="56" y="71" width="22" height="5" rx="2.5" fill="#f0e3cf"/>
+          <circle cx="44" cy="89" r="6" fill="none" stroke="#E3D8CC" stroke-width="3" class="a-pulse"/>
+          <rect x="56" y="87" width="24" height="5" rx="2.5" fill="#f0e3cf"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Guidance · Emergency</div>
+        <div class="name">While you wait</div>
+        <p class="goal">Between "this is bad" and the vet's door, owners need something to do. A short list of calm steps turns panic into action.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Channels adrenaline into helpful steps and eases the helplessness of waiting.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">first-aid</span><span class="tag">guidance</span></div>
+      </div>
+    </article>
+
+    <!-- 40. RATE YOUR PEACE OF MIND -->
+    <article class="card" data-cat="delight" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Five stars lighting up above a thankful paw print">
+          <ellipse cx="60" cy="104" rx="28" ry="5" fill="#e3d8cc"/>
+          <g fill="#f0c419" stroke="#816e0c" stroke-width="2" stroke-linejoin="round">
+            <g class="a-pop" style="transform-origin:22px 50px"><path transform="translate(14.6,42.6) scale(.62)" d="M12 3 l2.5 5.6 6.1 .5 -4.6 4 1.4 6 -5.4 -3.2 -5.4 3.2 1.4 -6 -4.6 -4 6.1 -.5 Z"/></g>
+            <g class="a-pop" style="transform-origin:40px 50px;animation-delay:.15s"><path transform="translate(32.6,42.6) scale(.62)" d="M12 3 l2.5 5.6 6.1 .5 -4.6 4 1.4 6 -5.4 -3.2 -5.4 3.2 1.4 -6 -4.6 -4 6.1 -.5 Z"/></g>
+            <g class="a-pop" style="transform-origin:58px 50px;animation-delay:.3s"><path transform="translate(50.6,42.6) scale(.62)" d="M12 3 l2.5 5.6 6.1 .5 -4.6 4 1.4 6 -5.4 -3.2 -5.4 3.2 1.4 -6 -4.6 -4 6.1 -.5 Z"/></g>
+            <g class="a-pop" style="transform-origin:76px 50px;animation-delay:.45s"><path transform="translate(68.6,42.6) scale(.62)" d="M12 3 l2.5 5.6 6.1 .5 -4.6 4 1.4 6 -5.4 -3.2 -5.4 3.2 1.4 -6 -4.6 -4 6.1 -.5 Z"/></g>
+            <g class="a-pop" style="transform-origin:94px 50px;animation-delay:.6s"><path transform="translate(86.6,42.6) scale(.62)" d="M12 3 l2.5 5.6 6.1 .5 -4.6 4 1.4 6 -5.4 -3.2 -5.4 3.2 1.4 -6 -4.6 -4 6.1 -.5 Z"/></g>
+          </g>
+          <g class="a-heartbeat" style="transform-origin:60px 84px" fill="#E76953">
+            <ellipse cx="60" cy="86" rx="7" ry="6"/>
+            <circle cx="52" cy="78" r="2.6"/><circle cx="57.5" cy="75" r="2.6"/><circle cx="62.5" cy="75" r="2.6"/><circle cx="68" cy="78" r="2.6"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Feedback · Delight</div>
+        <div class="name">Rate your peace of mind</div>
+        <p class="goal">After the worry passes is the honest moment to ask how we did. Stars framed as "peace of mind" invite warm, low-pressure feedback.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Captures goodwill at a calm high point and frames the rating around the emotional payoff.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">feedback</span><span class="tag">gratitude</span></div>
+      </div>
+    </article>
+
+  
+    </div>
+
+    <p class="empty-note">No assets in this stage yet.</p>
+
+    <footer>
+    <b>MewGuard</b> — sentimental-design asset kit · <b id="progress">40 of 40</b> complete ·
+    all assets are pure inline SVG + CSS, dependency-free, and honor <code>prefers-reduced-motion</code> — toggle
+    <b>Reduce motion</b> to preview that still fallback. <b>Copy SVG</b> drops self-animating markup onto your clipboard,
+    or hit the <b>download</b> button to save a standalone <code>.svg</code> file — both embed their own animation
+    <code>&lt;style&gt;</code>, so the asset stays alive the moment you paste or open it. Palette and tone follow the
+    app theme in <code>cat_toxin_app/constants/colors.ts</code>.
+  </footer>
+  </section>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
@@ -539,6 +1715,14 @@
     '@keyframes rise{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}',
     '@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}',
     '@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.13)}30%{transform:scale(1)}45%{transform:scale(1.08)}}',
+    '@keyframes purr{0%,100%{transform:translateX(0)}25%{transform:translateX(-.8px)}75%{transform:translateX(.8px)}}',
+    '@keyframes tailwag{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}',
+    '@keyframes swipe{0%,100%{transform:translateX(-10px)}50%{transform:translateX(12px)}}',
+    '@keyframes nod{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}',
+    '@keyframes ripple{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.5);opacity:0}}',
+    '@keyframes scan{0%,100%{transform:translateY(-13px);opacity:.45}50%{transform:translateY(13px);opacity:1}}',
+    '@keyframes ring{0%,60%,100%{transform:rotate(0)}8%{transform:rotate(16deg)}24%{transform:rotate(-13deg)}40%{transform:rotate(8deg)}52%{transform:rotate(-4deg)}}',
+    '@keyframes shine{0%{transform:translateX(-15px);opacity:0}45%{opacity:.85}100%{transform:translateX(15px);opacity:0}}',
     '.a-float{animation:float 4s ease-in-out infinite;transform-origin:center}',
     '.a-blink{animation:blink 5s ease-in-out infinite;transform-origin:center}',
     '.a-sway{animation:sway 4.5s ease-in-out infinite;transform-origin:50% 90%}',
@@ -550,10 +1734,18 @@
     '.a-rise{animation:rise 3s ease-in-out infinite;transform-origin:center}',
     '.a-twinkle{animation:twinkle 2s ease-in-out infinite;transform-origin:center}',
     '.a-heartbeat{animation:heartbeat 2.4s ease-in-out infinite;transform-origin:center}',
+    '.a-purr{animation:purr .25s ease-in-out infinite;transform-origin:center}',
+    '.a-tailwag{animation:tailwag 2.2s ease-in-out infinite;transform-origin:0% 100%}',
+    '.a-swipe{animation:swipe 2.8s ease-in-out infinite;transform-origin:center}',
+    '.a-nod{animation:nod 3s ease-in-out infinite;transform-origin:50% 90%}',
+    '.a-ripple{animation:ripple 2s ease-out infinite;transform-origin:center}',
+    '.a-scan{animation:scan 2.4s ease-in-out infinite;transform-origin:center}',
+    '.a-ring{animation:ring 3.6s ease-in-out infinite;transform-origin:50% 18%}',
+    '.a-shine{animation:shine 3.4s ease-in-out infinite;transform-origin:center}',
     '.draw{stroke-dasharray:90;stroke-dashoffset:90;animation:draw 1s ease-out .25s forwards}',
     '.conf{animation:confetti 1.3s ease-out infinite}',
     '.conf:nth-child(odd){animation-duration:1.6s}',
-    '@media (prefers-reduced-motion:reduce){.a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.conf{animation:none}.draw{stroke-dashoffset:0}}'
+    '@media (prefers-reduced-motion:reduce){.a-float,.a-blink,.a-sway,.a-pop,.a-spin,.a-pulse,.a-wiggle,.a-orbit,.a-rise,.a-twinkle,.a-heartbeat,.a-purr,.a-tailwag,.a-swipe,.a-nod,.a-ripple,.a-scan,.a-ring,.a-shine,.conf{animation:none}.draw{stroke-dashoffset:0}}'
   ].join('');
 
   // Build standalone, self-animating SVG markup for one card's stage <svg>.
@@ -579,20 +1771,17 @@
   var DL_IC   = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
   var REPLAY_IC = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>';
 
-  // Restart every animation in an asset's <svg> from frame 0 (one-shots re-play, infinites re-sync).
   function replayAnimations(svg) {
     svg.classList.add('anim-off');
-    void svg.getBoundingClientRect();   // force reflow so the "animation:none" takes effect
+    void svg.getBoundingClientRect();
     svg.classList.remove('anim-off');
   }
 
-  // "Nothing here — yet" -> "nothing-here-yet" for a friendly .svg filename
   function slugify(name) {
     return (name || 'asset').toLowerCase()
       .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'asset';
   }
 
-  // Save a standalone .svg document (self-animating markup + XML prolog) to disk.
   function downloadSvg(markup, filename) {
     var doc = '<?xml version="1.0" encoding="UTF-8"?>\n' + markup;
     var blob = new Blob([doc], { type: 'image/svg+xml' });
@@ -611,12 +1800,12 @@
     document.body.removeChild(ta); return ok;
   }
 
+  // ---- Copy / download / replay controls on every card (both kits) ----
   document.querySelectorAll('.card').forEach(function (card) {
     var svg = card.querySelector('.stage svg');
     if (!svg) return;
     var name = (card.querySelector('.name') || {}).textContent || 'asset';
 
-    // Replay control on the stage — re-runs the asset's animation for inspection.
     var stage = card.querySelector('.stage');
     if (stage) {
       var replay = document.createElement('button');
@@ -633,7 +1822,6 @@
     btn.className = 'copy-btn';
     btn.innerHTML = COPY_IC + '<span>Copy SVG</span>';
     btn.setAttribute('aria-label', 'Copy SVG markup for ' + name);
-
     btn.addEventListener('click', function () {
       var markup = buildSvg(svg);
       var done = function () {
@@ -672,59 +1860,62 @@
     card.querySelector('.body').appendChild(actions);
   });
 
-  // ---- Journey-stage filtering ----
-  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
-  var chips = Array.prototype.slice.call(document.querySelectorAll('.filterbar .chip'));
-  var countEl = document.getElementById('fbCount');
-  var emptyNote = document.getElementById('emptyNote');
+  // ---- Per-kit journey-stage filtering (each section is independent) ----
+  document.querySelectorAll('section.kit').forEach(function (section) {
+    var cards = Array.prototype.slice.call(section.querySelectorAll('.card'));
+    var chips = Array.prototype.slice.call(section.querySelectorAll('.filterbar .chip'));
+    var countEl = section.querySelector('.fb-count');
+    var emptyNote = section.querySelector('.empty-note');
 
-  function applyFilter(filter) {
-    var shown = 0;
-    cards.forEach(function (card) {
-      var match = filter === 'all' || card.getAttribute('data-cat') === filter;
-      card.classList.toggle('hide', !match);
-      if (match) shown++;
-    });
+    function applyFilter(filter) {
+      var shown = 0;
+      cards.forEach(function (card) {
+        var match = filter === 'all' || card.getAttribute('data-cat') === filter;
+        card.classList.toggle('hide', !match);
+        if (match) shown++;
+      });
+      chips.forEach(function (chip) {
+        chip.setAttribute('aria-pressed', String(chip.getAttribute('data-filter') === filter));
+      });
+      if (countEl) countEl.textContent = shown + (shown === 1 ? ' asset' : ' assets');
+      if (emptyNote) emptyNote.style.display = shown === 0 ? 'block' : 'none';
+    }
     chips.forEach(function (chip) {
-      chip.setAttribute('aria-pressed', String(chip.getAttribute('data-filter') === filter));
+      chip.addEventListener('click', function () { applyFilter(chip.getAttribute('data-filter')); });
     });
-    countEl.textContent = shown + (shown === 1 ? ' asset' : ' assets');
-    emptyNote.style.display = shown === 0 ? 'block' : 'none';
-  }
-
-  chips.forEach(function (chip) {
-    chip.addEventListener('click', function () { applyFilter(chip.getAttribute('data-filter')); });
+    applyFilter('all');
   });
 
-  // ---- Global motion toggle (freeze/resume all asset animations) ----
-  var motionBtn = document.getElementById('motionToggle');
-  if (motionBtn) {
-    motionBtn.addEventListener('click', function () {
-      var paused = document.body.classList.toggle('motion-paused');
-      motionBtn.setAttribute('aria-pressed', String(paused));
-      motionBtn.setAttribute('aria-label', paused ? 'Resume all asset animations' : 'Pause all asset animations');
+  // ---- Global preview toggles (sync every instance across both filterbars) ----
+  function wireToggle(selector, bodyClass, labelOn, labelOff) {
+    var btns = Array.prototype.slice.call(document.querySelectorAll(selector));
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var on = document.body.classList.toggle(bodyClass);
+        btns.forEach(function (b) {
+          b.setAttribute('aria-pressed', String(on));
+          b.setAttribute('aria-label', on ? labelOn : labelOff);
+        });
+      });
     });
   }
+  wireToggle('.stage-toggle', 'stage-dark', 'Preview assets on a light surface', 'Preview assets on a dark surface');
+  wireToggle('.motion-toggle', 'motion-paused', 'Resume all asset animations', 'Pause all asset animations');
+  wireToggle('.reduce-toggle', 'motion-reduced', 'Restore full motion', 'Preview the reduced-motion fallback');
 
-  // ---- Dark-stage preview toggle (flip every stage to a dark product surface) ----
-  var stageBtn = document.getElementById('stageToggle');
-  if (stageBtn) {
-    stageBtn.addEventListener('click', function () {
-      var dark = document.body.classList.toggle('stage-dark');
-      stageBtn.setAttribute('aria-pressed', String(dark));
-      stageBtn.setAttribute('aria-label', dark ? 'Preview assets on a light surface' : 'Preview assets on a dark surface');
-    });
+  // ---- Top kit switch (Mood / MewGuard) ----
+  var kitBtns = Array.prototype.slice.call(document.querySelectorAll('.kit-switch [data-kit]'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.kit'));
+  function showKit(kit) {
+    document.body.classList.remove('kit-mood', 'kit-mewguard');
+    document.body.classList.add('kit-' + kit);
+    sections.forEach(function (s) { s.classList.toggle('hidden', s.getAttribute('data-kit') !== kit); });
+    kitBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-kit') === kit)); });
   }
-
-  // ---- Reduce-motion preview toggle (force the static prefers-reduced-motion fallback) ----
-  var reduceBtn = document.getElementById('reduceToggle');
-  if (reduceBtn) {
-    reduceBtn.addEventListener('click', function () {
-      var reduced = document.body.classList.toggle('motion-reduced');
-      reduceBtn.setAttribute('aria-pressed', String(reduced));
-      reduceBtn.setAttribute('aria-label', reduced ? 'Restore full motion' : 'Preview the reduced-motion fallback');
-    });
-  }
+  kitBtns.forEach(function (b) {
+    b.addEventListener('click', function () { showKit(b.getAttribute('data-kit')); });
+  });
+  showKit('mewguard');
 })();
 </script>
 </body>
