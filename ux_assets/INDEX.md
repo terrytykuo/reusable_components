@@ -1,13 +1,15 @@
 # UX Assets — Index
 
 Self-contained galleries of **non-functional** UX assets: inline-SVG illustrations and
-CSS-animated, Lottie-style micro-motions whose only job is emotional/sentimental design.
-Every asset is dependency-free (pure SVG + CSS), honors `prefers-reduced-motion`, and can be
-copied or downloaded as a standalone self-animating `.svg` straight from its gallery.
+CSS-animated micro-motions whose only job is emotional/sentimental design, plus a `lottie/`
+folder of genuine Lottie JSON animation files for app/web Lottie players. Every HTML asset is
+dependency-free (pure SVG + CSS), honors `prefers-reduced-motion`, and can be copied or downloaded
+as a standalone self-animating `.svg` straight from its gallery.
 
 Open any `*.html` file in a browser. Each gallery offers journey-stage filters and three preview
 toggles — **Pause motion**, **Dark stage**, and **Reduce motion** — plus per-asset **Replay**,
-**Copy SVG**, and **Download** controls.
+**Copy SVG**, and **Download** controls. The `lottie/` files drop straight into `lottie-react-native`
+or a web Lottie player.
 
 ---
 
@@ -66,6 +68,36 @@ A recurring cat mascot is the face of "we've got you."
 | 40 | Rate your peace of mind | Delight | Feedback | Stars framed as "peace of mind" invite warm feedback at a calm emotional high point |
 
 **Journey stages:** onboarding (5) · search (6) · verdict (5) · care (8) · recovery (5) · emergency (5) · delight (6).
+
+---
+
+## `lottie/` — MewGuard Lottie animation files
+
+Genuine, schema-valid **Lottie JSON** animations (Bodymovin v5.5, 240×240, 30 fps) that pair the
+SVG/CSS gallery above with the real `.json` format a React Native / Expo app drops into
+`lottie-react-native` or any web player. Every file is **non-functional** — pure emotional/sentimental
+design — uses the same `cat_toxin_app/constants/colors.ts` palette, and carries the `mewguard` brand
+tag inside its `meta.k` (keywords) field along with author, description, and `theme_color`. All loop
+seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
+is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
+
+**Status:** 8 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic moments.
+**Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
+
+| File | Stage | Motion | UX payoff |
+|------|-------|--------|-----------|
+| `mw-heartbeat.json` | Verdict · Toxic / Emergency | Double-thump heart pulse | Steady coral heartbeat holds a worried owner's nerve — urgent, not panic |
+| `mw-safe-check.json` | Verdict · Safe | Ring fills, check draws in | Green ring + self-drawing check delivers instant relief on a safe verdict |
+| `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |
+| `mw-heart-pop.json` | Delight | Heart scales in + sparkle burst | Rewards saving a substance to a cat's profile |
+| `mw-purr-cat.json` | Delight · Ambient | Mascot breathes + blinks | Resting cat is visual proof that all is well |
+| `mw-bell-recall.json` | Emergency · Alert | Bell rings then settles | Flags a product recall as important, not catastrophic |
+| `mw-water-ripple.json` | Care · Reminder | Ripples spread across a bowl | Makes a hydration nudge caring rather than naggy |
+| `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
+
+**Usage:** load any file with `lottie-react-native` (`<LottieView source={require('./mw-heartbeat.json')} autoPlay loop />`),
+the `lottie-web`/`@lottiefiles/lottie-player` web player, or import into After Effects / LottieFiles. No external
+dependencies are baked into the JSON.
 
 ---
 

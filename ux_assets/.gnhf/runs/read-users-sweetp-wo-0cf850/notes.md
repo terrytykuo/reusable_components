@@ -62,3 +62,18 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - headless Chrome 對 36 張卡(12 列 ×3)的全頁截圖需 window 高度約 7200px 才能完整擷取,沿用前次 5600 的高度會裁掉底部新卡
 - grep 比對 <svg 與 </svg> 出現 49 vs 46 的差異屬正常:JS 區塊有 3 處註解含 <svg> 字面字串,並非未閉合標籤——驗證結構應改以 <article> 開合數(36/36)為準
 - app 在搜尋/驗證核心之外仍有豐富未涵蓋的情感時刻(書籤儲存、個人帳號、提醒通知、照護連續紀錄、My Home 分頁、分享推薦、召回解除、獸醫審核來源),足以支撐後續批次的 grounded 資產
+
+### Iteration 5
+
+**Summary:** 將 MewGuard 情感設計資產套件從 36/40 擴充至 40/40 完成目標,新增最後 4 個以 app 真實情境為依據的動畫 SVG 資產並同步更新所有計數與 INDEX.md。
+
+**Changes:**
+- 在 mewguard.html 新增 4 個品牌標記的動畫 SVG 資產達成 40/40:Picking up where you left off(search,最近查詢紀錄+時鐘徽章)、Back to chasing toys(recovery,康復貓咪戲毛線球)、While you wait(emergency,就醫前急救步驟清單)、Rate your peace of mind(delight,五星評分+貓掌感謝)
+- 更新所有 journey-stage chip 計數(search 6、recovery 5、emergency 5、delight 6)、All 計數 40、即時 fb-count 標籤為 40 assets,並將 footer 進度改為 40 of 40 complete
+- 更新 INDEX.md:狀態改為 40 of 40 complete、補上第 37-40 列資產說明、並在 journey stages 加註各 stage 數量
+
+**Learnings:**
+- 本次 4 個新資產全部複用既有 11 個動畫類別(a-rise/a-pop/a-float/a-tailwag/a-blink/a-wiggle/draw/a-pulse/a-heartbeat 等),因此前次迭代提到的「新增動畫需同步五處」規則本次完全不適用——優先複用既有動畫可大幅降低出錯面
+- 五點星形以 <g class='a-pop' transform-origin> 包裹帶有靜態 transform='translate() scale()' 的 path,可同時兼顧入場縮放動畫與精確定位,且 transform-origin 套在外層 g、靜態 transform 套在內層 path 不會互相干擾
+- 40 張卡(約 14 列×3)的全頁 headless Chrome 截圖需 window 高度約 8200px;以 PIL 從底部裁切(h-1700 至 h-300)是檢視最後幾列新卡的可靠方式
+- 驗證 stage 分布最快的方法是 grep -o 'data-cat=...' | sort | uniq -c 直接比對各 chip 計數,確保 article 數與 filterbar 計數一致(本次 40 全對齊)
