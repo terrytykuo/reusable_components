@@ -223,3 +223,20 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 - OK 繃要『斜貼』在愛心上,最乾淨做法是把整個 band-aid 圖層 transform.rotation.value 設為固定 -30(非 keyframe),圖層內以 cream 外框 rounded_rect+WHITE 中央 pad+兩端低透明度小圓孔由後往前疊;因 band-aid 圖層先加入會疊在愛心上方,視覺正確
 - 療癒式柔和心跳要與 heartbeat 的急促雙跳區隔:用單次、慢節奏的 scale pulse(94→104→94 跨 22 幀)即可讀作『安穩康復』而非『緊急』;搭配獨立圖層的綠色 stroke ring 同步 scale 放大+opacity 淡出做療癒擴散環
 - 補完本批後 onboarding 與 recovery 各達 3 個 Lottie;相對 SVG(各 5 個)仍有差距,emergency(2)與 delight(3)為下一個可補強的失衡點,比對 Lottie 與 SVG 各階段數量持續是挑選下一批最有依據的方法
+
+### Iteration 15
+
+**Summary:** 將 MewGuard Lottie 動畫集從 22 個擴充到 24 個,新增 Emergency·While you wait(依序打勾的急救清單)與 Delight·Spread the word(中央愛心向外連結三顆小愛心),補強相對 SVG 套件最薄弱的 emergency 與 delight 兩個階段。
+
+**Changes:**
+- 新增 mw-first-aid.json(Emergency·Guidance):白色清單卡上三個綠色核取圓盤蓋章式彈入、白色勾選經 Trim 依序自描繪,對應 SVG 第 39 號『While you wait』,emergency 階段 Lottie 由 2 增為 3
+- 新增 mw-spread-word.json(Delight·Referral):中央 coral 愛心柔和脈動,三條綠色線 Trim 描繪後三顆小愛心依序彈出,對應 SVG 第 34 號『Spread the word』,delight 階段 Lottie 由 3 增為 4
+- 在 lottie/_build.py 新增 build_first_aid 與 build_spread_word 兩個 builder 並接入 BUILDERS,全程複用既有 heart_group/rounded_rect/stroke_circle/ellipse/Trim 輔助函式,輸出可重現
+- 更新 lottie/_build_gallery.py 的 META 與 ORDER(依 journey 順序插入 emergency/delight)並重新產生含 24 張卡的 lottie/gallery.html
+- 更新 INDEX.md:Lottie 狀態改為 24 檔、表格新增兩列、預覽說明改為 24 個動畫
+
+**Learnings:**
+- 核取圓盤『先空著、輪到才彈入』效果:用 scale 在 0→d 幀維持 Point(0,0) 的 hold,再於 d 幀後 overshoot(0→122→100)即可讓每一列依序蓋章;白色勾選的 Trim end 起點設在彈入完成後(d+6→d+14)讓勾選在圓盤就位後才描繪
+- 連結式愛心的圖層順序關鍵:satellite 愛心(最上)→中央愛心→連結線(最下),讓中央愛心覆蓋三條線的共同起點,線端不會穿出愛心;線以 Trim 從中央向外描繪、satellite 在各自線描完後才 pop
+- draw-on 型 Lottie(safe-check/vet-calendar/本次 first-aid)在 loop 邊界會從『已完成』瞬跳回『未開始』,這是既有套件一致接受的慣例,毋須為避免跳接而額外淡出
+- 補完本批後 emergency 達 3、delight 達 4 個 Lottie;相對 SVG(各 5、6)仍有差距,care(4 vs SVG 8)與 onboarding/recovery/verdict 為後續可評估的補強點,比對 Lottie 與 SVG 各階段數量持續是挑選下一批最有依據的方法

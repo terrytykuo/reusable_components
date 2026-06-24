@@ -115,6 +115,14 @@ META = {
         title="Spread the word", stage="Delight · Referral",
         motion="Hearts pop out along threads from a central one",
         payoff="Frames sharing MewGuard as protecting more cats, not marketing."),
+    "mw-weigh-scale.json": dict(
+        title="Step on the scale", stage="Care · Weigh-in",
+        motion="Dial needle swings, overshoots, then settles",
+        payoff="Turns a weigh-in into a calm check-in, not a verdict on the numbers."),
+    "mw-on-the-scent.json": dict(
+        title="On the scent", stage="Search · Loading",
+        motion="Magnifier glides over paw prints that light up in sequence",
+        payoff="Reframes a search-in-progress as the cat actively following the scent."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
@@ -123,6 +131,7 @@ ORDER = [
     "mw-name-tag.json",
     "mw-guardian-crown.json",
     "mw-paw-loading.json",
+    "mw-on-the-scent.json",
     "mw-scan-label.json",
     "mw-clock-history.json",
     "mw-safe-check.json",
@@ -130,6 +139,7 @@ ORDER = [
     "mw-heartbeat.json",
     "mw-vet-rosette.json",
     "mw-meal-bowl.json",
+    "mw-weigh-scale.json",
     "mw-water-ripple.json",
     "mw-meds-reminder.json",
     "mw-vet-calendar.json",

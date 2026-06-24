@@ -1220,6 +1220,111 @@ def build_spread_word():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 25. Step on the scale — a dial needle swings then settles (care·weigh-in)
+# ----------------------------------------------------------------------------
+def build_weigh_scale():
+    a = new_anim(
+        "MewGuard — Step on the scale",
+        "care, weight, check-in",
+        "A scale's needle swings up, overshoots, then settles — turns a weigh-in "
+        "into a calm, reassuring check-in rather than a verdict on the numbers.",
+        op=60, theme=GREEN,
+    )
+    # center cap, drawn first → on top of the needle's pivot
+    hub = shape_layer(a)
+    hub.add_shape(ellipse(0, 0, 18, 18, GREEN))
+    # coral needle: pivots at the dial center (anchor 0,0), points up, swings in
+    # with a damped overshoot and holds the reading before resetting for the loop.
+    needle = shape_layer(a)
+    needle.transform.anchor_point.value = Point(0, 0)
+    needle.add_shape(rounded_rect(0, -46, 7, 92, CORAL, 3))
+    nrot = needle.transform.rotation
+    nrot.add_keyframe(0, -58, EASE_OUT)
+    nrot.add_keyframe(12, 40, EASE_IO)   # swing past the reading
+    nrot.add_keyframe(22, 6, EASE_IO)    # damp back
+    nrot.add_keyframe(30, 22, EASE_IO)
+    nrot.add_keyframe(38, 14, EASE_IO)   # settle on the reading
+    nrot.add_keyframe(50, 14, EASE_IN)   # hold (the cat is being read)
+    nrot.add_keyframe(60, -58, EASE_IN)  # reset for a seamless loop
+    # gauge tick marks along the top arc (r ≈ 72, angles -60…60 from vertical-up)
+    ticks = shape_layer(a)
+    for tx, ty in ((-62, -36), (-36, -62), (0, -72), (36, -62), (62, -36)):
+        ticks.add_shape(ellipse(tx, ty, 9, 9, GREEN, opacity=55))
+    # green dial ring and white face behind everything
+    ring = shape_layer(a)
+    ring.add_shape(stroke_circle(0, 0, 172, 172, GREEN, 7))
+    face = shape_layer(a)
+    face.add_shape(ellipse(0, 0, 180, 180, WHITE))
+    add_bg(a, 200)
+    return a
+
+
+def small_nose():
+    """A tiny downward coral triangle — a cat nose centered in the magnifier."""
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.closed = True
+    b.add_point(Point(-6, -3))
+    b.add_point(Point(6, -3))
+    b.add_point(Point(0, 5))
+    p.shape.value = b
+    g.add_shape(p)
+    g.add_shape(Fill(col(CORAL)))
+    return g
+
+
+def paw_print(layer):
+    """Add a tan paw print (main pad + three toe beans) at the layer origin."""
+    layer.add_shape(ellipse(-7, -4, 5, 5, "#B8967A"))
+    layer.add_shape(ellipse(0, -6, 5, 5, "#B8967A"))
+    layer.add_shape(ellipse(7, -4, 5, 5, "#B8967A"))
+    layer.add_shape(ellipse(0, 4, 14, 11, "#B8967A"))
+
+
+# ----------------------------------------------------------------------------
+# 26. On the scent — a magnifier glides over paw prints (search·loading)
+# ----------------------------------------------------------------------------
+def build_on_scent():
+    a = new_anim(
+        "MewGuard — On the scent",
+        "search, sniffing, loading",
+        "A magnifier glides along a trail of paw prints that light up in sequence — "
+        "reframes a search-in-progress as the cat actively following the scent.",
+        op=60, theme=CORAL,
+    )
+    spots = [(-54, 30), (0, 30), (54, 30)]
+    # magnifier (top): ring + cat nose + diagonal handle, sweeping across the trail
+    mag = shape_layer(a)
+    mag.add_shape(stroke_circle(0, 0, 52, 52, CORAL, 6))
+    mag.add_shape(small_nose())
+    handle = rounded_rect(0, 0, 9, 30, CORAL, 4)
+    handle.transform.position.value = Point(28, 28)
+    handle.transform.rotation.value = 45
+    mag.add_shape(handle)
+    pos = mag.transform.position
+    pos.add_keyframe(0, Point(120 - 54, 150 - 20), EASE_IO)
+    pos.add_keyframe(8, Point(120 - 54, 150 - 20), EASE_IO)
+    pos.add_keyframe(20, Point(120, 150 - 20), EASE_IO)
+    pos.add_keyframe(32, Point(120 + 54, 150 - 20), EASE_IO)
+    pos.add_keyframe(46, Point(120 + 54, 150 - 20), EASE_IO)
+    pos.add_keyframe(60, Point(120 - 54, 150 - 20), EASE_IO)
+    # paw prints light up in sequence as the magnifier passes, then fade for the loop
+    for i, (sx, sy) in enumerate(spots):
+        p = shape_layer(a, 120 + sx, 120 + sy)
+        paw_print(p)
+        op = p.transform.opacity
+        on = 6 + i * 12
+        op.add_keyframe(0, 12)
+        op.add_keyframe(on, 12, EASE_OUT)
+        op.add_keyframe(on + 6, 100, EASE_IN)
+        op.add_keyframe(52, 100, EASE_OUT)
+        op.add_keyframe(60, 12)
+    add_bg(a, 196)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -1245,6 +1350,8 @@ BUILDERS = {
     "mw-brave-patient": build_brave_patient,
     "mw-first-aid": build_first_aid,
     "mw-spread-word": build_spread_word,
+    "mw-weigh-scale": build_weigh_scale,
+    "mw-on-the-scent": build_on_scent,
 }
 
 
