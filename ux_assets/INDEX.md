@@ -20,7 +20,7 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
-**Status:** 36 of 40 planned assets. **Tag:** every asset carries the `mewguard` brand tag.
+**Status:** 40 of 40 assets — complete. **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
 |---|-------|-------|------|-----------|
@@ -60,8 +60,12 @@ A recurring cat mascot is the face of "we've got you."
 | 34 | Spread the word | Delight | Referral | Connected hearts frame sharing as protecting more cats, not marketing |
 | 35 | All clear | Emergency | Resolved | Shield-check with a soft ripple closes a recall scare with calming reassurance |
 | 36 | Reviewed by vets | Verdict | Trust | Vet-reviewed rosette anchors trust in the verdict at the moment certainty matters |
+| 37 | Picking up where you left off | Search | History | Clock badge over recent checks lets an owner resume a frantic search without retyping |
+| 38 | Back to chasing toys | Recovery | Milestone | Cat batting yarn marks full recovery and closes the worry loop on a joyful note |
+| 39 | While you wait | Emergency | Guidance | First-aid step checklist channels panic into calm action before reaching the vet |
+| 40 | Rate your peace of mind | Delight | Feedback | Stars framed as "peace of mind" invite warm feedback at a calm emotional high point |
 
-**Journey stages:** onboarding · search · verdict · care · recovery · emergency · delight.
+**Journey stages:** onboarding (5) · search (6) · verdict (5) · care (8) · recovery (5) · emergency (5) · delight (6).
 
 ---
 

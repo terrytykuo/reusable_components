@@ -47,3 +47,18 @@ Objective: see .gnhf/runs/read-users-sweetp-wo-0cf850/prompt.md
 **Learnings:**
 - The full 28-card gallery at 1200px wide is ~5300px tall (10 rows of 3), so a headless Chrome --screenshot needs window height >=5600 to avoid silently clipping the last cards — earlier 3400/4800 captures cut off the new assets and required re-rendering
 - sips crop offset flags (--cropOffset / --cropToHeightWidth) did not crop on this macOS build; Python PIL Image.crop is the reliable way to inspect specific gallery rows from a tall full-page screenshot
+
+### Iteration 4
+
+**Summary:** 將 MewGuard 情感設計資產套件從 28/40 擴充到 36/40,新增 8 個以 app 真實功能為依據的動畫 SVG 資產與兩個新動畫,並同步更新所有計數與 INDEX.md。
+
+**Changes:**
+- 在 mewguard.html 新增 8 個品牌標記的動畫 SVG 資產(Saved for later、Your account ready、Reminder set、Four days strong、Home is where the cat is、Spread the word、All clear、Reviewed by vets),分別對應 app 的書籤/個人帳號/提醒通知/照護日曆連續紀錄/My Home 分頁/分享推薦/召回解除/獸醫審核等真實功能點
+- 引入兩個新 keyframe 動畫 a-ring(鈴鐺擺動)與 a-shine(掃光),完整接入五個必要位置:<style> @keyframes 與 .a- class、prefers-reduced-motion 清單、body.motion-reduced 預覽選擇器,以及可匯出的 ANIM_CSS 陣列
+- 重新平衡並更新所有 journey-stage 計數(onboarding 5/search 5/verdict 5/care 8/recovery 4/emergency 4/delight 5)、All 計數 36、即時 fb-count 標籤與 footer 進度為 36 of 40
+- 在 INDEX.md 補上第 29-36 列資產說明、將狀態更新為 36/40,並於慣例段落加入 a-ring/a-shine 動畫類別
+
+**Learnings:**
+- headless Chrome 對 36 張卡(12 列 ×3)的全頁截圖需 window 高度約 7200px 才能完整擷取,沿用前次 5600 的高度會裁掉底部新卡
+- grep 比對 <svg 與 </svg> 出現 49 vs 46 的差異屬正常:JS 區塊有 3 處註解含 <svg> 字面字串,並非未閉合標籤——驗證結構應改以 <article> 開合數(36/36)為準
+- app 在搜尋/驗證核心之外仍有豐富未涵蓋的情感時刻(書籤儲存、個人帳號、提醒通知、照護連續紀錄、My Home 分頁、分享推薦、召回解除、獸醫審核來源),足以支撐後續批次的 grounded 資產
