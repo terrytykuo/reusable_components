@@ -31,14 +31,6 @@ META = {
         title="Checking the database", stage="Search",
         motion="Paw-pad dots pulse in sequence",
         payoff="Branded loader reframes toxin-database latency as active care."),
-    "mw-heart-pop.json": dict(
-        title="Saved to My Cats", stage="Delight",
-        motion="Heart scales in + sparkle burst",
-        payoff="Rewards saving a substance to a cat's profile."),
-    "mw-purr-cat.json": dict(
-        title="Resting easy", stage="Delight · Ambient",
-        motion="Mascot breathes + blinks",
-        payoff="Resting cat is visual proof that all is well."),
     "mw-bell-recall.json": dict(
         title="Recall watch", stage="Emergency · Alert",
         motion="Bell rings then settles",
@@ -51,10 +43,6 @@ META = {
         title="Rate your peace of mind", stage="Delight · Feedback",
         motion="Five stars pop in one by one",
         payoff="Invites warm feedback framed as peace of mind."),
-    "mw-wave-hello.json": dict(
-        title="Meet your guardian", stage="Onboarding · Welcome",
-        motion="Mascot waves, head bobs",
-        payoff="Builds trust and warmth before a worried owner's first search."),
     "mw-recovery-arc.json": dict(
         title="Feeling better, day by day", stage="Recovery · Tracking",
         motion="Climbing line draws up, dots rise",
@@ -75,18 +63,10 @@ META = {
         title="Mealtime logged", stage="Care · Feedback",
         motion="Kibble drops into a bowl, heart pops",
         payoff="Rewards logging a feeding in the care tracker."),
-    "mw-name-tag.json": dict(
-        title="Name your cat", stage="Onboarding · Empty profile",
-        motion="Heart-engraved collar tag swings on its ring",
-        payoff="Invites a worried owner to name and claim their cat's profile."),
     "mw-chase-toy.json": dict(
         title="Back to chasing toys", stage="Recovery · Milestone",
         motion="Yarn ball bounces and spins",
         payoff="Celebrates the milestone of a recovered cat back to play."),
-    "mw-dose-scale.json": dict(
-        title="How much matters", stage="Verdict · Nuance",
-        motion="Balance scale tips, then settles",
-        payoff="Frames toxicity as dose-dependent, easing panic over a tiny nibble."),
     "mw-vet-rosette.json": dict(
         title="Reviewed by vets", stage="Verdict · Trust",
         motion="Rosette pops in, check draws",
@@ -115,31 +95,28 @@ META = {
         title="Spread the word", stage="Delight · Referral",
         motion="Hearts pop out along threads from a central one",
         payoff="Frames sharing MewGuard as protecting more cats, not marketing."),
-    "mw-weigh-scale.json": dict(
-        title="Step on the scale", stage="Care · Weigh-in",
-        motion="Dial needle swings, overshoots, then settles",
-        payoff="Turns a weigh-in into a calm check-in, not a verdict on the numbers."),
     "mw-on-the-scent.json": dict(
         title="On the scent", stage="Search · Loading",
         motion="Magnifier glides over paw prints that light up in sequence",
         payoff="Reframes a search-in-progress as the cat actively following the scent."),
+    "mw-cat-box.json": dict(
+        title="Who's in the box?", stage="Onboarding · Empty state",
+        motion="Carton wobbles, flaps open, a cat silhouette peeks halfway out, then a '?' pops up",
+        payoff="Invites an owner to add their first cat on an empty My Cats screen."),
 }
 
 # preserve the MewGuard journey order rather than alphabetical
 ORDER = [
-    "mw-wave-hello.json",
-    "mw-name-tag.json",
+    "mw-cat-box.json",
     "mw-guardian-crown.json",
     "mw-paw-loading.json",
     "mw-on-the-scent.json",
     "mw-scan-label.json",
     "mw-clock-history.json",
     "mw-safe-check.json",
-    "mw-dose-scale.json",
     "mw-heartbeat.json",
     "mw-vet-rosette.json",
     "mw-meal-bowl.json",
-    "mw-weigh-scale.json",
     "mw-water-ripple.json",
     "mw-meds-reminder.json",
     "mw-vet-calendar.json",
@@ -149,10 +126,8 @@ ORDER = [
     "mw-bell-recall.json",
     "mw-call-vet.json",
     "mw-first-aid.json",
-    "mw-heart-pop.json",
     "mw-star-rating.json",
     "mw-spread-word.json",
-    "mw-purr-cat.json",
 ]
 
 

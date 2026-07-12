@@ -13,6 +13,177 @@ or a web Lottie player, and `lottie/gallery.html` previews all of them playing i
 
 ---
 
+## `bopomofo.html` — 注音樂園 (Bopomofo Land) design-system reference
+
+The **design-system / design-tokens** reference page for **注音樂園 (Bopomofo Land)**
+(`~/Workspace/bopomofo/`), a website that teaches 注音符號 (Zhuyin/Bopomofo) to 3–7-year-old
+children of Taiwanese families living abroad (e.g. Denmark) who already understand spoken Mandarin.
+A low-stimulation, kid-first kit: low-chroma cream surfaces, soft accents, rounded shapes, huge
+symbols and ≥64px touch targets, and gentle motion that fully collapses under
+`prefers-reduced-motion`.
+
+It is the visual preview of the project's CSS design tokens (the `:root` here mirrors
+`~/Workspace/bopomofo/styles/tokens.css`, the canonical source) **plus** the first mascot SVGs.
+It documents the palette (cream surfaces + forest-green/sky-blue/sakura-pink/warm-orange accents),
+the four-tone color set, the five Taiwanese-animal mascot brand colors (Formosan black bear, leopard
+cat, serow, landlocked salmon, macaque), type scale, radii/touch/shadow specs, and motion timings.
+It now also includes the **idle-state SVG mascots** for all five animals (pure inline SVG + CSS,
+each carrying its signature feature — bear's white V chest, leopard cat's forehead stripes & ear
+spots, serow's short horns & beard, salmon's oval side-spots, macaque's red face — with a gentle
+float + blink that collapses under `prefers-reduced-motion`). It now also adds the **cheer-state
+SVG mascots** (answer-correct celebration) for all five — a springy squash-and-stretch bounce,
+smiling squinted `^^` eyes and a burst of gold/sakura sparkle stars, all reusing the same animal
+bodies and tokens and likewise stilled under `prefers-reduced-motion`. It now also adds the
+**demonstrate-state SVG mascots** (gentle teaching demo) for all five — a soft nod-and-lean with an
+open "speaking" mouth and attentive open eyes, plus a per-animal bopomofo speech bubble (ㄅ/ㄆ/ㄇ/ㄚ/ㄋ,
+tinted to each animal's brand color) that softly pulses, again stilled under `prefers-reduced-motion`.
+It now also adds the first **stroke-order writing guide** ("寫" / tracing) assets — ㄚ (two strokes:
+橫撇 + 捺) and ㄧ (one horizontal stroke) — where each stroke is drawn in order inside a pale tracing
+channel, with a numbered start dot and a direction arrow per stroke. Under `prefers-reduced-motion`
+the animation stops and every stroke shows fully drawn, so it still works as a static stroke-order
+chart. It now also adds the **picture-association "看" (look & remember) cards** for the same ㄚ/ㄧ —
+a single "sound sprite" face demonstrates the mouth shape that produces each vowel (ㄚ = wide-open
+mouth, ㄧ = flat smile, whose horizontal line literally *is* the ㄧ stroke), linked by a dotted cue
+to the softly pulsing symbol so children map a known sound to the symbol's look; the pulse stills
+under `prefers-reduced-motion`. It now also adds the **audio-demo "聽" (listen & repeat) cards** for
+the same ㄚ/ㄧ — the sound sprite vocalises the symbol while three sound-wave arcs ripple outward
+from its mouth toward the symbol (the three arcs pulse in sequence so the sound reads as travelling
+out), with a "聽我說" play button inviting a tap to replay (audio is pre-recorded, no auto-scoring,
+per the foundation doc); under `prefers-reduced-motion` the waves rest as static decorative arcs and
+the button stops pulsing. It now also adds the **speak-along "換你說 · 說" (record-and-repeat) cards**
+(the Formosan macaque, the playful one) for the same ㄚ — completing the full 看＋聽＋寫＋說 four-skill set
+of a single learning unit: the macaque first demonstrates the sound, then invites the child to **tap the
+mic and repeat** (pulsing mic), records it (mic glowing with expanding ripples + a pulsing red record dot
+while the child's sound waves travel in), and finally **plays it back for a parent to "like"** (playback
+button + waveform + a beating heart). Per foundation §5 there is deliberately **no auto-scoring** for young
+children — a low-pressure record→playback→parent-likes loop; under `prefers-reduced-motion` the ripples,
+record dot and heart all rest while staying clear. It now also adds the **listen-discriminate "聽辨" quiz card** (roadmap step 5, the leopard-cat "sound
+detective" game): tap the "聽我說" play button, then pick the right symbol from a 3-choice row (ㄚ/ㄧ/ㄇ).
+Three cards show the same question's three interaction states — answering, correct (the right tile
+lights a green ring + check badge and gently bounces while the others fade), and a no-punishment wrong
+state (the tapped tile only gives a soft shake while a pulsing green ring + down arrow gently points
+to the correct answer to invite a retry). Under `prefers-reduced-motion` the bounce/shake/pulse all
+rest and the green ring + arrow stay clearly visible. It now also adds the **reverse read-select
+"讀選" quiz card** (roadmap step 5): read the prompt symbol at the top, then pick its sound from a
+3-choice row of "聲音小精靈" mouth shapes (open mouth = ㄚ, flat smile = ㄧ, pressed lips = ㄇ),
+reusing the same mouth vocabulary as the 看 unit and the same answering / correct / gentle-wrong
+feedback as 聽辨. It now also adds the **daily 30-minute "能量果實" (energy-fruit) progress** assets
+(roadmap step 6): the day's 30 minutes is drawn as a row of fruits on a vine (≈5 min each) that get
+eaten one by one as time is spent, the one being eaten softly pulsing so the child anticipates the
+end; four cards show one day's arc — starting (all six full), mid-session (three eaten husks + the
+fourth pulsing), last fruit (one pulsing fruit left), and done-for-today (all eaten, a crescent moon
+rising to close gently). It is framed as a gentle wind-down, not punishment or a countdown timer
+(foundation §6–§7); parent-facing copy shows the remaining minutes. Under `prefers-reduced-motion`
+the pulse rests while still marking which fruit is current. It now also adds the **login / select-child
+entry screens** (roadmap step 7): three cards covering the entry flow — a parent-login welcome (注音樂園
+title + a waving Formosan black bear + Google/Email login buttons), a **cute empty state** for when no
+child profile exists yet (a dashed circle with a softly pulsing green "+" inviting "新增第一個小朋友",
+with a leopard cat peeking in — an inviting empty state, not a cold blank), and a populated **select-profile**
+view (per-child avatar bubbles using mascot faces — 小宇/bear, 小恩/macaque — each with a name and
+learning-progress stars, plus a dashed "+" bubble to add another child). Framed as "one parent account,
+multiple children, independent progress" (foundation §10); data will be backed by Firebase Auth/Firestore.
+Under `prefers-reduced-motion` the wave/float/pulse all rest. It now also adds the **blending "拼讀"
+factory** assets (roadmap step 8, the Formosan landlocked salmon swimming upstream): the ultimate goal
+of zhuyin — combining a learned initial + final + tone into one syllable. Four cards show the blending
+arc — two separate sound tiles (ㄅ + ㄚ), the tiles sliding together to merge into ㄅㄚ, putting on the
+third-tone "hat" (ˇ → ㄅㄚˇ), and the finished ㄅㄚˇ = 把 with the salmon leaping out of the water in
+celebration. Under `prefers-reduced-motion` the merge/drop/leap all rest with the tiles joined and the
+tone settled in place. It now also adds the first **gamification-shell piece — the level-complete
+"星星評價" (star-rating) reward cards** (roadmap step 9): each level awards 1–3 stars by *completeness*
+(not speed, no timer pressure), the earned stars lighting up left-to-right with a gentle pop while the
+main partner (Formosan black bear) cheers; three cards show a one-/two-/three-star result, with parent-facing
+encouragement copy that praises effort rather than competing (foundation §6). Under `prefers-reduced-motion`
+the star pops and bear cheer rest while the earned stars stay clearly lit. It now also adds the
+**animal-unlock "解鎖新動物" celebration cards** (locked mystery silhouette + star progress → unlock burst
+with the new partner leaping out → welcome ribbon with the black bear greeting the newcomer, leopard cat as
+the example) and the third gamification piece — the **achievement "成就貼紙簿" badge/sticker-book** (roadmap
+step 9): learning achievements drawn as collectible round badge stickers (symbol-mastery ㄚ/ㄧ, first-complete
+star, animal-friend bear face, blending-master 拼…), earned ones full-colour with a gentle pop, not-yet-earned
+ones a dashed empty slot + "?"; three cards show one album going from "just started" (2/6) to "collecting" (4/6)
+to the celebratory moment a **new sticker is earned** (badge popping in a glow with sparks). Deliberately no
+leaderboard or loot box (collection motivation, foundation §6); under `prefers-reduced-motion` the badge pops
+rest while earned stickers stay clearly lit. The fourth gamification piece is the **streak "連續天數 · 動物的家"
+(animal-home) scene** (roadmap step 9): the consecutive-day streak drawn as a cozy tree-hollow home that *grows
+livelier* rather than a cold number — three cards show day 1 (the black bear alone, just moved in, a sprouting
+sapling) → 3-day streak (leopard cat visits, a lantern and flowers appear) → 7-day streak (the macaque joins too,
+bunting/balloons/blooming flowers/sunshine/sparks fill the home), with a row of little leaves along the bottom
+gently marking the days walked; emphasises persistence over competition, no punishment for breaking a streak.
+It now also adds the **parent-mode "家長園地 · 共學建議" cards** (roadmap step 10): a grown-up-facing dashboard
+of three cards — a **today's co-learning recap** (warm, affirming list of what the child played with today plus a
+"that's enough for today" gentle close), **co-learning tips for tonight** (concrete off-screen activities: find the
+ㄚ sound around the house, read a Chinese picture book together, sticky-note game on the fridge), and a **progress
+overview** (a symbol map of learned / learning / not-yet-started, foregrounding "compare to yesterday's self, not
+to other children", deliberately no inter-child leaderboard) — all in the spirit of foundation §6–§7 (30-min gentle
+close + parent co-learning, no time/competition pressure). It now also adds the capstone **"完整學習單元 · 一個符號的旅程"
+(complete-learning-unit) screens** that assemble the prior pieces into one consistent app screen: a top status bar
+(child mascot avatar from step 7 + the energy-fruit time budget from step 6), a 看／聽／說／寫／玩 five-step progress
+path (steps 4–5), the current activity in the centre, and a star rating on completion (step 9). Three cards walk the
+symbol ㄚ through its full journey — unit start (big symbol + "開始囉" button, fruits full), in-progress (the "看"
+activity embedded in the chrome with the step pulsing and one fruit eaten), and complete (all five steps checked, three
+gold stars, the black bear cheering, and a gentle "今天到這裡就好，明天再玩 ㄧ" close). Built entirely by reusing the
+lg avatar, ef fruit, look sound-sprite mouth, rw stars and bear cheer — zero new drawing; under `prefers-reduced-motion`
+the current-step and symbol pulses rest. Subsequent runs will wire the budget/progress to local state then Firestore.
+It now also adds the **adventure-map "注音冒險地圖 · 學習旅程"** — the macro view *above* the per-symbol capstone:
+the whole curriculum drawn as a winding trail up a mountain, each stop = one zhuyin symbol. Learned stops light up
+green and show their symbol, the current stop pulses orange with the child's avatar parked on it ("you are here"),
+and not-yet-reached stops are dashed/faint with a little lock (but faintly preview the upcoming symbol). Three cards
+walk the journey — setting off (stop 1 ㄅ), reaching stop 4 (ㄅㄆㄇ learned, ㄈ in progress), and summiting the first
+peak (all six lit, a flag on top and the black bear cheering with sparks). It foregrounds "how far I've walked" over
+ranking — no leaderboard, no comparison to other children (foundation §6); reuses the trail/avatar/star/bear-cheer
+vocabulary with zero new drawing, and under `prefers-reduced-motion` the current stop's pulse rests. Tapping the
+current stop is what opens the per-symbol capstone unit. Firestore per-symbol completeness will later drive which
+stops light up, the current-stop position and the length of the walked (green) trail. It now also adds the
+**tone-discrimination "聲調山坡 · 聽聲調" cards** — the tone dimension the earlier symbol games were missing, and the
+hardest part for these Mandarin-hearing / Danish-speaking children (Danish has no tones, foundation §4). The four
+tones are drawn as **hills the Formosan serow walks**: tone 1 a high flat ridge, tone 2 an uphill climb (low→high),
+tone 3 a dip-then-rise valley (down then up), tone 4 a downhill slide (high→low), each in its tone colour with a tiny
+serow standing where it walked to — turning abstract pitch contours into something visible. Examples use the four tones
+of one syllable **ㄅㄚ** (八 ㄅㄚ / 拔 ㄅㄚˊ / 把 ㄅㄚˇ / 爸 ㄅㄚˋ, all kid-familiar words, 把 matching the blending card).
+Three cards show learn-the-four-tones (four hills side by side), listen-and-pick correct (hear a tone → tap the matching
+hill; the right one lights a green ring + check with the serow summiting and cheering, others fade) and a no-punishment
+wrong state (the tapped hill only softly shakes with a coral ring while a pulsing green ring + down arrow gently points
+to the correct tone to invite a re-listen). It is the serow's first starring role in a game; all motion reuses existing
+play-button / wave / pop / shake / hint / spark animations (zero new keyframes), so it rests cleanly under
+`prefers-reduced-motion`. Real audio playback and per-tone accuracy in Firestore are pending.
+
+**Status:** design tokens + five idle-state, five cheer-state and five demonstrate-state mascot SVGs
+(roadmap steps 2–3 complete) + picture-association "看", audio-demo "聽" and stroke-order "寫"
+cards for ㄚ/ㄧ plus speak-along "換你說 · 說" record-and-repeat cards — the full 看＋聽＋寫＋說 four-skill
+set of one learning unit (roadmap step 4 complete) + the
+listen-discriminate "聽辨" and its reverse read-select "讀選" 3-choice quiz cards, each with their
+answering / correct / gentle-wrong states (roadmap step 5 complete) + the daily 30-minute "能量果實"
+(energy-fruit) progress, four cards covering one day's arc through to a gentle moon-rise wind-down
+(roadmap step 6 started — visual done, local-state/Firestore wiring pending) + the **login / select-child
+entry screens** (parent-login welcome, cute empty state, populated profile picker — roadmap step 7
+started, visuals done, Firebase Auth/Firestore wiring pending) + the **blending "拼讀" factory** (salmon
+swimming upstream, four cards taking ㄅ + ㄚ + ˇ through to ㄅㄚˇ = 把 — roadmap step 8 started, blending
+mechanic visualised) + the first **gamification-shell piece, the level-complete "星星評價" reward cards**
+(1–3 stars by completeness, bear cheering, three cards for one-/two-/three-star results) and the
+**animal-unlock "解鎖新動物" celebration cards** (locked mystery silhouette with star progress →
+unlock burst with the new partner leaping out → welcome ribbon with the black bear greeting the newcomer,
+leopard cat as the example — roadmap step 9 continued, collection motivation, deliberately no leaderboard
+or loot box) and the **achievement "成就貼紙簿" badge/sticker-book** (collectible round badge stickers for
+symbol-mastery / first-complete / animal-friend / blending-master, three cards from "just started" 2/6 →
+"collecting" 4/6 → a new sticker earned with a glow-and-spark pop — roadmap step 9 continued) and the
+**streak "連續天數 · 動物的家" animal-home scene** (the streak drawn as a tree-hollow home that grows livelier —
+day 1 bear alone → 3-day leopard cat visits + lantern/flowers → 7-day macaque joins + bunting/balloons/sparks,
+with a leaf-path counting the days, persistence over competition — roadmap step 9 continued) and the
+**parent-mode "家長園地 · 共學建議" cards** (a grown-up dashboard: today's co-learning recap, off-screen co-learning
+tips for tonight, and a progress overview that compares to yesterday's self rather than other children — roadmap
+step 10, deliberately no leaderboard, foundation §6–§7) + the capstone **"完整學習單元 · 一個符號的旅程"** screens that
+chain the avatar + energy-fruit budget + 看／聽／說／寫／玩 step path + current activity + star rating into one app screen
+(three cards: unit start → in-progress "看" → three-star complete, all reusing existing pieces) + the macro
+**adventure-map "注音冒險地圖 · 學習旅程"** above the capstone (a winding mountain trail of symbol-stops: learned green,
+current pulsing with the child's avatar, locked dashed — three cards from setting off → reaching stop 4 → summiting
+the first peak, foregrounding "how far I've walked" over ranking) + the **tone-discrimination "聲調山坡 · 聽聲調" cards**
+(the four tones drawn as hills the Formosan serow walks — tone 1 flat ridge, tone 2 uphill, tone 3 dip-then-rise, tone 4
+downhill — using the ㄅㄚ syllable's four tones 八/拔/把/爸; three cards: learn the four tones → listen-and-pick correct with
+the serow summiting → no-punishment wrong with a gentle pointer; the hardest skill for Danish-Mandarin bilingual kids,
+foundation §4). Firebase Auth/Firestore progress wiring pending.
+**Tag:** carries the `bopomofo` brand tag. Design rationale: `~/Workspace/bopomofo/docs/00-foundation.md`.
+
+---
+
 ## `mewguard.html` — MewGuard sentimental-design kit
 
 Asset kit for **MewGuard** (`~/Workspace/mewguard/cat_toxin_app/`), the app that helps cat owners
@@ -22,52 +193,43 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
-**Status:** 40 of 40 assets — complete. **Tag:** every asset carries the `mewguard` brand tag.
+**Status:** 31 of 31 assets — complete. **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
 |---|-------|-------|------|-----------|
-| 1 | Meet your guardian | Onboarding | Welcome | Waving cat builds trust at first launch |
-| 2 | Name your cat | Onboarding | Empty state | Blank collar tag turns an empty "My Cats" list into an invitation |
-| 3 | On the scent | Search | Loading | Sniffing nose reframes lookup latency as active care |
-| 4 | Checking the database | Search | Spinner | Branded paw spinner keeps the brand present during Firestore fetch |
-| 5 | All clear | Verdict · Safe | Result | Drawn check in a green shield delivers instant relief |
-| 6 | Worth a second look | Verdict · Caution | Result | Raised-paw cat signals middle-ground risk without crying wolf |
-| 7 | Keep this away | Verdict · Toxic | Result | Serious red verdict with a steady heartbeat — urgent, not panic-inducing |
-| 8 | Steady — we'll prep this for the vet | Emergency | Reassurance | Calm cat + slow pulse holds the owner's nerve during a crisis |
-| 9 | Nothing in the bowl | Recovery | No-results | Empty bowl softens a zero-result search |
-| 10 | Lost the thread | Recovery | Offline | Tangled-yarn cat frames a dropped connection as fixable, not the user's fault |
-| 11 | Saved to My Cats | Delight | Feedback | Heart pop + purr rewards saving a substance to a cat's profile |
-| 12 | Resting easy | Delight | Ambient | Sleeping cat is visual proof that all is well |
-| 13 | Mealtime logged | Care | Feedback | Full bowl + heart rewards logging a feeding in the care tracker |
-| 14 | Step on the scale | Care | Empty state | Cat-on-a-scale makes the empty weight timeline approachable, not clinical |
-| 15 | Time for meds | Care | Reminder | Soft-pulsing capsule nudges on-time dosing without alarm |
-| 16 | Fresh claws | Care | Feedback | Tidy paw + sparkle gives grooming/claw-trim logs a small payoff |
-| 17 | Vet day booked | Care | Confirmation | Stamped calendar with a check closes the loop on care planning |
-| 18 | Recall watch | Emergency | Alert | Friendly ringing bell flags a product recall as important, not catastrophic |
-| 19 | Guardian+ unlocked | Onboarding | Premium | Crowned mascot frames the paywall as richer care, not a wall |
-| 20 | Swipe to explore | Onboarding | Intro | Sweeping paw teaches the onboarding carousel gesture without words |
-| 21 | Never heard of that one | Search | Empty state | Curious head-tilt keeps a "no results" screen from feeling like a dead end |
-| 22 | Scan the label | Search | Action | Scanning frame invites the faster input mode when a worried hand can't type |
-| 23 | How much matters | Verdict | Nuance | Tipping scale frames toxicity as dose-dependent, easing panic over a tiny nibble |
-| 24 | Stay hydrated | Care | Reminder | Rippling water bowl makes a hydration nudge caring rather than naggy |
-| 25 | Feeling better, day by day | Recovery | Tracking | Climbing line turns symptom logging into a hopeful, not clinical, ritual |
-| 26 | Call your vet now | Emergency | Action | Warm pulsing handset makes the one critical action unmissable without red alarm |
-| 27 | Brave little patient | Recovery | Reassurance | Bandaged, healing cat closes a scare with warmth and pride |
-| 28 | With love, from us | Delight | Gratitude | Cat blowing a kiss returns affection after a review, rating, or referral |
-| 29 | Saved for later | Search | Saved | Bookmark + heartbeat lets an owner keep a substance handy without re-searching |
-| 30 | Your account, ready | Onboarding | Account | Cat-avatar profile badge turns sign-up into a personal welcome, not a form |
-| 31 | Reminder set | Care | Reminder | Bell that rings then settles confirms MewGuard is keeping watch on meds/vet visits |
-| 32 | Four days strong | Care | Streak | Filling calendar dots + a star celebrate a care streak without nagging |
-| 33 | Home is where the cat is | Delight | Ambient | Cozy house with a cat in the window gives the My Home tab a belonging-here identity |
-| 34 | Spread the word | Delight | Referral | Connected hearts frame sharing as protecting more cats, not marketing |
-| 35 | All clear | Emergency | Resolved | Shield-check with a soft ripple closes a recall scare with calming reassurance |
-| 36 | Reviewed by vets | Verdict | Trust | Vet-reviewed rosette anchors trust in the verdict at the moment certainty matters |
-| 37 | Picking up where you left off | Search | History | Clock badge over recent checks lets an owner resume a frantic search without retyping |
-| 38 | Back to chasing toys | Recovery | Milestone | Cat batting yarn marks full recovery and closes the worry loop on a joyful note |
-| 39 | While you wait | Emergency | Guidance | First-aid step checklist channels panic into calm action before reaching the vet |
-| 40 | Rate your peace of mind | Delight | Feedback | Stars framed as "peace of mind" invite warm feedback at a calm emotional high point |
+| 1 | On the scent | Search | Loading | Sniffing nose reframes lookup latency as active care |
+| 2 | Checking the database | Search | Spinner | Branded paw spinner keeps the brand present during Firestore fetch |
+| 3 | All clear | Verdict · Safe | Result | Drawn check in a green shield delivers instant relief |
+| 4 | Worth a second look | Verdict · Caution | Result | Raised-paw cat signals middle-ground risk without crying wolf |
+| 5 | Keep this away | Verdict · Toxic | Result | Serious red verdict with a steady heartbeat — urgent, not panic-inducing |
+| 6 | Nothing in the bowl | Recovery | No-results | Empty bowl softens a zero-result search |
+| 7 | Lost the thread | Recovery | Offline | Tangled-yarn cat frames a dropped connection as fixable, not the user's fault |
+| 8 | Mealtime logged | Care | Feedback | Full bowl + heart rewards logging a feeding in the care tracker |
+| 9 | Time for meds | Care | Reminder | Soft-pulsing capsule nudges on-time dosing without alarm |
+| 10 | Fresh claws | Care | Feedback | Tidy paw + sparkle gives grooming/claw-trim logs a small payoff |
+| 11 | Vet day booked | Care | Confirmation | Stamped calendar with a check closes the loop on care planning |
+| 12 | Recall watch | Emergency | Alert | Friendly ringing bell flags a product recall as important, not catastrophic |
+| 13 | Guardian+ unlocked | Onboarding | Premium | Crowned mascot frames the paywall as richer care, not a wall |
+| 14 | Never heard of that one | Search | Empty state | Curious head-tilt keeps a "no results" screen from feeling like a dead end |
+| 15 | Scan the label | Search | Action | Scanning frame invites the faster input mode when a worried hand can't type |
+| 16 | Stay hydrated | Care | Reminder | Rippling water bowl makes a hydration nudge caring rather than naggy |
+| 17 | Feeling better, day by day | Recovery | Tracking | Climbing line turns symptom logging into a hopeful, not clinical, ritual |
+| 18 | Call your vet now | Emergency | Action | Warm pulsing handset makes the one critical action unmissable without red alarm |
+| 19 | Brave little patient | Recovery | Reassurance | Bandaged, healing cat closes a scare with warmth and pride |
+| 20 | With love, from us | Delight | Gratitude | Cat blowing a kiss returns affection after a review, rating, or referral |
+| 21 | Saved for later | Search | Saved | Bookmark + heartbeat lets an owner keep a substance handy without re-searching |
+| 22 | Your account, ready | Onboarding | Account | Cat-avatar profile badge turns sign-up into a personal welcome, not a form |
+| 23 | Reminder set | Care | Reminder | Bell that rings then settles confirms MewGuard is keeping watch on meds/vet visits |
+| 24 | Four days strong | Care | Streak | Filling calendar dots + a star celebrate a care streak without nagging |
+| 25 | Spread the word | Delight | Referral | Connected hearts frame sharing as protecting more cats, not marketing |
+| 26 | All clear | Emergency | Resolved | Shield-check with a soft ripple closes a recall scare with calming reassurance |
+| 27 | Reviewed by vets | Verdict | Trust | Vet-reviewed rosette anchors trust in the verdict at the moment certainty matters |
+| 28 | Picking up where you left off | Search | History | Clock badge over recent checks lets an owner resume a frantic search without retyping |
+| 29 | Back to chasing toys | Recovery | Milestone | Cat batting yarn marks full recovery and closes the worry loop on a joyful note |
+| 30 | While you wait | Emergency | Guidance | First-aid step checklist channels panic into calm action before reaching the vet |
+| 31 | Rate your peace of mind | Delight | Feedback | Stars framed as "peace of mind" invite warm feedback at a calm emotional high point |
 
-**Journey stages:** onboarding (5) · search (6) · verdict (5) · care (8) · recovery (5) · emergency (5) · delight (6).
+**Journey stages:** onboarding (2) · search (6) · verdict (4) · care (7) · recovery (5) · emergency (4) · delight (3).
 
 ---
 
@@ -81,25 +243,22 @@ tag inside its `meta.k` (keywords) field along with author, description, and `th
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
 is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 
-**Status:** 26 Lottie files — a reusable core subset of the 40-asset gallery's highest-traffic
+**Status:** 21 Lottie files — a reusable core subset of the 31-asset gallery's highest-traffic
 moments, spanning **all seven journey stages**.
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
 | File | Stage | Motion | UX payoff |
 |------|-------|--------|-----------|
-| `mw-wave-hello.json` | Onboarding · Welcome | Mascot waves, head bobs | Builds trust and warmth before a worried owner's first search |
-| `mw-name-tag.json` | Onboarding · Empty profile | Heart-engraved collar tag swings on its ring | Invites a worried owner to name and claim their cat's profile |
+| `mw-cat-box.json` | Onboarding · Empty state | Carton wobbles, flaps open, a cat silhouette peeks halfway out, then a "?" pops up | Invites an owner to add their first cat on an empty My Cats screen |
 | `mw-guardian-crown.json` | Onboarding · Premium | Gold crown settles in, sparkles pop | Frames the Guardian+ paywall as richer care unlocked, not a wall hit |
 | `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |
 | `mw-on-the-scent.json` | Search · Loading | Magnifier glides over paw prints that light up in sequence | Reframes a search-in-progress as the cat actively following the scent |
 | `mw-scan-label.json` | Search · Action | Scan beam sweeps down a label card | Invites the faster scan input when a worried hand can't type |
 | `mw-clock-history.json` | Search · History | Clock hands sweep backward, rewinding | Lets a worried owner resume a frantic search without retyping |
 | `mw-safe-check.json` | Verdict · Safe | Ring fills, check draws in | Green ring + self-drawing check delivers instant relief on a safe verdict |
-| `mw-dose-scale.json` | Verdict · Nuance | Balance scale tips, then settles | Frames toxicity as dose-dependent, easing panic over a tiny nibble |
 | `mw-heartbeat.json` | Verdict · Toxic / Emergency | Double-thump heart pulse | Steady coral heartbeat holds a worried owner's nerve — urgent, not panic |
 | `mw-vet-rosette.json` | Verdict · Trust | Rosette pops in, check draws | Anchors trust in the verdict at the moment certainty matters most |
 | `mw-meal-bowl.json` | Care · Feedback | Kibble drops into a bowl, heart pops | Rewards logging a feeding in the care tracker |
-| `mw-weigh-scale.json` | Care · Weigh-in | Dial needle swings, overshoots, then settles | Turns a weigh-in into a calm check-in, not a verdict on the numbers |
 | `mw-water-ripple.json` | Care · Reminder | Ripples spread across a bowl | Makes a hydration nudge caring rather than naggy |
 | `mw-meds-reminder.json` | Care · Reminder | Capsule pulses inside a breathing halo | Nudges on-time dosing without alarm |
 | `mw-vet-calendar.json` | Care · Confirmation | A check stamps onto a calendar date | Closes the loop on care planning when a vet visit is booked |
@@ -109,12 +268,10 @@ moments, spanning **all seven journey stages**.
 | `mw-bell-recall.json` | Emergency · Alert | Bell rings then settles | Flags a product recall as important, not catastrophic |
 | `mw-call-vet.json` | Emergency · Action | Warm handset pulses, sound waves ring | Makes the one critical action unmissable without a red alarm |
 | `mw-first-aid.json` | Emergency · Guidance | First-aid steps check off one by one | Channels panic into ordered, doable action while help is on the way |
-| `mw-heart-pop.json` | Delight | Heart scales in + sparkle burst | Rewards saving a substance to a cat's profile |
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
 | `mw-spread-word.json` | Delight · Referral | Hearts pop out along threads from a central one | Frames sharing MewGuard as protecting more cats, not marketing |
-| `mw-purr-cat.json` | Delight · Ambient | Mascot breathes + blinks | Resting cat is visual proof that all is well |
 
-**Preview:** open `lottie/gallery.html` in a browser to see all 26 animations playing side by side
+**Preview:** open `lottie/gallery.html` in a browser to see all 21 animations playing side by side
 with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
 into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
 is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`
@@ -123,6 +280,20 @@ is loaded from a CDN. The gallery is generated from the `.json` files by `lottie
 **Usage:** load any file with `lottie-react-native` (`<LottieView source={require('./mw-heartbeat.json')} autoPlay loop />`),
 the `lottie-web`/`@lottiefiles/lottie-player` web player, or import into After Effects / LottieFiles. No external
 dependencies are baked into the JSON.
+
+---
+
+## Errand Pin (順路 / EnRoute) — Lottie kit (lives inside `index.html`)
+
+8 genuine Lottie JSON animations for the **Errand Pin** location-todo app
+(`~/Workspace/onmyway/`): a recurring **map-pin** motif, own palette (Pin `#2F6BF6` / done green /
+alert amber), covering onboarding ×2, empty states ×2, geofence trigger, completion, time-reminder,
+locating. Deliberately small to match the app's "極簡" positioning. Tag: `errandpin` / `enroute`.
+
+The standalone source folder (`enroute-lottie/` — `python-lottie` build scripts + raw `.json`) was
+removed; the kit now lives **only inlined inside `index.html`** as a third selectable kit
+(Mood / MewGuard / Errand Pin). The raw animation JSON can be recovered from the
+`<script id="er-lottie-data">` block in `index.html` if the source pipeline is ever needed again.
 
 ---
 

@@ -241,95 +241,6 @@ def build_paw_loading():
 
 
 # ----------------------------------------------------------------------------
-# 4. Heart pop — heart scales in with a sparkle burst (delight·feedback)
-# ----------------------------------------------------------------------------
-def build_heart_pop():
-    a = new_anim(
-        "MewGuard — Saved to My Cats",
-        "delight, feedback, success",
-        "A heart pops in with a sparkle burst — rewards saving a substance to a cat's "
-        "profile.",
-        op=45, theme=CORAL,
-    )
-    l = shape_layer(a)
-    heart = heart_group(CORAL, 0.95)
-    l.add_shape(heart)
-    sc = l.transform.scale
-    sc.add_keyframe(0, Point(0, 0), EASE_OUT)
-    sc.add_keyframe(12, Point(116, 116), EASE_IN)
-    sc.add_keyframe(20, Point(100, 100), EASE_IO)
-    sc.add_keyframe(45, Point(100, 100))
-    # sparkles
-    for i, (sx, sy) in enumerate([(-52, -36), (50, -30), (44, 40), (-46, 44)]):
-        sg = shape_layer(a, 120 + sx, 120 + sy)
-        star = Star()
-        star.star_type = StarType.Star
-        star.points.value = 4
-        star.outer_radius.value = 11
-        star.inner_radius.value = 4
-        star.rotation.value = 0
-        star.position.value = Point(0, 0)
-        grp = Group()
-        grp.add_shape(star)
-        grp.add_shape(Fill(col(GOLD)))
-        sg.add_shape(grp)
-        s2 = sg.transform.scale
-        d = 10 + i * 2
-        s2.add_keyframe(d, Point(0, 0), EASE_OUT)
-        s2.add_keyframe(d + 8, Point(130, 130), EASE_IN)
-        s2.add_keyframe(d + 18, Point(0, 0), EASE_IO)
-        s2.add_keyframe(45, Point(0, 0))
-    add_bg(a)
-    return a
-
-
-# ----------------------------------------------------------------------------
-# 5. Purr — sleeping/breathing cat face, gentle scale + blink (delight·ambient)
-# ----------------------------------------------------------------------------
-def build_purr():
-    a = new_anim(
-        "MewGuard — Resting easy",
-        "delight, ambient, mascot",
-        "The MewGuard mascot breathes softly and blinks — visual proof that all is "
-        "well.",
-        op=72, theme=GREEN,
-    )
-    # eyes layer first → paints on top of the head; blinks independently
-    eyes = shape_layer(a)
-    for ex in (-26, 26):
-        eyes.add_shape(ellipse(ex, -2, 18, 18, CREAM))
-    eyeb = eyes.transform.scale
-    # blink: squash the eyes flat briefly mid-loop
-    eyeb.add_keyframe(0, Point(100, 100))
-    eyeb.add_keyframe(28, Point(100, 100), EASE_OUT)
-    eyeb.add_keyframe(31, Point(100, 12), EASE_IN)
-    eyeb.add_keyframe(34, Point(100, 100), EASE_OUT)
-    eyeb.add_keyframe(72, Point(100, 100))
-    # head layer (ears + face + nose), breathing scale; sits below the eyes
-    l = shape_layer(a)
-    for ex in (-44, 44):
-        g = Group()
-        p = Path()
-        b = Bezier()
-        b.closed = True
-        b.add_point(Point(ex, -54))
-        b.add_point(Point(ex + (16 if ex < 0 else -16), -18))
-        b.add_point(Point(ex + (40 if ex < 0 else -40), -26))
-        p.shape.value = b
-        g.add_shape(p)
-        g.add_shape(Fill(col(GREEN)))
-        l.add_shape(g)
-    l.add_shape(ellipse(0, 18, 14, 10, CORAL))  # nose
-    l.add_shape(ellipse(0, 6, 120, 110, GREEN))  # face (added last → back of this layer)
-    sc = l.transform.scale
-    sc.add_keyframe(0, Point(98, 98), EASE_IO)
-    sc.add_keyframe(36, Point(103, 103), EASE_IO)
-    sc.add_keyframe(72, Point(98, 98))
-    add_bg(a, 160)
-    return a
-
-
-# ----------------------------------------------------------------------------
 # 6. Bell — recall watch, gentle ring wobble (emergency·alert)
 # ----------------------------------------------------------------------------
 def build_bell():
@@ -435,58 +346,6 @@ def build_star_rating():
         sc.add_keyframe(d + 12, Point(100, 100), EASE_IO)
         sc.add_keyframe(55, Point(100, 100))
     add_bg(a)
-    return a
-
-
-# ----------------------------------------------------------------------------
-# 9. Wave hello — mascot waves at first launch (onboarding·welcome)
-# ----------------------------------------------------------------------------
-def build_wave_hello():
-    a = new_anim(
-        "MewGuard — Meet your guardian",
-        "onboarding, welcome, mascot",
-        "The MewGuard mascot waves hello at first launch — builds trust and warmth "
-        "before a worried owner's first search.",
-        op=60, theme=GREEN,
-    )
-    # waving paw — drawn first so it sits on top; anchored at the wrist so the
-    # whole paw rotates about a fixed pivot beside the head.
-    paw = shape_layer(a)
-    paw.add_shape(ellipse(0, 0, 30, 34, GREEN_L))   # paw pad
-    paw.transform.anchor_point.value = Point(0, 34)  # wrist below the pad
-    paw.transform.position.value = Point(120 + 72, 120 - 6 + 34)
-    rot = paw.transform.rotation
-    rot.add_keyframe(0, -20, EASE_IO)
-    rot.add_keyframe(12, 18, EASE_IO)
-    rot.add_keyframe(24, -20, EASE_IO)
-    rot.add_keyframe(36, 18, EASE_IO)
-    rot.add_keyframe(48, -20, EASE_IO)
-    rot.add_keyframe(60, -20)
-    # eyes layer on top of the head
-    eyes = shape_layer(a)
-    for ex in (-24, 24):
-        eyes.add_shape(ellipse(ex, -4, 16, 18, CREAM))
-    # head: ears + nose + face, with a gentle welcoming bob
-    head = shape_layer(a)
-    for ex in (-42, 42):
-        g = Group()
-        p = Path()
-        b = Bezier()
-        b.closed = True
-        b.add_point(Point(ex, -52))
-        b.add_point(Point(ex + (16 if ex < 0 else -16), -16))
-        b.add_point(Point(ex + (40 if ex < 0 else -40), -24))
-        p.shape.value = b
-        g.add_shape(p)
-        g.add_shape(Fill(col(GREEN)))
-        head.add_shape(g)
-    head.add_shape(ellipse(0, 16, 14, 10, CORAL))   # nose
-    head.add_shape(ellipse(0, 4, 120, 110, GREEN))  # face (added last → behind)
-    sc = head.transform.scale
-    sc.add_keyframe(0, Point(99, 99), EASE_IO)
-    sc.add_keyframe(30, Point(102, 102), EASE_IO)
-    sc.add_keyframe(60, Point(99, 99))
-    add_bg(a, 170)
     return a
 
 
@@ -700,34 +559,6 @@ def build_meal_bowl():
 
 
 # ----------------------------------------------------------------------------
-# 15. Name your cat — a heart-engraved collar tag swings on its ring (onboarding)
-# ----------------------------------------------------------------------------
-def build_name_tag():
-    a = new_anim(
-        "MewGuard — Name your cat",
-        "onboarding, empty-state, profile",
-        "A heart-engraved collar tag swings gently on its ring — invites a worried "
-        "owner to name and claim their cat's profile.",
-        op=60, theme=GREEN,
-    )
-    # pendant tag: layer pivots about the ring (anchor above the disc) so the whole
-    # tag swings like a pendulum. Heart drawn first → on top of the disc.
-    tag = shape_layer(a, 120, 122)
-    tag.transform.anchor_point.value = Point(0, -48)  # pivot at the ring above
-    tag.add_shape(heart_group(CORAL, 0.30))           # engraved heart (on top)
-    tag.add_shape(ellipse(0, 0, 66, 66, GREEN))       # the tag disc
-    tag.add_shape(stroke_circle(0, -44, 22, 22, GREEN_L, 5))  # hanging ring (behind)
-    rot = tag.transform.rotation
-    rot.add_keyframe(0, -16, EASE_IO)
-    rot.add_keyframe(15, 16, EASE_IO)
-    rot.add_keyframe(30, -16, EASE_IO)
-    rot.add_keyframe(45, 16, EASE_IO)
-    rot.add_keyframe(60, -16)
-    add_bg(a, 168)
-    return a
-
-
-# ----------------------------------------------------------------------------
 # 16. Back to chasing toys — a yarn ball bounces and spins (recovery·milestone)
 # ----------------------------------------------------------------------------
 def build_chase_toy():
@@ -850,50 +681,6 @@ def build_vet_rosette():
     rop.add_keyframe(10, 0, EASE_OUT)
     rop.add_keyframe(18, 100, EASE_IN)
     rop.add_keyframe(55, 100)
-    add_bg(a, 172)
-    return a
-
-
-# ----------------------------------------------------------------------------
-# 18. How much matters — a balance scale tips gently back and forth (verdict·nuance)
-# ----------------------------------------------------------------------------
-def build_dose_scale():
-    a = new_anim(
-        "MewGuard — How much matters",
-        "verdict, nuance, dose",
-        "A balance scale tips gently back and forth then settles — frames toxicity as "
-        "dose-dependent, easing panic over a tiny nibble.",
-        op=72, theme=CAUTION,
-    )
-    # beam + two pans + hangers in one layer that pivots about the central fulcrum,
-    # so the whole balance tips. Drawn first → on top of the fulcrum post.
-    beam = shape_layer(a, 120, 102)
-    beam.transform.anchor_point.value = Point(0, 0)
-    for px, fill in ((-70, GREEN_L), (70, CAUTION)):
-        beam.add_shape(ellipse(px, 32, 48, 15, fill))           # pan dish
-        beam.add_shape(rounded_rect(px, 17, 3, 28, GREEN, 1))   # hanger string
-    beam.add_shape(ellipse(0, 0, 18, 18, GREEN))                # pivot knob
-    beam.add_shape(rounded_rect(0, 0, 158, 9, GREEN, 4))        # the beam bar
-    rot = beam.transform.rotation
-    rot.add_keyframe(0, -11, EASE_IO)
-    rot.add_keyframe(20, 11, EASE_IO)
-    rot.add_keyframe(40, -6, EASE_IO)
-    rot.add_keyframe(56, 4, EASE_IO)
-    rot.add_keyframe(72, -11)
-    # fulcrum post + base, steady, on a layer behind the tipping beam
-    post = shape_layer(a, 120, 102)
-    g = Group()
-    p = Path()
-    b = Bezier()
-    b.closed = True
-    b.add_point(Point(0, 4))
-    b.add_point(Point(30, 80))
-    b.add_point(Point(-30, 80))
-    p.shape.value = b
-    g.add_shape(p)
-    g.add_shape(Fill(col(GREEN)))
-    post.add_shape(g)
-    post.add_shape(ellipse(0, 86, 96, 18, GREEN))   # base
     add_bg(a, 172)
     return a
 
@@ -1220,46 +1007,6 @@ def build_spread_word():
     return a
 
 
-# ----------------------------------------------------------------------------
-# 25. Step on the scale — a dial needle swings then settles (care·weigh-in)
-# ----------------------------------------------------------------------------
-def build_weigh_scale():
-    a = new_anim(
-        "MewGuard — Step on the scale",
-        "care, weight, check-in",
-        "A scale's needle swings up, overshoots, then settles — turns a weigh-in "
-        "into a calm, reassuring check-in rather than a verdict on the numbers.",
-        op=60, theme=GREEN,
-    )
-    # center cap, drawn first → on top of the needle's pivot
-    hub = shape_layer(a)
-    hub.add_shape(ellipse(0, 0, 18, 18, GREEN))
-    # coral needle: pivots at the dial center (anchor 0,0), points up, swings in
-    # with a damped overshoot and holds the reading before resetting for the loop.
-    needle = shape_layer(a)
-    needle.transform.anchor_point.value = Point(0, 0)
-    needle.add_shape(rounded_rect(0, -46, 7, 92, CORAL, 3))
-    nrot = needle.transform.rotation
-    nrot.add_keyframe(0, -58, EASE_OUT)
-    nrot.add_keyframe(12, 40, EASE_IO)   # swing past the reading
-    nrot.add_keyframe(22, 6, EASE_IO)    # damp back
-    nrot.add_keyframe(30, 22, EASE_IO)
-    nrot.add_keyframe(38, 14, EASE_IO)   # settle on the reading
-    nrot.add_keyframe(50, 14, EASE_IN)   # hold (the cat is being read)
-    nrot.add_keyframe(60, -58, EASE_IN)  # reset for a seamless loop
-    # gauge tick marks along the top arc (r ≈ 72, angles -60…60 from vertical-up)
-    ticks = shape_layer(a)
-    for tx, ty in ((-62, -36), (-36, -62), (0, -72), (36, -62), (62, -36)):
-        ticks.add_shape(ellipse(tx, ty, 9, 9, GREEN, opacity=55))
-    # green dial ring and white face behind everything
-    ring = shape_layer(a)
-    ring.add_shape(stroke_circle(0, 0, 172, 172, GREEN, 7))
-    face = shape_layer(a)
-    face.add_shape(ellipse(0, 0, 180, 180, WHITE))
-    add_bg(a, 200)
-    return a
-
-
 def small_nose():
     """A tiny downward coral triangle — a cat nose centered in the magnifier."""
     g = Group()
@@ -1325,33 +1072,139 @@ def build_on_scent():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 27. Who's in the box? — a kraft carton wobbles, its flaps swing open and a
+#     curious cat peeks out, round eyes darting (onboarding · empty state)
+# ----------------------------------------------------------------------------
+def build_cat_box():
+    a = new_anim(
+        "MewGuard — Who's in the box?",
+        "onboarding, empty-state, add-cat",
+        "A kraft carton wobbles, its flaps swing open and a shy black cat silhouette "
+        "peeks halfway out — ears and eyes over the rim — then a curious question mark "
+        "pops up above. Invites an owner to add their first cat on an empty My Cats screen.",
+        op=96, theme=GREEN,
+    )
+
+    FUR     = "#cdbfae"   # cat head — warm grey, matching the SVG-kit mascot
+    EAR     = "#b8967a"   # ears / tan fur
+    KRAFT   = "#c9a37a"   # carton front
+    KRAFT_L = "#d8b892"   # carton flaps (lit inner face)
+    KRAFT_D = "#a9814f"   # tape seam
+    HOLE    = "#6f5238"   # dark carton interior
+    cx = 120
+
+    # --- flaps: anticipation jiggle → swing open → hold → snap shut. On top of
+    #     everything so a closed carton reads as sealed. sign = +1 left, -1 right.
+    def flap(hinge_x, sign):
+        f = shape_layer(a, hinge_x, 105)
+        f.add_shape(rounded_rect(sign * 26, -4, 52, 16, KRAFT_L, 4))
+        rot = f.transform.rotation
+        rot.add_keyframe(0, 0, EASE_IO)
+        rot.add_keyframe(4, sign * -7, EASE_IO)       # wobble in place
+        rot.add_keyframe(9, sign * 6, EASE_IO)
+        rot.add_keyframe(14, 0, EASE_OUT)
+        rot.add_keyframe(22, sign * -128, EASE_IN)    # swing open, overshoot
+        rot.add_keyframe(28, sign * -120, EASE_IO)    # settle open
+        rot.add_keyframe(78, sign * -120, EASE_IN)    # hold open
+        rot.add_keyframe(90, sign * 7, EASE_OUT)      # snap shut, slight overshoot
+        rot.add_keyframe(96, 0)
+
+    flap(76, 1)
+    flap(164, -1)
+
+    # --- carton front wall (with a tape seam), painted over the cat's body so
+    #     only what clears the rim shows.
+    wall = shape_layer(a, cx, 150)
+    wall.add_shape(rounded_rect(0, 0, 10, 90, KRAFT_D, 3))    # tape seam (on top)
+    wall.add_shape(rounded_rect(0, 0, 108, 90, KRAFT, 10))    # front
+
+    # --- curious "?" that pops up above the box only after the cat is out
+    q = shape_layer(a, cx, 32)
+    qg = Group()
+    qp = Path()
+    qb = Bezier()
+    qb.add_point(Point(-9, -5), Point(0, 0), Point(-3, -9))
+    qb.add_point(Point(9, -7), Point(-7, -7), Point(5, 7))
+    qb.add_point(Point(0, 6), Point(7, -1), Point(0, -3))
+    qp.shape.value = qb
+    qg.add_shape(qp)
+    qst = Stroke(col(CAUTION), 4)
+    qst.line_cap = 2
+    qst.line_join = 2
+    qg.add_shape(qst)
+    q.add_shape(qg)
+    q.add_shape(ellipse(0, 16, 6, 6, CAUTION))        # the dot
+    qop = q.transform.opacity
+    qop.add_keyframe(0, 0)
+    qop.add_keyframe(50, 0, EASE_OUT)                 # stay hidden until the cat is out
+    qop.add_keyframe(58, 100, EASE_IN)               # then pop in
+    qop.add_keyframe(70, 100, EASE_OUT)
+    qop.add_keyframe(78, 0, EASE_IN)
+    qop.add_keyframe(96, 0)
+    qsc = q.transform.scale
+    qsc.add_keyframe(50, Point(50, 50), EASE_OUT)
+    qsc.add_keyframe(60, Point(112, 112), EASE_IN)
+    qsc.add_keyframe(68, Point(100, 100), EASE_IO)
+    qsc.add_keyframe(96, Point(100, 100))
+
+    # --- cat head (ears + face + dot eyes + nose), rising halfway through the rim.
+    head = shape_layer(a, cx, 160)
+    head.add_shape(ellipse(-15, -3, 11, 11, CREAM))  # light eyes on the silhouette
+    head.add_shape(ellipse(15, -3, 11, 11, CREAM))
+    head.add_shape(ellipse(0, 2, 68, 60, INK))       # black head
+    for s in (1, -1):                                 # black ears (merge into the head)
+        eg = Group()
+        ep = Path()
+        eb = Bezier()
+        eb.closed = True
+        eb.add_point(Point(s * 30, -16))
+        eb.add_point(Point(s * 44, -52))
+        eb.add_point(Point(s * 13, -33))
+        ep.shape.value = eb
+        eg.add_shape(ep)
+        eg.add_shape(Fill(col(INK)))
+        head.add_shape(eg)
+    hp = head.transform.position
+    hp.add_keyframe(0, Point(cx, 160), EASE_IO)
+    hp.add_keyframe(28, Point(cx, 160), EASE_OUT)     # hold hidden until flaps open
+    hp.add_keyframe(40, Point(cx, 103), EASE_IN)      # rise halfway, little overshoot
+    hp.add_keyframe(46, Point(cx, 109), EASE_IO)      # settle: eyes half over the rim
+    hp.add_keyframe(72, Point(cx, 109), EASE_IN)      # hold the shy half-peek
+    hp.add_keyframe(84, Point(cx, 160), EASE_OUT)     # duck back in
+    hp.add_keyframe(96, Point(cx, 160))
+
+    # --- dark opening + ground shadow + backdrop, all behind the cat.
+    hole = shape_layer(a, cx, 107)
+    hole.add_shape(ellipse(0, 0, 98, 26, HOLE))
+    shadow = shape_layer(a, cx, 201)
+    shadow.add_shape(ellipse(0, 0, 124, 22, "#e3d8cc"))
+    add_bg(a, 212)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
     "mw-paw-loading": build_paw_loading,
-    "mw-heart-pop": build_heart_pop,
-    "mw-purr-cat": build_purr,
     "mw-bell-recall": build_bell,
     "mw-water-ripple": build_water_ripple,
     "mw-star-rating": build_star_rating,
-    "mw-wave-hello": build_wave_hello,
     "mw-recovery-arc": build_recovery_arc,
     "mw-meds-reminder": build_meds_reminder,
     "mw-call-vet": build_call_vet,
     "mw-scan-label": build_scan_label,
     "mw-meal-bowl": build_meal_bowl,
-    "mw-name-tag": build_name_tag,
     "mw-chase-toy": build_chase_toy,
     "mw-vet-rosette": build_vet_rosette,
-    "mw-dose-scale": build_dose_scale,
     "mw-vet-calendar": build_vet_calendar,
     "mw-clock-history": build_clock_history,
     "mw-guardian-crown": build_guardian_crown,
     "mw-brave-patient": build_brave_patient,
     "mw-first-aid": build_first_aid,
     "mw-spread-word": build_spread_word,
-    "mw-weigh-scale": build_weigh_scale,
     "mw-on-the-scent": build_on_scent,
+    "mw-cat-box": build_cat_box,
 }
 
 
