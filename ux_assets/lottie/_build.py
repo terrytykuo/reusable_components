@@ -1158,9 +1158,11 @@ def build_cat_box():
         ep = Path()
         eb = Bezier()
         eb.closed = True
-        eb.add_point(Point(s * 30, -16))
-        eb.add_point(Point(s * 44, -52))
-        eb.add_point(Point(s * 13, -33))
+        # small triangle whose base sits on the round head so the ear reads as
+        # part of the face (not a detached horn) — matches mewguard.html.
+        eb.add_point(Point(s * 20, -14))
+        eb.add_point(Point(s * 30, -42))
+        eb.add_point(Point(s * -2, -22))
         ep.shape.value = eb
         eg.add_shape(ep)
         eg.add_shape(Fill(col(INK)))
