@@ -4,7 +4,9 @@ Self-contained galleries of **non-functional** UX assets: inline-SVG illustratio
 CSS-animated micro-motions whose only job is emotional/sentimental design, plus a `lottie/`
 folder of genuine Lottie JSON animation files for app/web Lottie players. Every HTML asset is
 dependency-free (pure SVG + CSS), honors `prefers-reduced-motion`, and can be copied or downloaded
-as a standalone self-animating `.svg` straight from its gallery.
+as a standalone self-animating `.svg` straight from its gallery. One deliberate exception:
+`mewguard-raster/` is a 1:1 PNG mirror of the MewGuard app's shipped raster assets, previewed by
+`mewguard.html`'s App raster archive section (that section needs the folder alongside the HTML).
 
 Open any `*.html` file in a browser. Each gallery offers journey-stage filters and three preview
 toggles — **Pause motion**, **Dark stage**, and **Reduce motion** — plus per-asset **Replay**,
@@ -193,7 +195,8 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
-**Status:** 32 journey assets + 8 cat-avatar breed presets(見下方 Cat avatar 區段). **Tag:** every asset carries the `mewguard` brand tag.
+**Status:** 32 journey assets + 8 cat-avatar breed presets(見下方 Cat avatar 區段)+ 14 raster-archive
+cards(前期 PNG 檔案庫,見下方 App raster 區段). **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
 |---|-------|-------|------|-----------|
@@ -250,6 +253,25 @@ Reduce motion 三個預覽開關與 `prefers-reduced-motion`。
 **Status:** 概念討論階段的視覺雛形——路線(SVG vs Lottie vs 外部資產)待評估後定案。
 **Canonical source:** 此區段即唯一正本,後續迭代直接改 `mewguard.html`。
 **Tag:** 區段與八張 preset 卡皆帶 `cat-avatar`(加上 `mewguard` 品牌 tag)。
+
+### App raster — 前期 PNG 資產檔案庫(`mewguard-raster/`,tag `app-raster`)
+
+`mewguard.html` 最尾端(Cat avatar 之後)另有 **`App raster` 區段**(錨點 `#app-raster`,篩選列
+專屬「App raster」chip):app 前期實際 ship 的 raster 資產檔案庫,是 gallery「純 inline SVG」
+原則的唯一例外。PNG 原檔 1:1 鏡像自 `cat_toxin_app/assets/`(含 @2x/@3x 密度變體,共 78 檔
+約 20 MB)存於同層 `mewguard-raster/` 資料夾,依原始子目錄結構擺放;`.json`(Lottie)不鏡像
+——`mw-cat-box`、`mw-sparkle-burst` 的正本本來就在 `lottie/`,`my-cats/cat.json` 為外部
+LottieFiles 素材。14 張卡涵蓋:品牌識別(花圈 logo、app icon、手繪賓士貓 portrait、
+**尚未客製的 icon placeholder 稽核卡**——adaptive/splash icon 仍是漣漪底、favicon 仍是 Expo
+方塊)、onboarding 01–07(分層 hero 元件、三張功能導覽全屏 mock、通知權限、方案比較表、
+paywall 套件)、兩代 splash 散景(白底扁平版 vs 現行透明色鉛筆版)、search demo 縮圖、
+claw-trim 四掌、My Cats 房間底圖。兩代吉祥物並存:扁平虎斑(logo/icon/splash)與手繪賓士
+(portrait/onboarding hero/search demo)。卡片圖可**點擊開原檔**,每卡附 **Copy app path**
+按鈕(複製 `cat_toxin_app` 內路徑)、`files` 行列出檔名與尺寸;圖片皆 `loading="lazy"`。
+
+**Status:** 14 cards / 78 mirrored PNGs — 檔案庫(archive),非設計提案;新增前期資產時同步
+鏡像進 `mewguard-raster/` 並補卡。
+**Tag:** 區段與 14 張卡皆帶 `app-raster`(加上 `mewguard` 品牌 tag)。
 
 ---
 
