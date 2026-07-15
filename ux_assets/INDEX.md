@@ -193,7 +193,7 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
-**Status:** 31 of 31 assets — complete. **Tag:** every asset carries the `mewguard` brand tag.
+**Status:** 32 journey assets + 8 cat-avatar breed presets(見下方 Cat avatar 區段). **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
 |---|-------|-------|------|-----------|
@@ -231,6 +231,26 @@ A recurring cat mascot is the face of "we've got you."
 
 **Journey stages:** onboarding (2) · search (6) · verdict (4) · care (7) · recovery (5) · emergency (4) · delight (3).
 
+### Cat avatar — 參數化貓 avatar 系統(頁尾互動區段,tag `cat-avatar`)
+
+`mewguard.html` 頁尾另有一個 **`Cat avatar` 互動區段**(錨點 `#cat-avatar`,篩選列有專屬
+「Cat avatar」chip):MewGuard「add cat flow 情感化改造」的視覺驗證雛形。與 gallery 其他
+靜態資產不同,這是**參數化 avatar 系統**的原型——貓由分層 SVG 即時生成,所有特徵(色盤/花紋、
+耳型尖摺、體態、年齡比例)都是可存入 Firestore cat doc 的參數,對應規劃中的永久 `<CatAvatar>`
+元件(無照片時取代通用貓 icon)。三個子區塊:①**創造儀式模擬**——依 flow 順序(名字→年齡→
+體重→性別→品種→生成)互動走完「剪影→命名甦醒(五官依序彈出、眨眼、尾巴擺動)→體態成形→
+毛色花紋解鎖→魔法生成」,性別刻意不做外觀對應(避免刻板印象)改以動作回應;②**八個品種
+preset 卡**——對應 app 現有品種選項(Mixed/Not sure 預設黑貓,呼應開場剪影),是正規 gallery
+卡片,**Copy SVG / Download 輸出的檔案自帶眨眼與尾巴動畫**;③**縮小可讀性測試**——52px 列表
+與 32px 條帶。互動區段由 vanilla JS 驅動(仍零外部依賴),遵守頁面的 Pause / Dark stage /
+Reduce motion 三個預覽開關與 `prefers-reduced-motion`。
+
+**技術對應:** SVG 結構 ↔ `react-native-svg` 幾乎 1:1;transform 動畫 ↔ Reanimated;魔法粒子
+建議換用現成 Lottie(見 `lottie/`)。
+**Status:** 概念討論階段的視覺雛形——路線(SVG vs Lottie vs 外部資產)待評估後定案。
+**Canonical source:** 此區段即唯一正本,後續迭代直接改 `mewguard.html`。
+**Tag:** 區段與八張 preset 卡皆帶 `cat-avatar`(加上 `mewguard` 品牌 tag)。
+
 ---
 
 ## `lottie/` — MewGuard Lottie animation files
@@ -243,13 +263,14 @@ tag inside its `meta.k` (keywords) field along with author, description, and `th
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
 is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
 
-**Status:** 21 Lottie files — a reusable core subset of the 31-asset gallery's highest-traffic
+**Status:** 22 Lottie files — a reusable core subset of the 31-asset gallery's highest-traffic
 moments, spanning **all seven journey stages**.
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
 | File | Stage | Motion | UX payoff |
 |------|-------|--------|-----------|
 | `mw-cat-box.json` | Onboarding · Empty state | Carton wobbles, flaps open, a cat silhouette peeks halfway out, then a "?" pops up | Invites an owner to add their first cat on an empty My Cats screen |
+| `mw-sparkle-burst.json` | Onboarding · Add-cat generate | Radial burst of stars, dots and tiny hearts (transparent bg; loopable) | Masks the Firestore write + photo upload as the "magic generate" moment of the cat-avatar creation ritual |
 | `mw-guardian-crown.json` | Onboarding · Premium | Gold crown settles in, sparkles pop | Frames the Guardian+ paywall as richer care unlocked, not a wall hit |
 | `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |
 | `mw-on-the-scent.json` | Search · Loading | Magnifier glides over paw prints that light up in sequence | Reframes a search-in-progress as the cat actively following the scent |
@@ -271,7 +292,7 @@ moments, spanning **all seven journey stages**.
 | `mw-star-rating.json` | Delight · Feedback | Five stars pop in one by one | Invites warm feedback framed as peace of mind |
 | `mw-spread-word.json` | Delight · Referral | Hearts pop out along threads from a central one | Frames sharing MewGuard as protecting more cats, not marketing |
 
-**Preview:** open `lottie/gallery.html` in a browser to see all 21 animations playing side by side
+**Preview:** open `lottie/gallery.html` in a browser to see all 22 animations playing side by side
 with **Pause/Replay all**, a **Dark stage** toggle, and a **Speed** slider. Each animation is inlined
 into the page (so it works straight from `file://`, no server needed); only the `lottie-web` player
 is loaded from a CDN. The gallery is generated from the `.json` files by `lottie/_build_gallery.py`

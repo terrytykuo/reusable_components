@@ -10,7 +10,9 @@ their only job is emotional/sentimental design across the MewGuard journey stage
 Run:  python3 lottie/_build.py
 Outputs one <name>.json per asset next to this script.
 """
+import math
 import os
+import random
 from lottie import Color, Point
 from lottie.objects import Animation, ShapeLayer
 from lottie.objects.shapes import (
@@ -1185,6 +1187,69 @@ def build_cat_box():
     return a
 
 
+# ----------------------------------------------------------------------------
+# 22. Sparkle burst — radial star/dot/heart burst (add-cat · magic generate)
+# ----------------------------------------------------------------------------
+def build_sparkle_burst():
+    """Replicates the cat-avatar prototype's celebrate burst (mewguard.html
+    #cat-avatar: burst(26, true)): glyph colors, 90–200 px radial travel with a
+    slight upward bias, scale .4→1.1, ±90° tumble, staggered 0–220 ms starts.
+    Transparent background so it overlays the avatar stage; loop it to mask the
+    Firestore write + photo upload."""
+    a = new_anim(
+        "MewGuard — Sparkle burst",
+        "add-cat, generate, celebration",
+        "A radial burst of stars, dots and tiny hearts for the add-cat "
+        "'generate my cat' moment.",
+        op=48, theme=GREEN,
+    )
+    rng = random.Random(715)  # deterministic output
+    colors = [GREEN, "#B08D2A", CORAL, "#146b3c"]  # prototype PCOLORS
+    kinds = ["star4"] * 7 + ["star6"] * 4 + ["dot"] * 4 + ["heart"] * 3
+
+    def star_group(points, outer, fill_hex):
+        g = Group()
+        s = Star()
+        s.star_type = StarType.Star
+        s.points.value = points
+        s.outer_radius.value = outer
+        s.inner_radius.value = outer * (0.42 if points == 4 else 0.5)
+        g.add_shape(s)
+        g.add_shape(Fill(col(fill_hex)))
+        return g
+
+    for kind in kinds:
+        fill_hex = rng.choice(colors)
+        size = 13 + rng.random() * 13
+        ang = rng.random() * 6.283185
+        dist = 90 + rng.random() * 110
+        dx = math.cos(ang) * dist
+        dy = math.sin(ang) * dist - 30  # upward bias, like the prototype
+        start = int(rng.random() * 7)               # 0–220 ms stagger
+        dur = int(28 + rng.random() * 11)           # 950–1300 ms flight
+        end = min(48, start + dur)
+
+        l = ShapeLayer()
+        if kind == "dot":
+            l.add_shape(ellipse(0, 0, size * 0.7, size * 0.7, fill_hex))
+        elif kind == "heart":
+            l.add_shape(heart_group(fill_hex, size / 80.0))
+        else:
+            l.add_shape(star_group(4 if kind == "star4" else 6, size * 0.62, fill_hex))
+
+        tr = l.transform
+        tr.position.add_keyframe(start, Point(120, 120), EASE_OUT)
+        tr.position.add_keyframe(end, Point(120 + dx, 120 + dy))
+        tr.scale.add_keyframe(start, Point(40, 40), EASE_OUT)
+        tr.scale.add_keyframe(end, Point(110, 110))
+        tr.rotation.add_keyframe(start, 0, EASE_OUT)
+        tr.rotation.add_keyframe(end, rng.random() * 180 - 90)
+        tr.opacity.add_keyframe(start, 100, EASE_IN)
+        tr.opacity.add_keyframe(end, 0)
+        a.add_layer(l)
+    return a
+
+
 BUILDERS = {
     "mw-heartbeat": build_heartbeat,
     "mw-safe-check": build_safe_check,
@@ -1207,6 +1272,7 @@ BUILDERS = {
     "mw-spread-word": build_spread_word,
     "mw-on-the-scent": build_on_scent,
     "mw-cat-box": build_cat_box,
+    "mw-sparkle-burst": build_sparkle_burst,
 }
 
 
