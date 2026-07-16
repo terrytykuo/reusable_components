@@ -195,6 +195,12 @@ an emergency. Palette and tone follow the app theme in `cat_toxin_app/constants/
 (warm cream surfaces, forest-green primary, coral accent, safe/cautious/toxic severity colors).
 A recurring cat mascot is the face of "we've got you."
 
+**品牌統一(2026-07):** 以 Wreath wordmark / Home-screen tabby 為基準,全 kit 吉祥物統一為
+**品牌虎斑「Mew」= logo 貓本人**——奶油毛 `#EFDDB9`、赭金條紋 `#B28135`(額頭 M/側腹/尾環)、
+綠杏仁眼+直立瞳孔 `#587848`、珊瑚腮紅 `#E7724F`、**紅領巾 `#EC5447`(MewGuard 制服,吉祥物
+出場必帶)**;里程碑/慶祝類資產引用 wordmark 的葉飾(`#42644C`/`#5F8A5E`)與寶石花
+(`#CA3B70`/`#F5C139`);Caution/Toxic 盾牌貓臉加白色 M 條紋(severity 功能色不動)。
+
 **Status:** 32 journey assets + 8 cat-avatar breed presets(見下方 Cat avatar 區段)+ 14 raster-archive
 cards(前期 PNG 檔案庫,見下方 App raster 區段). **Tag:** every asset carries the `mewguard` brand tag.
 
@@ -239,18 +245,22 @@ cards(前期 PNG 檔案庫,見下方 App raster 區段). **Tag:** every asset ca
 `mewguard.html` 頁尾另有一個 **`Cat avatar` 互動區段**(錨點 `#cat-avatar`,篩選列有專屬
 「Cat avatar」chip):MewGuard「add cat flow 情感化改造」的視覺驗證雛形。與 gallery 其他
 靜態資產不同,這是**參數化 avatar 系統**的原型——貓由分層 SVG 即時生成,所有特徵(色盤/花紋、
-耳型尖摺、體態、年齡比例)都是可存入 Firestore cat doc 的參數,對應規劃中的永久 `<CatAvatar>`
-元件(無照片時取代通用貓 icon)。三個子區塊:①**創造儀式模擬**——依 flow 順序(名字→年齡→
-體重→性別→品種→生成)互動走完「剪影→命名甦醒(五官依序彈出、眨眼、尾巴擺動)→體態成形→
-毛色花紋解鎖→魔法生成」,性別刻意不做外觀對應(避免刻板印象)改以動作回應;②**八個品種
-preset 卡**——對應 app 現有品種選項(Mixed/Not sure 預設黑貓,呼應開場剪影),是正規 gallery
-卡片,**Copy SVG / Download 輸出的檔案自帶眨眼與尾巴動畫**;③**縮小可讀性測試**——52px 列表
-與 32px 條帶。互動區段由 vanilla JS 驅動(仍零外部依賴),遵守頁面的 Pause / Dark stage /
+耳型尖摺、體態、年齡比例)都是可存入 Firestore cat doc 的參數,對應永久 `<CatAvatar>`
+元件(無照片時取代通用貓 icon)。造型語言遵循品牌基準:杏仁眼+直立瞳、常駐珊瑚腮紅
+(幼貓加碼)、赭金虎斑筆觸、**紅領巾層(品牌制服,參數可關;preset 常駐、儀式於生成時繫上)**;
+九色盤全面暖化(無冷藍灰),`orange` 色盤即 logo 貓本色。三個子區塊:①**創造儀式模擬**——依
+flow 順序(名字→年齡→體重→性別→品種→生成)互動走完「剪影→命名甦醒(五官依序彈出、眨眼、
+尾巴擺動)→體態成形→毛色花紋解鎖→魔法生成(**戴上紅領巾+wordmark 半圈花圈依序綻放**)」,
+性別刻意不做外觀對應(避免刻板印象)改以動作回應;②**八個品種 preset 卡**——對應 app 現有
+品種選項(Mixed/Not sure 預設黑貓,呼應開場剪影),是正規 gallery 卡片,**Copy SVG / Download
+輸出的檔案自帶眨眼與尾巴動畫**;③**縮小可讀性測試**——52px 列表與 32px 條帶(領巾紅在小尺寸
+即品牌識別點)。互動區段由 vanilla JS 驅動(仍零外部依賴),遵守頁面的 Pause / Dark stage /
 Reduce motion 三個預覽開關與 `prefers-reduced-motion`。
 
 **技術對應:** SVG 結構 ↔ `react-native-svg` 幾乎 1:1;transform 動畫 ↔ Reanimated;魔法粒子
 建議換用現成 Lottie(見 `lottie/`)。
-**Status:** 概念討論階段的視覺雛形——路線(SVG vs Lottie vs 外部資產)待評估後定案。
+**Status:** 已 port 至 `cat_toxin_app/components/cat-avatar/`(品牌統一版含 bandana 參數);
+app 端的生成花圈時刻尚未 port(follow-up)。
 **Canonical source:** 此區段即唯一正本,後續迭代直接改 `mewguard.html`。
 **Tag:** 區段與八張 preset 卡皆帶 `cat-avatar`(加上 `mewguard` 品牌 tag)。
 
