@@ -349,10 +349,24 @@
     58% { transform: scale(.97,1.05) translateY(-9px); } 100% { transform: scale(1,1); }
   }
   .catlab .g-stripes, .catlab .g-points, .catlab .g-patches, .catlab .g-bib, .catlab .g-tufts,
-  .catlab .g-fluff, .catlab .g-mask, .catlab .g-blush { opacity: 0; transition: opacity .45s; }
+  .catlab .g-fluff, .catlab .g-mask { opacity: 0; transition: opacity .45s; }
   .catlab .has-stripes .g-stripes, .catlab .has-points .g-points, .catlab .has-patches .g-patches,
   .catlab .has-bib .g-bib, .catlab .has-tufts .g-tufts, .catlab .has-fluff .g-fluff,
-  .catlab .has-mask .g-mask, .catlab .is-kitten .g-blush { opacity: 1; }
+  .catlab .has-mask .g-mask { opacity: 1; }
+  /* brand blush is always on once the face wakes; kittens get bonus blush */
+  .catlab .is-kitten .g-blush circle { opacity: .55; }
+
+  /* ---- brand bandana + wordmark wreath (the Generate payoff) ---- */
+  .catlab .g-bandana {
+    opacity: 0; transform: scale(0); transform-origin: 50% 8%;
+    transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+  }
+  .catlab .bandana-on .g-bandana { opacity: 1; transform: scale(1); }
+  .catlab .g-wreath { opacity: 0; transition: opacity .3s; }
+  .catlab .wreath-on .g-wreath { opacity: 1; }
+  .catlab .g-wreath .wb { transform: scale(0); transform-origin: 50% 50%; transform-box: fill-box;
+    transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+  .catlab .wreath-on .g-wreath .wb { transform: scale(1); }
 
   /* ---- step panel ---- */
   .cat-qpanel { border-top: 1px solid var(--border); padding: 20px 22px 22px; }
@@ -425,12 +439,15 @@
   body.motion-reduced .catlab .react .g-pose, body.motion-reduced .catlab .celebrate .g-pose,
   body.motion-reduced .catlab .cat-hero-stage.celebrating .stage-ground { animation: none !important; }
   body.motion-reduced .catlab .awake .pop, body.motion-reduced .catlab .nameplate,
-  body.motion-reduced .catlab .g-blink { transition: none !important; }
+  body.motion-reduced .catlab .g-blink,
+  body.motion-reduced .catlab .g-bandana, body.motion-reduced .catlab .g-wreath,
+  body.motion-reduced .catlab .g-wreath .wb { transition: none !important; }
   @media (prefers-reduced-motion: reduce) {
     .catlab .g-breath, .catlab .awake .g-tail, .catlab .react .g-earL, .catlab .react .g-earR,
     .catlab .react .g-pose, .catlab .celebrate .g-pose,
     .catlab .cat-hero-stage.celebrating .stage-ground { animation: none !important; }
-    .catlab .awake .pop, .catlab .nameplate, .catlab .g-blink { transition: none !important; }
+    .catlab .awake .pop, .catlab .nameplate, .catlab .g-blink,
+    .catlab .g-bandana, .catlab .g-wreath, .catlab .g-wreath .wb { transition: none !important; }
   }
 
   /* ================= App raster — shipped PNG archive section ================= */
@@ -1388,7 +1405,7 @@
       <b>breed</b> paints coat, pattern and ears — while <b>sex</b> deliberately maps to no visual (the cat
       just reacts). The parameter set (coat / pattern / ear / body / age) is exactly what a
       <code>users/{uid}/cats</code> doc would store, so the same renderer can double as the app-wide
-      <b>persistent avatar</b> whenever a cat has no photo. Structure maps ~1:1 to
+      <b>persistent avatar</b> whenever a cat has no photo. Face language and palette follow the brand mark — almond eyes with upright pupils, coral blush, ochre tabby stripes, and the red MewGuard bandana tied on at Generate (a param the owner can turn off). Structure maps ~1:1 to
       <code>react-native-svg</code>; the transform animations map to Reanimated.
     </p>
     <div class="tags">
@@ -1433,7 +1450,7 @@
         <div class="body">
           <div class="kind">Cat avatar · Breed preset</div>
           <div class="name">British Shorthair</div>
-          <p class="goal">Blue-gray solid coat, copper eyes, rounder head and build.</p>
+          <p class="goal">Warm-gray solid coat, copper eyes, rounder head and build.</p>
           <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">british-shorthair</span></div>
         </div>
       </article>
@@ -1442,7 +1459,7 @@
         <div class="body">
           <div class="kind">Cat avatar · Breed preset</div>
           <div class="name">American Shorthair</div>
-          <p class="goal">Silver tabby: forehead M, flank stripes, ringed tail.</p>
+          <p class="goal">Warm-silver tabby: forehead M, flank stripes, ringed tail — brand-green eyes.</p>
           <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">american-shorthair</span></div>
         </div>
       </article>
@@ -1487,7 +1504,7 @@
         <div class="body">
           <div class="kind">Cat avatar · Breed preset</div>
           <div class="name">Scottish Fold</div>
-          <p class="goal">Folded ears on a blue-gray coat, amber eyes.</p>
+          <p class="goal">Folded ears on a warm-gray coat, amber eyes.</p>
           <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">scottish-fold</span></div>
         </div>
       </article>
@@ -1790,34 +1807,40 @@
   function motionPaused() { return document.body.classList.contains('motion-paused'); }
 
   /* ---------- palettes & breed presets ---------- */
+  /* Palettes follow the brand baseline (Wreath wordmark / Home-screen tabby):
+     warm family only — no cool blue-grays. `orange` IS the logo cat
+     (cream #EFDDB9 + ochre #B28135 + green #587848), inner ears sit in the
+     brand coral family, and bandana red is a shared constant (the uniform). */
+  var BANDANA = { main:'#EC5447', fold:'#D64A3C', stitch:'#C8402F' };
+  var BLUSH = '#E7724F';
   var COATS = {
     black:   { coat:'#33292E', coat2:'#3E3238', chest:'#4A3C42', stripe:'#33292E', point:'#33292E',
-               eye:'#7BC086', inner:'#8A6E76', nose:'#C08A90', whisker:'#EDE4DA', line:'#E8DCCB',
+               eye:'#7BC086', inner:'#C96A52', nose:'#C08A90', whisker:'#F1E8DA', line:'#E8DCCB',
                flags:['has-bib'] },
-    orange:  { coat:'#E8995C', coat2:'#DE8B4C', chest:'#F6DFC4', stripe:'#C9743C', point:'#E8995C',
-               eye:'#D98E35', inner:'#E9A9A0', nose:'#DE8F82', whisker:'#8A5A38', line:'#8A5A38',
+    orange:  { coat:'#EFDDB9', coat2:'#E8D2A6', chest:'#F8EDD6', stripe:'#B28135', point:'#EFDDB9',
+               eye:'#587848', inner:'#E77553', nose:'#7A4A2E', whisker:'#FFFFFF', line:'#6B4A2E',
                flags:['has-stripes','has-bib'] },
-    gray:    { coat:'#97A1B0', coat2:'#8C96A6', chest:'#B9C1CD', stripe:'#97A1B0', point:'#97A1B0',
-               eye:'#C77B4A', inner:'#C8A7AC', nose:'#B98C93', whisker:'#5D6570', line:'#5D6570',
+    gray:    { coat:'#A6A099', coat2:'#9B958D', chest:'#C7C1B8', stripe:'#A6A099', point:'#A6A099',
+               eye:'#C77B4A', inner:'#DDA292', nose:'#B08A84', whisker:'#5F594F', line:'#5F594F',
                flags:['has-bib'] },
-    silver:  { coat:'#C7CCD4', coat2:'#BDC3CC', chest:'#E4E7EC', stripe:'#8B93A1', point:'#C7CCD4',
-               eye:'#7BA05B', inner:'#D9B6BB', nose:'#C5949B', whisker:'#6E7683', line:'#6E7683',
+    silver:  { coat:'#C9C5BB', coat2:'#BFBAAE', chest:'#E6E2D8', stripe:'#8B8478', point:'#C9C5BB',
+               eye:'#587848', inner:'#E7A38E', nose:'#A87E70', whisker:'#6E675C', line:'#6E675C',
                flags:['has-stripes','has-bib'] },
     ragdoll: { coat:'#F2E4CE', coat2:'#EDDCC2', chest:'#FAF2E4', stripe:'#F2E4CE', point:'#8A7466',
-               eye:'#7FA8C9', inner:'#D9AFA6', nose:'#C79288', whisker:'#8A7466', line:'#6E5B4E',
+               eye:'#7FA8C9', inner:'#E5AC98', nose:'#C79288', whisker:'#8A7466', line:'#6E5B4E',
                flags:['has-points','has-bib','has-fluff'] },
     cream:   { coat:'#F0D9B2', coat2:'#EBD1A4', chest:'#F9EDD8', stripe:'#F0D9B2', point:'#F0D9B2',
-               eye:'#C77B4A', inner:'#E5AFA4', nose:'#D8968A', whisker:'#9A7C52', line:'#8A6E48',
+               eye:'#C77B4A', inner:'#E7A38E', nose:'#C08A6E', whisker:'#9A7C52', line:'#8A6E48',
                flags:['has-bib','has-fluff'] },
-    browntab:{ coat:'#A9805B', coat2:'#9E7550', chest:'#D8BFA4', stripe:'#7C5A3E', point:'#A9805B',
-               eye:'#8FAE58', inner:'#C79A92', nose:'#B98578', whisker:'#5E4430', line:'#5E4430',
+    browntab:{ coat:'#B08A5F', coat2:'#A57F53', chest:'#DCC5A8', stripe:'#7C5A3E', point:'#B08A5F',
+               eye:'#8FAE58', inner:'#D9987F', nose:'#8A5E42', whisker:'#5E4430', line:'#5E4430',
                flags:['has-stripes','has-bib'] },
     siamese: { coat:'#EFDFC5', coat2:'#EAD7B8', chest:'#F8EFDC', stripe:'#EFDFC5', point:'#6B5240',
-               eye:'#7FA8C9', inner:'#D9AFA6', nose:'#B0806E', whisker:'#6B5240', line:'#5C4636',
+               eye:'#7FA8C9', inner:'#E5AC98', nose:'#B0806E', whisker:'#6B5240', line:'#5C4636',
                flags:['has-points','has-mask'] },
     calico:  { coat:'#F7F2E9', coat2:'#F2ECE0', chest:'#FFFDF8', stripe:'#F7F2E9', point:'#F7F2E9',
-               eye:'#7BA05B', inner:'#E5AFA4', nose:'#DE8F82', whisker:'#8A7260', line:'#6E594A',
-               patch1:'#E8995C', patch2:'#3A3036', flags:['has-patches'] }
+               eye:'#587848', inner:'#E7A38E', nose:'#C97F6C', whisker:'#8A7260', line:'#6E594A',
+               patch1:'#DFA05E', patch2:'#3A3036', flags:['has-patches'] }
   };
   var BREEDS = [
     { id:'mixed',   label:'Mixed / unknown',    coat:'black',   ear:'point', body:1.0,  head:1.0  },
@@ -1834,11 +1857,13 @@
   /* ---------- SVG part builders (shared geometry) ---------- */
   var FB = 'transform-box:fill-box;';
   function partsTail(c, flags, statc) {
-    var s = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M150 226 C 190 230 208 206 199 178" stroke="' + c.coat + '" stroke-width="15" fill="none" stroke-linecap="round"/>';
+    var s = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M150 226 C 190 230 208 206 199 178" stroke="' + c.coat + '" stroke-width="16" fill="none" stroke-linecap="round"/>';
     if (!statc || flags.indexOf('has-points') >= 0)
-      s += '<path ' + (statc ? '' : 'data-stroke class="g-points tb" ') + 'd="M202 199 C 201 191 200 184 199 178" stroke="' + c.point + '" stroke-width="15" fill="none" stroke-linecap="round"' + (statc ? '' : '') + '/>';
-    if (!statc || flags.indexOf('has-stripes') >= 0)
-      s += '<path ' + (statc ? '' : 'data-stroke class="g-stripes tb" ') + 'd="M201 202 C 200.5 197 200 191 199.5 186" stroke="' + c.stripe + '" stroke-width="15" fill="none" stroke-linecap="round" opacity="0.85"/>';
+      s += '<path ' + (statc ? '' : 'data-stroke class="g-points tb" ') + 'd="M202 199 C 201 191 200 184 199 178" stroke="' + c.point + '" stroke-width="16" fill="none" stroke-linecap="round"' + (statc ? '' : '') + '/>';
+    var rings = '<path d="M201.5 197 C 201 192 200.5 187 199.5 182" stroke="' + c.stripe + '" stroke-width="16" fill="none" stroke-linecap="round" opacity="0.95"/>' +
+      '<path d="M191 218.5 C 193.5 216 195.5 213 197.5 210" stroke="' + c.stripe + '" stroke-width="16" fill="none" stroke-linecap="round" opacity="0.95"/>';
+    if (!statc) s += '<g class="g-stripes tb">' + rings.replace(/<path /g, '<path data-stroke ') + '</g>';
+    else if (flags.indexOf('has-stripes') >= 0) s += rings;
     return s;
   }
   function partsBody(c, flags, statc) {
@@ -1852,8 +1877,8 @@
         '<path d="M78 168 C 90 164 100 172 102 186 C 96 198 82 200 72 192 C 68 182 70 172 78 168 Z" fill="' + (c.patch1 || 'transparent') + '"/>';
     if (!statc) s += '<g class="g-bib tb"><ellipse data-fill cx="120" cy="200" rx="30" ry="28" fill="' + c.chest + '"/></g>';
     else if (flags.indexOf('has-bib') >= 0) s += '<ellipse cx="120" cy="200" rx="30" ry="28" fill="' + c.chest + '"/>';
-    var stripes = '<path d="M69 166 C 63 178 63 192 69 202" stroke="' + c.stripe + '" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.9"/>' +
-      '<path d="M171 166 C 177 178 177 192 171 202" stroke="' + c.stripe + '" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.9"/>';
+    var stripes = '<path d="M68 164 C 62 176 62 190 68 202" stroke="' + c.stripe + '" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.95"/>' +
+      '<path d="M172 164 C 178 176 178 190 172 202" stroke="' + c.stripe + '" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.95"/>';
     if (!statc) s += '<g class="g-stripes tb">' + stripes.replace(/<path /g, '<path data-stroke ') + '</g>';
     else if (flags.indexOf('has-stripes') >= 0) s += stripes;
     s += '<rect ' + (statc ? '' : 'data-fill ') + 'x="92" y="222" width="24" height="17" rx="8.5" fill="' + c.coat2 + '"/>' +
@@ -1863,27 +1888,51 @@
     else if (flags.indexOf('has-points') >= 0) s += pawPts;
     return s;
   }
+  /* Brand red bandana — the MewGuard "uniform" from the wreath logo.
+     Shared constants, not per-coat; sits over the body, tucked under the chin.
+     Hero gates it behind .bandana-on (tied on at Generate); statics always wear it. */
+  function partsBandana(statc) {
+    return '<path ' + (statc ? '' : 'data-fill ') + 'd="M76 128 Q 120 150 164 128 L 165.5 138 Q 120 160 74.5 138 Z" fill="' + BANDANA.fold + '"/>' +
+      '<path ' + (statc ? '' : 'data-fill ') + 'd="M80 133 Q 120 154 160 133 C 157 150 139 170 125 178 Q 120 181 115 178 C 101 170 83 150 80 133 Z" fill="' + BANDANA.main + '"/>' +
+      '<path ' + (statc ? '' : 'data-stroke ') + 'd="M94 148 C 102 154 110 158 118 160 M146 148 C 138 154 130 158 122 160" stroke="' + BANDANA.stitch + '" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="4.5 6" fill="none" opacity="0.85"/>';
+  }
+  /* Half-wreath from the wordmark — deep leaves + jewel blooms. Hero-only,
+     revealed at the Generate moment (.wreath-on); each .wb bit pops in staggered. */
+  var WREATH = { leaf:'#42644C', leaf2:'#5F8A5E', magenta:'#CA3B70', magenta2:'#E86A99', gold:'#F5C139', gold2:'#FBDF8A' };
+  function partsWreath() {
+    function wb(i, inner) { return '<g class="wb" style="transition-delay:' + (i * 55) + 'ms">' + inner + '</g>'; }
+    return wb(0, '<path d="M38 216 C 50 208 62 204 76 204 C 62 214 50 220 38 216 Z" fill="' + WREATH.leaf + '"/>') +
+      wb(1, '<path d="M202 216 C 190 208 178 204 164 204 C 178 214 190 220 202 216 Z" fill="' + WREATH.leaf + '"/>') +
+      wb(2, '<path d="M30 196 C 42 190 54 188 66 190 C 54 198 40 202 30 196 Z" fill="' + WREATH.leaf2 + '"/>') +
+      wb(3, '<path d="M210 196 C 198 190 186 188 174 190 C 186 198 200 202 210 196 Z" fill="' + WREATH.leaf2 + '"/>') +
+      wb(4, '<path d="M44 232 C 56 226 70 224 84 226 C 70 234 54 238 44 232 Z" fill="' + WREATH.leaf2 + '"/>') +
+      wb(5, '<path d="M196 232 C 184 226 170 224 156 226 C 170 234 186 238 196 232 Z" fill="' + WREATH.leaf + '"/>') +
+      wb(6, '<circle cx="36" cy="180" r="9" fill="' + WREATH.magenta + '"/><circle cx="36" cy="180" r="3.5" fill="' + WREATH.magenta2 + '"/>') +
+      wb(7, '<circle cx="206" cy="178" r="8" fill="' + WREATH.gold + '"/><circle cx="206" cy="178" r="3" fill="' + WREATH.gold2 + '"/>') +
+      wb(8, '<circle cx="214" cy="232" r="5" fill="' + WREATH.magenta + '"/>') +
+      wb(9, '<circle cx="26" cy="234" r="5" fill="' + WREATH.gold + '"/>');
+  }
   function partsEars(c, ear, tufts, statc) {
     var pointEars =
       '<g class="g-earL tb">' +
         '<path ' + (statc ? '' : 'data-fill ') + 'd="M70 64 C 61 45 59 28 65 17 C 78 19 95 32 105 45 C 97 56 84 62 70 64 Z" fill="' + c.coat + '"/>' +
         (!statc ? '<path data-fill class="g-points tb" d="M70 64 C 61 45 59 28 65 17 C 78 19 95 32 105 45 C 97 56 84 62 70 64 Z" fill="' + c.point + '"/>' : '') +
-        '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M73 55 C 68 43 67 33 70 26 C 79 29 89 37 96 45 C 90 51 82 54 73 55 Z" fill="' + c.inner + '" opacity="0.6"/>' +
+        '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M73 55 C 68 43 67 33 70 26 C 79 29 89 37 96 45 C 90 51 82 54 73 55 Z" fill="' + c.inner + '" opacity="0.8"/>' +
         (!statc ? '<g class="g-tufts tb"><path data-stroke d="M64 20 C 62 14 61 10 61 6 M69 19 C 68 14 68 10 68 7" stroke="' + c.coat2 + '" stroke-width="3" stroke-linecap="round" fill="none"/></g>'
                 : (tufts ? '<path d="M64 20 C 62 14 61 10 61 6 M69 19 C 68 14 68 10 68 7" stroke="' + c.coat2 + '" stroke-width="3" stroke-linecap="round" fill="none"/>' : '')) +
       '</g>' +
       '<g class="g-earR tb">' +
         '<path ' + (statc ? '' : 'data-fill ') + 'd="M170 64 C 179 45 181 28 175 17 C 162 19 145 32 135 45 C 143 56 156 62 170 64 Z" fill="' + c.coat + '"/>' +
         (!statc ? '<path data-fill class="g-points tb" d="M170 64 C 179 45 181 28 175 17 C 162 19 145 32 135 45 C 143 56 156 62 170 64 Z" fill="' + c.point + '"/>' : '') +
-        '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M167 55 C 172 43 173 33 170 26 C 161 29 151 37 144 45 C 150 51 158 54 167 55 Z" fill="' + c.inner + '" opacity="0.6"/>' +
+        '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M167 55 C 172 43 173 33 170 26 C 161 29 151 37 144 45 C 150 51 158 54 167 55 Z" fill="' + c.inner + '" opacity="0.8"/>' +
         (!statc ? '<g class="g-tufts tb"><path data-stroke d="M176 20 C 178 14 179 10 179 6 M171 19 C 172 14 172 10 172 7" stroke="' + c.coat2 + '" stroke-width="3" stroke-linecap="round" fill="none"/></g>'
                 : (tufts ? '<path d="M176 20 C 178 14 179 10 179 6 M171 19 C 172 14 172 10 172 7" stroke="' + c.coat2 + '" stroke-width="3" stroke-linecap="round" fill="none"/>' : '')) +
       '</g>';
     var foldEars =
       '<path ' + (statc ? '' : 'data-fill ') + 'd="M68 58 C 60 49 59 38 66 31 C 78 26 93 31 101 43 C 96 54 83 59 68 58 Z" fill="' + c.coat + '"/>' +
       '<path ' + (statc ? '' : 'data-fill ') + 'd="M172 58 C 180 49 181 38 174 31 C 162 26 147 31 139 43 C 144 54 157 59 172 58 Z" fill="' + c.coat + '"/>' +
-      '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M72 51 C 68 45 68 38 72 34 C 80 32 89 36 94 43 C 90 49 81 52 72 51 Z" fill="' + c.inner + '" opacity="0.45"/>' +
-      '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M168 51 C 172 45 172 38 168 34 C 160 32 151 36 146 43 C 150 49 159 52 168 51 Z" fill="' + c.inner + '" opacity="0.45"/>';
+      '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M72 51 C 68 45 68 38 72 34 C 80 32 89 36 94 43 C 90 49 81 52 72 51 Z" fill="' + c.inner + '" opacity="0.6"/>' +
+      '<path ' + (statc ? '' : 'data-fill class="g-innerear tb" ') + 'd="M168 51 C 172 45 172 38 168 34 C 160 32 151 36 146 43 C 150 49 159 52 168 51 Z" fill="' + c.inner + '" opacity="0.6"/>';
     if (statc) return ear === 'fold' ? foldEars : pointEars;
     return '<g class="g-ears-point tb">' + pointEars + '</g><g class="g-ears-fold tb">' + foldEars + '</g>';
   }
@@ -1896,28 +1945,27 @@
     s += '<path ' + (statc ? '' : 'data-fill ') + 'd="M120 134 C 82 134 58 114 58 86 C 58 56 86 40 120 40 C 154 40 182 56 182 86 C 182 114 158 134 120 134 Z" fill="' + c.coat + '"/>';
     if (!statc) s += '<g class="g-patches tb"><path data-fill d="M76 48 C 94 38 112 40 119 52 C 113 67 92 72 77 65 C 72 59 72 52 76 48 Z" fill="' + (c.patch1 || 'transparent') + '"/></g>';
     else if (flags.indexOf('has-patches') >= 0) s += '<path d="M76 48 C 94 38 112 40 119 52 C 113 67 92 72 77 65 C 72 59 72 52 76 48 Z" fill="' + (c.patch1 || 'transparent') + '"/>';
-    var mStripes = '<path d="M104 47 C 103 39 103 33 104 26" stroke="' + c.stripe + '" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.9"/>' +
-      '<path d="M120 46 C 120 37 120 31 120 24" stroke="' + c.stripe + '" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.9"/>' +
-      '<path d="M136 47 C 137 39 137 33 136 26" stroke="' + c.stripe + '" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.9"/>';
+    var mStripes = '<path d="M104 47 C 103 39 103 32 104 25" stroke="' + c.stripe + '" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.95"/>' +
+      '<path d="M120 46 C 120 37 120 30 120 23" stroke="' + c.stripe + '" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.95"/>' +
+      '<path d="M136 47 C 137 39 137 32 136 25" stroke="' + c.stripe + '" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.95"/>';
     if (!statc) s += '<g class="g-stripes tb">' + mStripes.replace(/<path /g, '<path data-stroke ') + '</g>';
     else if (flags.indexOf('has-stripes') >= 0) s += mStripes;
     if (!statc) s += '<g class="g-mask tb"><ellipse data-fill cx="120" cy="99" rx="25" ry="15" fill="' + c.point + '" opacity="0.3"/></g>';
     else if (flags.indexOf('has-mask') >= 0) s += '<ellipse cx="120" cy="99" rx="25" ry="15" fill="' + c.point + '" opacity="0.3"/>';
-    // face
-    var blush = '<ellipse cx="86" cy="109" rx="8" ry="4.5" fill="#E76953" opacity="0.3"/><ellipse cx="154" cy="109" rx="8" ry="4.5" fill="#E76953" opacity="0.3"/>';
+    // face — brand language: almond eye + upright slit pupil, big coral blush
+    // (always on; kittens extra rosy), small brand nose, whiskers thick enough to read.
+    var blush = '<circle cx="80" cy="106" r="9" fill="' + BLUSH + '" opacity="' + (kitten ? '0.5' : '0.42') + '"/><circle cx="160" cy="106" r="9" fill="' + BLUSH + '" opacity="' + (kitten ? '0.5' : '0.42') + '"/>';
     var eyes =
-      '<ellipse ' + (statc ? '' : 'data-fill class="irisL" ') + 'cx="97" cy="89" rx="10" ry="11" fill="' + c.eye + '"/>' +
-      '<ellipse fill="#241B16" cx="97" cy="89.5" rx="3.7" ry="7" opacity="0.88"/>' +
-      '<circle fill="#FFFFFF" cx="93.6" cy="85" r="2.7" opacity="0.95"/>' +
-      '<ellipse ' + (statc ? '' : 'data-fill class="irisR" ') + 'cx="143" cy="89" rx="10" ry="11" fill="' + c.eye + '"/>' +
-      '<ellipse fill="#241B16" cx="143" cy="89.5" rx="3.7" ry="7" opacity="0.88"/>' +
-      '<circle fill="#FFFFFF" cx="139.6" cy="85" r="2.7" opacity="0.95"/>';
-    var nose = '<path ' + (statc ? '' : 'data-fill ') + 'd="M113 101.5 C 113 99.3 116.2 98 120 98 C 123.8 98 127 99.3 127 101.5 C 127 104.2 123.5 106.5 120 106.5 C 116.5 106.5 113 104.2 113 101.5 Z" fill="' + c.nose + '"/>';
-    var mouth = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M120 106.5 L120 110.5 M120 110.5 C 118 114.5 113 115 110 112 M120 110.5 C 122 114.5 127 115 130 112" stroke="' + c.line + '" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.75"/>';
-    var whiskers = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M84 95 C 72 92.5 62 92 52 94 M85 102 C 73 102 63 103.5 54 107 M88 108.5 C 78 111 69 114.5 61 119" stroke="' + c.whisker + '" stroke-width="1.9" stroke-linecap="round" fill="none" opacity="0.6"/>' +
-      '<path ' + (statc ? '' : 'data-stroke ') + 'd="M156 95 C 168 92.5 178 92 188 94 M155 102 C 167 102 177 103.5 186 107 M152 108.5 C 162 111 171 114.5 179 119" stroke="' + c.whisker + '" stroke-width="1.9" stroke-linecap="round" fill="none" opacity="0.6"/>';
+      '<path ' + (statc ? '' : 'data-fill class="irisL" ') + 'd="M83 88 Q 97 70 111 88 Q 97 106 83 88 Z" fill="' + c.eye + '"/>' +
+      '<ellipse fill="#2A1F14" cx="97" cy="88" rx="3.2" ry="7.6"/>' +
+      '<path ' + (statc ? '' : 'data-fill class="irisR" ') + 'd="M129 88 Q 143 70 157 88 Q 143 106 129 88 Z" fill="' + c.eye + '"/>' +
+      '<ellipse fill="#2A1F14" cx="143" cy="88" rx="3.2" ry="7.6"/>';
+    var nose = '<path ' + (statc ? '' : 'data-fill ') + 'd="M114 100 C 114 98 116.5 97 120 97 C 123.5 97 126 98 126 100 C 126 102.6 122.8 104.8 120 104.8 C 117.2 104.8 114 102.6 114 100 Z" fill="' + c.nose + '"/>';
+    var mouth = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M120 104.8 L120 109 M120 109 C 117.5 113.5 112 114 109 111 M120 109 C 122.5 113.5 128 114 131 111" stroke="' + c.line + '" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.8"/>';
+    var whiskers = '<path ' + (statc ? '' : 'data-stroke ') + 'd="M84 95 C 72 92.5 62 92 52 94 M85 102 C 73 102 63 103.5 54 107 M88 108.5 C 78 111 69 114.5 61 119" stroke="' + c.whisker + '" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.85"/>' +
+      '<path ' + (statc ? '' : 'data-stroke ') + 'd="M156 95 C 168 92.5 178 92 188 94 M155 102 C 167 102 177 103.5 186 107 M152 108.5 C 162 111 171 114.5 179 119" stroke="' + c.whisker + '" stroke-width="2.6" stroke-linecap="round" fill="none" opacity="0.85"/>';
     if (statc) {
-      s += (kitten ? blush : '') +
+      s += blush +
         '<g class="a-blink" style="' + FB + 'transform-origin:50% 55%">' + eyes + '</g>' +
         nose + mouth + whiskers;
     } else {
@@ -1939,10 +1987,12 @@
       whisker:'var(--c-whisker)', line:'var(--c-line)', patch1:'var(--c-patch1)', patch2:'var(--c-patch2)' };
     return '<svg viewBox="0 0 240 250" xmlns="http://www.w3.org/2000/svg" aria-label="parametric cat avatar">' +
       '<ellipse cx="120" cy="240" rx="60" ry="7" fill="currentColor" opacity="0.08"/>' +
+      '<g class="g-wreath tb">' + partsWreath() + '</g>' +
       '<g class="g-pose tb">' +
         '<g class="g-tail tb">' + partsTail(v, [], false) + '</g>' +
         '<g class="g-bodywrap tb"><g class="g-breath tb">' + partsBody(v, [], false) + '</g></g>' +
-        '<g class="g-headwrap tb">' + partsEars(v, 'point', false, false) + partsHead(v, [], false, false) + '</g>' +
+        '<g class="g-headwrap tb">' + partsEars(v, 'point', false, false) +
+          '<g class="g-bandana tb">' + partsBandana(false) + '</g>' + partsHead(v, [], false, false) + '</g>' +
       '</g></svg>';
   }
   /* static build: only the needed layers, colors baked in, gallery a-blink / a-sway classes */
@@ -1956,7 +2006,7 @@
       '<g class="a-sway" style="' + FB + 'transform-origin:8% 88%;animation-duration:5.5s">' + partsTail(c, flags, true) + '</g>' +
       '<g style="' + FB + 'transform-origin:50% 96%;transform:scale(' + bx + ',' + by + ')">' + partsBody(c, flags, true) + '</g>' +
       '<g style="' + FB + 'transform-origin:50% 62%;transform:scale(' + hs + ')">' +
-        partsEars(c, preset.ear, !!preset.tufts, true) + partsHead(c, flags, true, !!preset.kitten) +
+        partsEars(c, preset.ear, !!preset.tufts, true) + partsBandana(true) + partsHead(c, flags, true, !!preset.kitten) +
       '</g></svg>';
   }
 
@@ -2176,18 +2226,22 @@
       nextBtn('Last step', !!state.breed, advance);
     }
     if (stepIdx === 5) {
-      q('Ready to meet ' + personalize(state.name) + '?', 'One tap — the magic moment. In the real app this also masks the Firestore write and photo upload.');
+      q('Ready to meet ' + personalize(state.name) + '?', 'One tap — your cat ties on the red MewGuard bandana and the wordmark wreath blooms. In the real app this also masks the Firestore write and photo upload.');
       nextBtn(state.done ? 'Generate again ✨' : 'Generate my cat ✨', true, function () {
         interacted = true;
         state.done = true;
         stageEl.classList.remove('celebrating'); hero.classList.remove('celebrate');
+        hero.classList.remove('bandana-on', 'wreath-on');
         void hero.offsetWidth;
         stageEl.classList.add('celebrating'); hero.classList.add('celebrate');
         burst(26, true);
+        hero.classList.add('bandana-on');
+        setTimeout(function () { hero.classList.add('wreath-on'); }, motionOff() ? 0 : 260);
         document.getElementById('catNameplate').classList.add('shown');
         setTimeout(function () { hero.classList.remove('celebrate'); stageEl.classList.remove('celebrating'); }, 1000);
         renderSteps();
       });
+      note('Unlocks: <b>red bandana + wordmark wreath</b> — every MewGuard cat wears the uniform (a param the owner can turn off).');
       var reset = document.createElement('div'); reset.className = 'cat-row'; reset.style.marginTop = '10px';
       var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'cat-btn ghost';
       rb.textContent = 'Start over (back to silhouette)';
@@ -2195,7 +2249,7 @@
         state = { name:'', age:null, kg:4, sex:null, breed:null, done:false };
         stepIdx = 0; maxStep = 0;
         hero.classList.add('no-face');
-        hero.classList.remove('awake','ears-fold','has-tufts','is-kitten','has-stripes','has-points','has-patches','has-bib','has-mask','has-fluff');
+        hero.classList.remove('awake','ears-fold','has-tufts','is-kitten','has-stripes','has-points','has-patches','has-bib','has-mask','has-fluff','bandana-on','wreath-on');
         hero.style.cssText = '';
         applyShape();
         document.getElementById('catNameplate').classList.remove('shown');
