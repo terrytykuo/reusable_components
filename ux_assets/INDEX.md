@@ -293,15 +293,20 @@ SVG/CSS gallery above with the real `.json` format a React Native / Expo app dro
 design — uses the same `cat_toxin_app/constants/colors.ts` palette, and carries the `mewguard` brand
 tag inside its `meta.k` (keywords) field along with author, description, and `theme_color`. All loop
 seamlessly. Files are produced by `lottie/_build.py` with the `python-lottie` object model (so output
-is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`.
+is guaranteed valid) and can be re-generated with `python3 lottie/_build.py`. Mascot appearances
+follow the **品牌統一(2026-07)** brand tabby「Mew」(see the mewguard.html section above): the
+`_build.py` palette carries the full Mew color block (奶油毛 `#EFDDB9`、赭金條紋 `#B28135`、綠杏仁眼
++直立瞳 `#587848`/`#2A1F14`、腮紅 `#E7724F` .42、棕鼻 `#7A4A2E`、紅領巾 `#EC5447`/`#D64A3C`/`#C8402F`).
 
 **Status:** 22 Lottie files — a reusable core subset of the 31-asset gallery's highest-traffic
-moments, spanning **all seven journey stages**.
+moments, spanning **all seven journey stages**. 吉祥物已品牌統一(2026-07):`mw-cat-box` 探頭貓
+=品牌虎斑 Mew(奶油毛+額頭 M+綠杏仁眼越過箱緣;領巾被紙箱遮擋,依盾牌臉慣例以 M 條紋帶品牌識別)、
+`mw-on-the-scent` 掌印改赭金 `#B28135`(75%,對齊 gallery 同名資產)。
 **Tag:** every file carries the `mewguard` brand tag in its metadata keywords.
 
 | File | Stage | Motion | UX payoff |
 |------|-------|--------|-----------|
-| `mw-cat-box.json` | Onboarding · Empty state | Carton wobbles, flaps open, a cat silhouette peeks halfway out, then a "?" pops up | Invites an owner to add their first cat on an empty My Cats screen |
+| `mw-cat-box.json` | Onboarding · Empty state | Carton wobbles, flaps open, the brand tabby Mew peeks halfway out — M stripes and green almond eyes over the rim — then a "?" pops up | Invites an owner to add their first cat on an empty My Cats screen |
 | `mw-sparkle-burst.json` | Onboarding · Add-cat generate | Radial burst of stars, dots and tiny hearts (transparent bg; loopable) | Masks the Firestore write + photo upload as the "magic generate" moment of the cat-avatar creation ritual |
 | `mw-guardian-crown.json` | Onboarding · Premium | Gold crown settles in, sparkles pop | Frames the Guardian+ paywall as richer care unlocked, not a wall hit |
 | `mw-paw-loading.json` | Search | Paw-pad dots pulse in sequence | Branded loader reframes toxin-database latency as active care |

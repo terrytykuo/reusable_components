@@ -6,6 +6,8 @@ Builds genuine, schema-valid Lottie JSON animations with the python-lottie objec
 model (so output is guaranteed valid), using the cat_toxin_app palette and carrying
 the `mewguard` brand tag in each file's metadata.keywords. Non-functional UX assets:
 their only job is emotional/sentimental design across the MewGuard journey stages.
+Mascot appearances follow the 品牌統一(2026-07) brand tabby「Mew」— the wreath-logo
+cat itself — with mewguard.html (canonical) as the color/shape reference.
 
 Run:  python3 lottie/_build.py
 Outputs one <name>.json per asset next to this script.
@@ -39,6 +41,22 @@ GOLD    = "#816e0c"
 INK     = "#2C1810"
 WATER   = "#5B8A7A"
 WHITE   = "#FFFFFF"
+
+# --- Brand tabby「Mew」— 品牌統一 2026-07 (canonical: mewguard.html /
+#     INDEX.md「品牌統一(2026-07)」). The mascot IS the wreath-logo cat: cream fur,
+#     ochre-gold M stripes, green almond eyes with upright pupils, coral blush at
+#     42% opacity, brown nose; the red bandana is the MewGuard uniform whenever the
+#     neck/body is visible (head-only appearances carry the identity via the M). ---
+MEW_FUR     = "#EFDDB9"   # cream fur (head, ears, paws)
+MEW_STRIPE  = "#B28135"   # ochre-gold tabby stripes: forehead M, tail rings, paw prints
+MEW_EAR_IN  = "#E77553"   # inner-ear accent (drawn at 85% opacity)
+MEW_EYE     = "#587848"   # green almond iris
+MEW_PUPIL   = "#2A1F14"   # upright pupil
+MEW_BLUSH   = "#E7724F"   # coral blush — always at 42% opacity
+MEW_NOSE    = "#7A4A2E"   # brown nose
+MEW_BANDANA = "#EC5447"   # red bandana (uniform)
+MEW_BANDANA_FOLD   = "#D64A3C"   # bandana fold band
+MEW_BANDANA_STITCH = "#C8402F"   # bandana stitching
 
 
 def col(hexstr):
@@ -1025,11 +1043,12 @@ def small_nose():
 
 
 def paw_print(layer):
-    """Add a tan paw print (main pad + three toe beans) at the layer origin."""
-    layer.add_shape(ellipse(-7, -4, 5, 5, "#B8967A"))
-    layer.add_shape(ellipse(0, -6, 5, 5, "#B8967A"))
-    layer.add_shape(ellipse(7, -4, 5, 5, "#B8967A"))
-    layer.add_shape(ellipse(0, 4, 14, 11, "#B8967A"))
+    """Add an ochre-gold paw print (main pad + three toe beans) at the layer origin —
+    the brand tabby's stripe color at 75%, matching mewguard.html's On-the-scent."""
+    layer.add_shape(ellipse(-7, -4, 5, 5, MEW_STRIPE, opacity=75))
+    layer.add_shape(ellipse(0, -6, 5, 5, MEW_STRIPE, opacity=75))
+    layer.add_shape(ellipse(7, -4, 5, 5, MEW_STRIPE, opacity=75))
+    layer.add_shape(ellipse(0, 4, 14, 11, MEW_STRIPE, opacity=75))
 
 
 # ----------------------------------------------------------------------------
@@ -1074,22 +1093,38 @@ def build_on_scent():
     return a
 
 
+def almond_group(ex, ey, hw, amp, fill_hex):
+    """A closed almond eye (two mirrored quadratic arcs, expressed as cubics) —
+    the brand tabby's eye shape from mewguard.html, e.g. `M44 70 Q51 64.5 58 70
+    Q51 75.5 44 70 Z`. hw = half-width, amp = arc amplitude."""
+    g = Group()
+    p = Path()
+    b = Bezier()
+    b.closed = True
+    tx, ty = hw * 2 / 3, amp * 2 / 3   # quadratic → cubic tangent conversion
+    b.add_point(Point(ex - hw, ey), Point(tx, ty), Point(tx, -ty))
+    b.add_point(Point(ex + hw, ey), Point(-tx, -ty), Point(-tx, ty))
+    p.shape.value = b
+    g.add_shape(p)
+    g.add_shape(Fill(col(fill_hex)))
+    return g
+
+
 # ----------------------------------------------------------------------------
-# 27. Who's in the box? — a kraft carton wobbles, its flaps swing open and a
-#     curious cat peeks out, round eyes darting (onboarding · empty state)
+# 27. Who's in the box? — a kraft carton wobbles, its flaps swing open and the
+#     brand tabby Mew peeks out, green eyes over the rim (onboarding · empty state)
 # ----------------------------------------------------------------------------
 def build_cat_box():
     a = new_anim(
         "MewGuard — Who's in the box?",
         "onboarding, empty-state, add-cat",
-        "A kraft carton wobbles, its flaps swing open and a shy black cat silhouette "
-        "peeks halfway out — ears and eyes over the rim — then a curious question mark "
-        "pops up above. Invites an owner to add their first cat on an empty My Cats screen.",
+        "A kraft carton wobbles, its flaps swing open and the brand tabby Mew peeks "
+        "halfway out — cream ears, forehead M stripes and green almond eyes over the "
+        "rim — then a curious question mark pops up above. Invites an owner to add "
+        "their first cat on an empty My Cats screen.",
         op=96, theme=GREEN,
     )
 
-    FUR     = "#cdbfae"   # cat head — warm grey, matching the SVG-kit mascot
-    EAR     = "#b8967a"   # ears / tan fur
     KRAFT   = "#c9a37a"   # carton front
     KRAFT_L = "#d8b892"   # carton flaps (lit inner face)
     KRAFT_D = "#a9814f"   # tape seam
@@ -1150,24 +1185,76 @@ def build_cat_box():
     qsc.add_keyframe(68, Point(100, 100), EASE_IO)
     qsc.add_keyframe(96, Point(100, 100))
 
-    # --- cat head (ears + face + dot eyes + nose), rising halfway through the rim.
+    # --- cat head: the brand tabby「Mew」(mewguard.html 品牌統一 head grammar —
+    #     cream fur, forehead M stripes, green almond eyes with upright pupils,
+    #     blush + brown nose), rising halfway through the rim. The bandana stays
+    #     hidden inside the box: head-only appearances carry the identity via the
+    #     M stripes, like the gallery's shield faces. Within the layer the FIRST
+    #     shape paints on top.
     head = shape_layer(a, cx, 160)
-    head.add_shape(ellipse(-15, -3, 11, 11, CREAM))  # light eyes on the silhouette
-    head.add_shape(ellipse(15, -3, 11, 11, CREAM))
-    head.add_shape(ellipse(0, 2, 68, 60, INK))       # black head
-    for s in (1, -1):                                 # black ears (merge into the head)
+    # nose (only clears the rim at the overshoot, but keeps the face complete)
+    ng = Group()
+    npth = Path()
+    nb = Bezier()
+    nb.closed = True
+    nb.add_point(Point(-4.5, 4))
+    nb.add_point(Point(4.5, 4))
+    nb.add_point(Point(0, 9))
+    npth.shape.value = nb
+    ng.add_shape(npth)
+    ng.add_shape(Fill(col(MEW_NOSE)))
+    head.add_shape(ng)
+    # blush, always at 42% opacity
+    head.add_shape(ellipse(-23, 7, 11, 11, MEW_BLUSH, opacity=42))
+    head.add_shape(ellipse(23, 7, 11, 11, MEW_BLUSH, opacity=42))
+    # green almond eyes with upright pupils (pupils first → on top of the iris).
+    # Sat slightly high on the face so the almond's widest band — not just its
+    # thin upper taper — clears the box rim during the half-peek.
+    for ex in (-12, 12):
+        head.add_shape(ellipse(ex, -6, 5, 11, MEW_PUPIL))
+    for ex in (-12, 12):
+        head.add_shape(almond_group(ex, -6, 10, 7.5, MEW_EYE))
+    # forehead M: three short round-cap strokes poking just above the dome
+    mg = Group()
+    for sx, top, bot in ((-7, -30, -21.5), (0, -31, -22), (7, -30, -21.5)):
+        mp = Path()
+        mb = Bezier()
+        mb.add_point(Point(sx, top))
+        mb.add_point(Point(sx, bot))
+        mp.shape.value = mb
+        mg.add_shape(mp)
+    mst = Stroke(col(MEW_STRIPE), 6)
+    mst.line_cap = 2
+    mg.add_shape(mst)
+    head.add_shape(mg)
+    head.add_shape(ellipse(0, 2, 68, 60, MEW_FUR))   # cream head
+    for s in (1, -1):                                 # ears (merge into the head)
+        # inner-ear accent, inset toward the tip (over the ear, under the dome)
+        ig = Group()
+        ip = Path()
+        ib = Bezier()
+        ib.closed = True
+        ib.add_point(Point(s * 18, -19))
+        ib.add_point(Point(s * 24, -35))
+        ib.add_point(Point(s * 6, -24))
+        ip.shape.value = ib
+        ig.add_shape(ip)
+        inf = Fill(col(MEW_EAR_IN))
+        inf.opacity.value = 85
+        ig.add_shape(inf)
+        head.add_shape(ig)
+        # cream ear triangle whose base sits on the round head so the ear reads
+        # as part of the face (not a detached horn) — matches mewguard.html.
         eg = Group()
         ep = Path()
         eb = Bezier()
         eb.closed = True
-        # small triangle whose base sits on the round head so the ear reads as
-        # part of the face (not a detached horn) — matches mewguard.html.
         eb.add_point(Point(s * 20, -14))
         eb.add_point(Point(s * 30, -42))
         eb.add_point(Point(s * -2, -22))
         ep.shape.value = eb
         eg.add_shape(ep)
-        eg.add_shape(Fill(col(INK)))
+        eg.add_shape(Fill(col(MEW_FUR)))
         head.add_shape(eg)
     hp = head.transform.position
     hp.add_keyframe(0, Point(cx, 160), EASE_IO)

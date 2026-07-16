@@ -101,7 +101,7 @@ META = {
         payoff="Reframes a search-in-progress as the cat actively following the scent."),
     "mw-cat-box.json": dict(
         title="Who's in the box?", stage="Onboarding · Empty state",
-        motion="Carton wobbles, flaps open, a cat silhouette peeks halfway out, then a '?' pops up",
+        motion="Carton wobbles, flaps open, the brand tabby Mew peeks halfway out, then a '?' pops up",
         payoff="Invites an owner to add their first cat on an empty My Cats screen."),
 }
 
