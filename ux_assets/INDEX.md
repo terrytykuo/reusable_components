@@ -237,8 +237,11 @@ cards(前期 PNG 檔案庫,見下方 App raster 區段). **Tag:** every asset ca
 | 29 | Back to chasing toys | Recovery | Milestone | Cat batting yarn marks full recovery and closes the worry loop on a joyful note |
 | 30 | While you wait | Emergency | Guidance | First-aid step checklist channels panic into calm action before reaching the vet |
 | 31 | Rate your peace of mind | Delight | Feedback | Stars framed as "peace of mind" invite warm feedback at a calm emotional high point |
+| 32 | Pill time | Care | Empty state | Amber bottle + floating capsule invites the first medication entry without guilt |
+| 33 | Vet pulse | Care | Empty state | Stethoscope with a beating heart frames an empty vet history as care-in-waiting |
+| 34 | Shield spark | Care | Empty state | Shield + twinkling syringe turns a blank vaccine list into "start protecting" |
 
-**Journey stages:** onboarding (2) · search (6) · verdict (4) · care (7) · recovery (5) · emergency (4) · delight (3).
+**Journey stages:** onboarding (2) · search (6) · verdict (4) · care (10) · recovery (5) · emergency (4) · delight (3).
 
 ### Cat avatar — 參數化貓 avatar 系統(頁尾互動區段,tag `cat-avatar`)
 

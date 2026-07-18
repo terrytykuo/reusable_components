@@ -489,11 +489,11 @@
 
   <nav class="filterbar" id="filterbar" aria-label="Filter assets by MewGuard journey stage or kit">
     <span class="fb-label">Filter</span>
-    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">54</span></button>
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span class="ct">57</span></button>
     <button type="button" class="chip" data-filter="onboarding" aria-pressed="false">Onboarding <span class="ct">3</span></button>
     <button type="button" class="chip" data-filter="search" aria-pressed="false">Search <span class="ct">6</span></button>
     <button type="button" class="chip" data-filter="verdict" aria-pressed="false">Verdict <span class="ct">4</span></button>
-    <button type="button" class="chip" data-filter="care" aria-pressed="false">Care <span class="ct">7</span></button>
+    <button type="button" class="chip" data-filter="care" aria-pressed="false">Care <span class="ct">10</span></button>
     <button type="button" class="chip" data-filter="recovery" aria-pressed="false">Recovery <span class="ct">5</span></button>
     <button type="button" class="chip" data-filter="emergency" aria-pressed="false">Emergency <span class="ct">4</span></button>
     <button type="button" class="chip" data-filter="delight" aria-pressed="false">Delight <span class="ct">3</span></button>
@@ -514,7 +514,7 @@
       <svg class="ic rm-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
       <span class="rm-on">Reduce motion</span><span class="rm-off">Full motion</span>
     </button>
-    <span class="fb-count" id="fbCount" aria-live="polite">54 assets</span>
+    <span class="fb-count" id="fbCount" aria-live="polite">57 assets</span>
   </nav>
 
   <div class="grid">
@@ -1440,6 +1440,83 @@
         <p class="goal">After the worry passes is the honest moment to ask how we did. Stars framed as "peace of mind" invite warm, low-pressure feedback.</p>
         <div class="benefit"><span class="ico">↑</span><span>Captures goodwill at a calm high point and frames the rating around the emotional payoff.</span></div>
         <div class="tags"><span class="tag brand">mewguard</span><span class="tag">feedback</span><span class="tag">gratitude</span></div>
+      </div>
+    </article>
+
+    <!-- 41. PILL TIME (medication empty state) -->
+    <article class="card" data-cat="care" style="--c:var(--gold)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="An amber pill bottle with a capsule floating above it and dose dots">
+          <ellipse cx="60" cy="104" rx="24" ry="5" fill="#e3d8cc"/>
+          <path d="M48 60 h24 v30 q0 8 -8 8 h-8 q-8 0 -8 -8 Z" fill="#f0c419" stroke="#c99a12" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="50" y="70" width="20" height="13" rx="2" fill="#ffffff" opacity=".85"/>
+          <path d="M53 74 h14 M53 78 h11" stroke="#cdbfae" stroke-width="1.6" stroke-linecap="round"/>
+          <rect x="46" y="52" width="28" height="10" rx="3" fill="#d9a70f"/>
+          <g class="a-float">
+            <g transform="rotate(-35 60 32)">
+              <rect x="48" y="26" width="24" height="12" rx="6" fill="#fbe3dc" stroke="#c9503a" stroke-width="1.4"/>
+              <path d="M60 26 h-6 a6 6 0 0 0 0 12 h6 Z" fill="#E76953"/>
+            </g>
+          </g>
+          <g class="a-pulse" style="transform-origin:60px 49px">
+            <circle cx="38" cy="46" r="2.4" fill="#E76953"/>
+            <circle cx="84" cy="52" r="2" fill="#f0c419"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Care</div>
+        <div class="name">Pill time</div>
+        <p class="goal">A medication log with nothing in it should feel calm, not neglectful. A tidy bottle with a floating capsule reads "ready when you are".</p>
+        <div class="benefit"><span class="ico">↑</span><span>Invites the first medication entry without implying the owner is behind.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">empty-state</span><span class="tag">medication</span></div>
+      </div>
+    </article>
+
+    <!-- 42. VET PULSE (vet visits empty state) -->
+    <article class="card" data-cat="care" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A stethoscope with a beating heart at the chestpiece">
+          <ellipse cx="60" cy="106" rx="22" ry="4.5" fill="#e3d8cc"/>
+          <circle cx="40" cy="28" r="3.4" fill="#5B8A7A"/>
+          <circle cx="80" cy="28" r="3.4" fill="#5B8A7A"/>
+          <path d="M40 30 q-4 26 10 34 M80 30 q4 26 -10 34" stroke="#5B8A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="60" cy="72" r="10" fill="#4a7768" stroke="#3c6355" stroke-width="2"/>
+          <g class="a-heartbeat" style="transform-origin:60px 72px">
+            <path d="M60 78 C54 72.5 54 68 57.5 68 C59.2 68 60 69.6 60 69.6 C60 69.6 60.8 68 62.5 68 C66 68 66 72.5 60 78 Z" fill="#E76953"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Care</div>
+        <div class="name">Vet pulse</div>
+        <p class="goal">No vet visits logged yet — a steady heartbeat at the stethoscope says the record is alive and waiting, not empty and cold.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Frames an empty vet history as care-in-waiting, nudging the first visit entry.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">empty-state</span><span class="tag">vet-visits</span></div>
+      </div>
+    </article>
+
+    <!-- 43. SHIELD SPARK (vaccines empty state) -->
+    <article class="card" data-cat="care" style="--c:var(--sage)">
+      <div class="stage">
+        <svg viewBox="0 0 120 120" role="img" aria-label="A shield with a syringe and a sparkle twinkling at the needle tip">
+          <ellipse cx="60" cy="106" rx="22" ry="4.5" fill="#e3d8cc"/>
+          <path d="M60 30 L84 38 V64 Q84 84 60 96 Q36 84 36 64 V38 Z" fill="#5B8A7A" stroke="#3c6355" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M54 58 L69 73" stroke="#c96b57" stroke-width="9" stroke-linecap="round"/>
+          <path d="M55 59 L67 71" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round"/>
+          <path d="M64 76 L73 67" stroke="#c96b57" stroke-width="3" stroke-linecap="round"/>
+          <path d="M69 73 L76 80" stroke="#c96b57" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M73 83 L82 74" stroke="#c96b57" stroke-width="3.2" stroke-linecap="round"/>
+          <path d="M54 58 L43 47" stroke="#9aa0a6" stroke-width="2" stroke-linecap="round"/>
+          <path d="M41 38 L43 45 L41 52 L39 45 Z M34 45 L41 43 L48 45 L41 47 Z" fill="#f0c419" class="a-twinkle" style="transform-origin:41px 45px"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="kind">Empty State · Care</div>
+        <div class="name">Shield spark</div>
+        <p class="goal">An empty vaccine record is a protection story not yet written. A shield with a twinkling syringe frames the first shot as guarding, not charting.</p>
+        <div class="benefit"><span class="ico">↑</span><span>Turns a blank vaccine list into an inviting "start protecting" prompt.</span></div>
+        <div class="tags"><span class="tag brand">mewguard</span><span class="tag">empty-state</span><span class="tag">vaccines</span></div>
       </div>
     </article>
 
