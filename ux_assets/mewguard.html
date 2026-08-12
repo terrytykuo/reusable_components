@@ -1929,11 +1929,287 @@
 <div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
 
 <script>
-/* ================= Cat Avatar — parametric prototype ================= */
+/* ================= Cat Avatar — line-art parametric prototype ================= */
 (function () {
   var media = matchMedia('(prefers-reduced-motion: reduce)');
   function motionOff() { return media.matches || document.body.classList.contains('motion-reduced'); }
   function motionPaused() { return document.body.classList.contains('motion-paused'); }
+
+  /* =====================================================================
+     LINE-ART CAT (style 1a "淨線 Clean") — canonical geometry.
+     Ported verbatim (2026-08-12) from the shipped app:
+       cat_toxin_app/components/cat-avatar/lineCoats.ts   → LINE / LINE_COATS / BREED_TO_COAT
+       cat_toxin_app/components/cat-avatar/LineCat.tsx    → SIT / WALK / SLEEP path data
+       cat_toxin_app/components/cat-avatar/lineSpec.ts    → the unlock-stage reveal spec
+       cat_toxin_app/components/cat-avatar/presets.ts     → AGE_SHAPE / weightToBuild / ANIM
+     Do not redraw these paths — edit here and re-port to the app.
+
+     Identity model: the silhouette is IDENTICAL for every cat (white body,
+     5px #1E1B18 outline). Only the colour laid on it differs — six pattern
+     switches × three colour slots. `breed` therefore drives colour only.
+     ===================================================================== */
+
+  /* Ink + line weight. */
+  var LINE = { ink: '#1E1B18', width: 5, hair: 2.75, medium: 4 };
+
+  var COAT_BASE = {
+    body: '#FFFFFF', stripe: '#B8712A', accent: 'transparent',
+    patch1: 'transparent', patch2: 'transparent', inner: '#F0B9A6',
+    stripes: false, patches: false, mask: false, socks: false, tailTip: false, muzzle: false
+  };
+  function recipe(o) { return Object.assign({}, COAT_BASE, o); }
+
+  var LINE_COATS = {
+    tora:  recipe({ id:'tora',  label:'虎斑橘', en:'Orange tabby',  body:'#EFA45C', stripe:'#C2711F', stripes:true, muzzle:true }),
+    mike:  recipe({ id:'mike',  label:'三花',   en:'Calico',        patch1:'#EFA45C', patch2:'#2E2A28', accent:'#2E2A28', patches:true, tailTip:true }),
+    kuro:  recipe({ id:'kuro',  label:'賓士',   en:'Tuxedo',        accent:'#2E2A28', stripe:'#3A3532', mask:true, tailTip:true }),
+    nabe:  recipe({ id:'nabe',  label:'奶油',   en:'Cream tabby',   body:'#F7DDA6', stripe:'#D9A64B', stripes:true, muzzle:true }),
+    hai:   recipe({ id:'hai',   label:'灰襪',   en:'Grey socks',    accent:'#A5A7A5', stripe:'#9EA0A0', stripes:true, socks:true, tailTip:true }),
+    shama: recipe({ id:'shama', label:'重點色', en:'Colour-point',  body:'#F6EBDA', accent:'#7C6350', stripe:'#8B7360', mask:true, tailTip:true }),
+    plain: recipe({ id:'plain', label:'白貓',   en:'White',         muzzle:true })
+  };
+  var COAT_ORDER = ['tora', 'mike', 'kuro', 'nabe', 'hai', 'shama', 'plain'];
+
+  /* Existing breed strings → a coat recipe (app's BREED_TO_COAT, verbatim). */
+  var BREED_TO_COAT = [
+    { test: /siamese/i, coat: 'shama' },
+    { test: /british|american|russian/i, coat: 'hai' },
+    { test: /ragdoll|persian/i, coat: 'shama' },
+    { test: /maine|tabby|虎斑/i, coat: 'tora' },
+    { test: /calico|三花/i, coat: 'mike' },
+    { test: /tuxedo|賓士/i, coat: 'kuro' }
+  ];
+  /* No breed → spread cats across the palette deterministically by name. */
+  function deriveLineCoat(breed, seed) {
+    var value = (breed || '').trim();
+    for (var i = 0; i < BREED_TO_COAT.length; i++) {
+      if (value && BREED_TO_COAT[i].test.test(value)) return LINE_COATS[BREED_TO_COAT[i].coat];
+    }
+    var order = ['tora', 'mike', 'kuro', 'nabe', 'hai', 'shama'];
+    var key = seed || value || 'mewguard-cat';
+    var hash = 0;
+    for (var j = 0; j < key.length; j += 1) hash = ((hash << 5) - hash + key.charCodeAt(j)) | 0;
+    return LINE_COATS[order[Math.abs(hash) % order.length]];
+  }
+
+  /* ---------- pose path data (200×200 for every pose, so a cat can swap pose in place) ---------- */
+  var SIT = {
+    head: 'M62,66 C62,44 79,31 100,31 C121,31 138,44 138,66 C138,90 121,104 100,104 C79,104 62,90 62,66 Z',
+    body: 'M78,95 C64,110 56,140 58,164 C59,178 76,187 100,187 C124,187 141,178 142,164 C144,140 136,110 122,95 Z',
+    tail: 'M138,168 C168,184 196,166 190,132 C188,120 178,114 171,119 C165,123 168,131 170,138 C174,152 156,160 136,152 Z',
+    earL: 'M67,50 L70,20 L95,33 Z',
+    earR: 'M133,50 L130,20 L105,33 Z',
+    innerL: 'M73,44 L75,28 L88,35 Z',
+    innerR: 'M127,44 L125,28 L112,35 Z',
+    muzzle: 'M100,80 C93,74 82,78 82,87 C82,95 92,101 100,101 C108,101 118,95 118,87 C118,78 107,74 100,80 Z',
+    nose: 'M95,83 C97,81 103,81 105,83 C104,88 101,90 100,90 C99,90 96,88 95,83 Z',
+    mouth: 'M100,90 L100,93 M100,93 C97,97 92,96 91,93 M100,93 C103,97 108,96 109,93',
+    whisk: 'M70,80 L49,74 M70,87 L49,90 M130,80 L151,74 M130,87 L151,90',
+    legL: 'M86,152 C85,164 85,174 86,182',
+    legR: 'M114,152 C115,164 115,174 114,182',
+    headPatch: 'M103,32 C116,31 133,42 137,60 C126,70 106,67 100,56 C96,48 97,36 103,32 Z',
+    headMask: 'M100,38 C117,32 137,43 139,64 C133,82 110,84 100,72 C94,62 93,44 100,38 Z',
+    bodyPatchA: 'M104,108 C124,106 138,124 135,146 C132,162 114,164 105,152 C97,140 95,113 104,108 Z',
+    bodyPatchB: 'M62,116 C74,112 84,124 82,140 C74,150 62,148 56,140 C54,130 56,120 62,116 Z',
+    sockL: 'M76,170 C84,168 92,168 94,170 L94,190 L76,190 Z',
+    sockR: 'M106,170 C114,168 122,168 124,170 L124,190 L106,190 Z',
+    headStripes: ['M89,50 C89,44 89,40 90,34', 'M100,48 C100,42 100,37 100,31', 'M111,50 C111,44 111,40 110,34'],
+    bodyStripes: ['M82,122 C81,130 81,138 82,144', 'M100,118 C99,128 99,138 100,146', 'M118,122 C119,130 119,138 118,144', 'M68,146 C67,152 67,158 68,164', 'M132,146 C133,152 133,158 132,164'],
+    tailStripes: ['M158,170 C160,176 162,180 164,184', 'M182,142 C186,144 190,144 194,143']
+  };
+  var WALK = {
+    head: 'M128,110 C128,94 141,84 156,84 C171,84 184,94 184,110 C184,126 171,136 156,136 C141,136 128,126 128,110 Z',
+    body: 'M46,112 C46,96 66,88 96,88 C126,88 146,96 146,112 C146,128 126,136 96,136 C66,136 46,128 46,112 Z',
+    tail: 'M48,104 C30,98 20,80 28,64 C32,56 41,56 44,62 C47,68 42,71 40,75 C36,83 42,92 54,96 Z',
+    earL: 'M136,94 L134,72 L152,84 Z',
+    earR: 'M176,94 L178,72 L160,84 Z',
+    legs: ['M64,124 C62,144 62,156 64,166', 'M84,126 C82,146 82,158 84,168', 'M116,126 C114,146 114,158 116,168', 'M136,124 C138,144 138,156 136,166'],
+    mask: 'M156,80 C172,76 190,88 188,108 C182,124 162,126 154,114 C148,104 148,84 156,80 Z',
+    patchA: 'M96,84 C116,82 132,94 130,114 C112,126 92,118 88,102 C87,93 90,86 96,84 Z',
+    patchB: 'M50,112 C62,108 72,118 70,132 C60,140 48,136 44,128 Z',
+    stripes: ['M72,92 C70,100 70,110 72,118', 'M92,90 C90,100 90,112 92,120', 'M112,92 C110,100 110,110 112,118'],
+    nose: 'M152,118 C154,116 160,116 162,118 C161,123 158,125 157,125 C156,125 153,123 152,118 Z',
+    whisk: 'M172,116 L193,112 M172,122 L193,126'
+  };
+  var SLEEP = {
+    head: 'M26,140 C26,120 42,110 60,110 C78,110 92,120 92,140 C92,158 78,168 60,168 C42,168 26,158 26,140 Z',
+    body: 'M62,140 C62,116 92,106 124,106 C156,106 176,120 176,142 C176,160 152,168 120,168 C88,168 62,162 62,140 Z',
+    tail: 'M172,162 C188,160 195,146 187,136 C183,131 175,132 174,137 C173,142 178,144 179,149 C180,155 174,158 168,157 Z',
+    earL: 'M34,124 L30,104 L50,114 Z',
+    earR: 'M80,122 L86,104 L66,114 Z',
+    mask: 'M62,106 C80,104 98,116 96,134 C90,150 70,152 62,140 C56,130 56,110 62,106 Z',
+    patchA: 'M118,102 C140,100 156,112 154,132 C136,146 114,138 110,120 C109,110 112,104 118,102 Z',
+    patchB: 'M70,132 C82,128 94,138 92,152 C82,162 68,158 64,148 Z',
+    stripes: ['M100,110 C98,120 98,132 100,142', 'M120,108 C118,120 118,134 120,144', 'M140,112 C138,122 138,132 140,140'],
+    eyeL: 'M40,136 C43,143 49,143 52,136',
+    eyeR: 'M68,136 C71,143 77,143 80,136',
+    nose: 'M56,148 C57,146 63,146 64,148 C63,153 61,155 60,155 C59,155 57,153 56,148 Z',
+    whisk: 'M36,150 L16,146 M36,156 L16,160'
+  };
+
+  /* ---------- markup helpers ---------- */
+  var SEQ = 0;
+  function nextUid() { SEQ += 1; return 'lc' + SEQ; }
+  /* the ink outline — every part ends with it, so it reads as one continuous line */
+  var SK = 'stroke="' + LINE.ink + '" stroke-width="' + LINE.width + '" stroke-linejoin="round" stroke-linecap="round" fill="none"';
+  var HAIR = 'stroke="' + LINE.ink + '" stroke-width="' + LINE.hair + '" stroke-linecap="round" fill="none"';
+  var ARC = 'stroke="' + LINE.ink + '" stroke-width="' + LINE.medium + '" stroke-linecap="round" fill="none"';
+  function patAttrs(c) { return 'stroke="' + c.stripe + '" stroke-width="' + LINE.width + '" stroke-linecap="round" fill="none"'; }
+  function p(d, attrs) { return '<path d="' + d + '" ' + attrs + '/>'; }
+  function fillPath(d, color) { return '<path d="' + d + '" fill="' + color + '"/>'; }
+  function pathList(list, attrs) {
+    return list.map(function (d) { return p(d, attrs); }).join('');
+  }
+  /* pattern layers live inside a clip group — emitted ONLY when the coat asks for
+     them (never an idle opacity:0 node, which is what leaked stripes in the app). */
+  function clipped(uid, key, inner) {
+    return inner ? '<g clip-path="url(#' + uid + key + ')">' + inner + '</g>' : '';
+  }
+  /* scale about an absolute pivot — SVG transform attribute, so a copied/downloaded
+     standalone file needs no `transform-box` support. */
+  function pivotScale(sx, sy, cx, cy) {
+    return 'transform="translate(' + cx + ',' + cy + ') scale(' + sx + ',' + sy + ') translate(' + (-cx) + ',' + (-cy) + ')"';
+  }
+
+  /* ---------- per-part coat layers (shared by the hero and the baked cards) ----------
+     These are exactly LineCatHero's five coat slots; the hero re-paints them on the
+     breed answer and fades them in, the cards bake them in flat.                    */
+  function coatTail(c, u) {
+    var inner = '';
+    if (c.tailTip) inner += '<circle cx="182" cy="128" r="20" fill="' + c.accent + '"/>';
+    if (c.stripes) inner += pathList(SIT.tailStripes, patAttrs(c));
+    return fillPath(SIT.tail, c.body) + clipped(u, 'st', inner);
+  }
+  function coatBody(c, u) {
+    var inner = '';
+    if (c.patches) inner += fillPath(SIT.bodyPatchA, c.patch2) + fillPath(SIT.bodyPatchB, c.patch1);
+    if (c.socks) inner += fillPath(SIT.sockL, c.accent) + fillPath(SIT.sockR, c.accent);
+    if (c.stripes) inner += pathList(SIT.bodyStripes, patAttrs(c));
+    return fillPath(SIT.body, c.body) + clipped(u, 'sb', inner);
+  }
+  function coatEarL(c) { return fillPath(SIT.earL, c.body) + fillPath(SIT.innerL, c.inner); }
+  function coatEarR(c) {
+    return fillPath(SIT.earR, c.body) +
+      (c.mask ? fillPath(SIT.earR, c.accent) : fillPath(SIT.innerR, c.inner));
+  }
+  function coatHead(c, u) {
+    var inner = '';
+    if (c.patches) inner += fillPath(SIT.headPatch, c.patch1);
+    if (c.mask) inner += fillPath(SIT.headMask, c.accent);
+    if (c.stripes) inner += pathList(SIT.headStripes, patAttrs(c));
+    return fillPath(SIT.head, c.body) + clipped(u, 'sh', inner) +
+      (c.muzzle ? fillPath(SIT.muzzle, '#FFFFFF') : '');
+  }
+
+  /* ---------- buildLineCat(coat, pose, opts) → standalone <svg> markup ----------
+     Drawing rule that makes it read as one continuous line drawing: parts are
+     painted BACK TO FRONT and each part is [fill → pattern → stroke], so the next
+     part's fill hides the previous part's outline:  tail → body → ears → head → face
+     NEVER reorder these groups.                                                   */
+  function buildLineCat(coat, pose, opts) {
+    opts = opts || {};
+    var c = coat || LINE_COATS.plain;
+    var u = nextUid();
+    var headScale = opts.headScale == null ? 1 : opts.headScale;
+    var bodyScale = opts.bodyScale == null ? 1 : opts.bodyScale;
+    var build = opts.build == null ? 1 : opts.build;
+    var whiskers = opts.whiskers !== false;
+    var animate = opts.animate !== false;
+    var body = '';
+
+    if (pose === 'walk') {
+      var wTip = c.tailTip ? '<circle cx="32" cy="68" r="17" fill="' + c.accent + '"/>' : '';
+      var wBody = '';
+      if (c.patches) wBody += fillPath(WALK.patchA, c.patch2) + fillPath(WALK.patchB, c.patch1);
+      if (c.stripes) wBody += pathList(WALK.stripes, patAttrs(c));
+      body =
+        /* tail */
+        fillPath(WALK.tail, c.body) + clipped(u, 'wt', wTip) + p(WALK.tail, SK) +
+        /* legs */
+        pathList(WALK.legs, SK) +
+        /* body */
+        fillPath(WALK.body, c.body) + clipped(u, 'wb', wBody) + p(WALK.body, SK) +
+        /* ears */
+        fillPath(WALK.earL, c.body) + fillPath(WALK.earR, c.body) +
+        (c.mask ? fillPath(WALK.earR, c.accent) : '') +
+        p(WALK.earL, SK) + p(WALK.earR, SK) +
+        /* head */
+        fillPath(WALK.head, c.body) + clipped(u, 'wh', c.mask ? fillPath(WALK.mask, c.accent) : '') +
+        p(WALK.head, SK) +
+        /* face */
+        '<ellipse cx="147" cy="108" rx="4.2" ry="5.2" fill="' + LINE.ink + '"/>' +
+        '<ellipse cx="167" cy="108" rx="4.2" ry="5.2" fill="' + LINE.ink + '"/>' +
+        fillPath(WALK.nose, LINE.ink) +
+        (whiskers ? p(WALK.whisk, HAIR) : '');
+    } else if (pose === 'sleep') {
+      var zTip = c.tailTip ? '<circle cx="188" cy="138" r="15" fill="' + c.accent + '"/>' : '';
+      var zBody = '';
+      if (c.patches) zBody += fillPath(SLEEP.patchA, c.patch2) + fillPath(SLEEP.patchB, c.patch1);
+      if (c.stripes) zBody += pathList(SLEEP.stripes, patAttrs(c));
+      body =
+        fillPath(SLEEP.tail, c.body) + clipped(u, 'zt', zTip) + p(SLEEP.tail, SK) +
+        fillPath(SLEEP.body, c.body) + clipped(u, 'zb', zBody) + p(SLEEP.body, SK) +
+        fillPath(SLEEP.earL, c.body) + fillPath(SLEEP.earR, c.body) +
+        (c.mask ? fillPath(SLEEP.earR, c.accent) : '') +
+        p(SLEEP.earL, SK) + p(SLEEP.earR, SK) +
+        fillPath(SLEEP.head, c.body) + clipped(u, 'zh', c.mask ? fillPath(SLEEP.mask, c.accent) : '') +
+        p(SLEEP.head, SK) +
+        p(SLEEP.eyeL, ARC) + p(SLEEP.eyeR, ARC) + fillPath(SLEEP.nose, LINE.ink) +
+        (whiskers ? p(SLEEP.whisk, HAIR) : '') +
+        '<text x="146" y="84" font-size="20" font-weight="700" fill="' + LINE.ink + '" font-family="system-ui, sans-serif">z</text>' +
+        '<text x="168" y="62" font-size="13" font-weight="700" fill="' + LINE.ink + '" font-family="system-ui, sans-serif">z</text>';
+    } else {
+      /* sit — the canonical pose */
+      var tail = coatTail(c, u) + p(SIT.tail, SK);
+      var eyes = '<ellipse cx="85" cy="70" rx="4.6" ry="5.8" fill="' + LINE.ink + '"/>' +
+                 '<ellipse cx="115" cy="70" rx="4.6" ry="5.8" fill="' + LINE.ink + '"/>';
+      body =
+        /* tail — swayed on the baked cards (transform-box:fill-box, app pivot 137,152) */
+        (animate
+          ? '<g class="a-sway" style="transform-box:fill-box;transform-origin:2% 60%;animation-duration:3.8s">' + tail + '</g>'
+          : tail) +
+        /* body */
+        '<g ' + pivotScale((build * bodyScale).toFixed(3), bodyScale.toFixed(3), 100, 187) + '>' +
+          coatBody(c, u) + p(SIT.legL, SK) + p(SIT.legR, SK) + p(SIT.body, SK) +
+        '</g>' +
+        /* ears + head */
+        '<g ' + pivotScale(headScale.toFixed(3), headScale.toFixed(3), 100, 90) + '>' +
+          coatEarL(c) + coatEarR(c) + p(SIT.earL, SK) + p(SIT.earR, SK) +
+          coatHead(c, u) + p(SIT.head, SK) +
+          /* face — the eyes group's own bbox centre IS the app's (100,70) blink pivot */
+          (animate
+            ? '<g class="a-blink" style="transform-box:fill-box;transform-origin:50% 50%">' + eyes + '</g>'
+            : eyes) +
+          fillPath(SIT.nose, LINE.ink) + p(SIT.mouth, HAIR) +
+          (whiskers ? p(SIT.whisk, HAIR) : '') +
+        '</g>';
+    }
+
+    var clips = pose === 'walk'
+      ? '<clipPath id="' + u + 'wt"><path d="' + WALK.tail + '"/></clipPath>' +
+        '<clipPath id="' + u + 'wb"><path d="' + WALK.body + '"/></clipPath>' +
+        '<clipPath id="' + u + 'wh"><path d="' + WALK.head + '"/></clipPath>'
+      : pose === 'sleep'
+      ? '<clipPath id="' + u + 'zt"><path d="' + SLEEP.tail + '"/></clipPath>' +
+        '<clipPath id="' + u + 'zb"><path d="' + SLEEP.body + '"/></clipPath>' +
+        '<clipPath id="' + u + 'zh"><path d="' + SLEEP.head + '"/></clipPath>'
+      : '<clipPath id="' + u + 'st"><path d="' + SIT.tail + '"/></clipPath>' +
+        '<clipPath id="' + u + 'sb"><path d="' + SIT.body + '"/></clipPath>' +
+        '<clipPath id="' + u + 'sh"><path d="' + SIT.head + '"/></clipPath>';
+
+    if (opts.fragment) return { defs: clips, body: body };
+    return '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
+      (opts.label || (c.en + ' line-art cat')) + '"><defs>' + clips + '</defs>' + body + '</svg>';
+  }
+
+  /* ---------- shape math (presets.ts, verbatim) ---------- */
+  var AGE_SHAPE = { kitten:{ head:1.15, body:0.86 }, adult:{ head:1.0, body:1.0 }, senior:{ head:0.98, body:0.95 } };
+  function clampWeightKg(kg) { return Math.min(10, Math.max(1, kg)); }
+  /* 1 kg slender → 10 kg round */
+  function weightToBuild(kg) { return 0.86 + (clampWeightKg(kg) - 1) / 9 * 0.34; }
+
+  /* expose for the temporary build harness / console checks */
+  window.__lineCat = { build: buildLineCat, coats: LINE_COATS, order: COAT_ORDER, derive: deriveLineCoat, weightToBuild: weightToBuild, AGE_SHAPE: AGE_SHAPE };
 
   /* ---------- palettes & breed presets ---------- */
   /* Palettes follow the brand baseline (Wreath wordmark / Home-screen tabby):
