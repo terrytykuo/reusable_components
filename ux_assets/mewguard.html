@@ -1536,17 +1536,22 @@
     <div class="sec-eyebrow">Interactive prototype · Add-cat flow</div>
     <h2>Cat avatar — a cat assembled from answers</h2>
     <p class="sec-lede">
-      A <b>parametric SVG cat</b> for the add-cat flow redesign. Every answer unlocks part of the cat:
-      the <b>name</b> wakes the face, <b>age</b> sets head-to-body proportions, <b>weight</b> sets the build,
-      <b>breed</b> paints coat, pattern and ears — while <b>sex</b> deliberately maps to no visual (the cat
-      just reacts). The parameter set (coat / pattern / ear / body / age) is exactly what a
-      <code>users/{uid}/cats</code> doc would store, so the same renderer can double as the app-wide
-      <b>persistent avatar</b> whenever a cat has no photo. Face language and palette follow the brand mark — almond eyes with upright pupils, coral blush, ochre tabby stripes, and the red MewGuard bandana tied on at Generate (a param the owner can turn off). Structure maps ~1:1 to
-      <code>react-native-svg</code>; the transform animations map to Reanimated.
+      A <b>parametric SVG cat</b> for the add-cat flow, drawn in <b>line art — style 1a「淨線 Clean」</b>,
+      the direction now shipping in the app. The identity model is the interesting part: <b>every cat is
+      the same drawing</b> — a white body inside a 5&nbsp;px <code>#1E1B18</code> outline — and identity
+      comes entirely from the colour laid on top, six <b>pattern switches</b> (stripes / patches / mask /
+      socks / tailTip / muzzle) over three <b>colour slots</b>. So <b>breed drives colour only</b>: there is
+      no breed shape morph, which leaves <b>age</b> and <b>weight</b> as the sole shape inputs and makes the
+      coat reveal a pure fade over an unchanging silhouette. Each answer unlocks one stage — the
+      <b>name</b> wakes the face, <b>age</b> sets head-to-body proportions, <b>weight</b> sets the build,
+      <b>breed</b> paints the coat, and <b>sex</b> deliberately maps to no visual (the cat just reacts).
+      That parameter set is exactly what a <code>users/{uid}/cats</code> doc would store, so the same
+      renderer doubles as the app-wide <b>persistent avatar</b> whenever a cat has no photo. Structure maps
+      ~1:1 to <code>react-native-svg</code>; the transform animations map to Reanimated.
     </p>
     <div class="tags">
       <span class="tag brand">mewguard</span><span class="tag">cat-avatar</span>
-      <span class="tag">parametric</span><span class="tag">react-native-svg</span>
+      <span class="tag">line-art</span><span class="tag">parametric</span><span class="tag">react-native-svg</span>
     </div>
 
     <article class="cat-panel lab">
