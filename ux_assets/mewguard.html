@@ -265,6 +265,9 @@
   .catlab .sec-lede b { color: var(--text); }
   .catlab > .tags { margin-top: 14px; }
 
+  /* the poses card holds two 200×200 poses in one 400×200 document */
+  .catlab .stage.duo svg { width: 260px; height: 130px; }
+
   .cat-panel {
     background: var(--panel); border: 1px solid var(--border); border-radius: 18px;
     overflow: hidden; box-shadow: 0 1px 2px rgba(44,24,16,.05); margin-top: 22px;
@@ -419,7 +422,7 @@
   }
   .ava {
     width: 52px; height: 52px; border-radius: 50%; background: var(--cat-soft);
-    display: flex; align-items: flex-end; justify-content: center; overflow: hidden; flex: none;
+    display: flex; align-items: center; justify-content: center; overflow: hidden; flex: none;
   }
   .ava svg { width: 46px; height: 46px; display: block; }
   .rowcard .meta { flex: 1; min-width: 0; }
@@ -433,6 +436,8 @@
 
   /* ---- honor the three global preview toggles ---- */
   body.motion-paused .catlab svg *, body.motion-paused .catlab .sparkle-layer span { animation-play-state: paused !important; }
+  /* baked cats live in .stage svg (cards, covered globally) AND in .ava (legibility mock) */
+  body.motion-reduced .catlab .a-blink, body.motion-reduced .catlab .a-sway { animation: none !important; }
   body.motion-reduced .catlab .g-breath,
   body.motion-reduced .catlab .awake .g-tail,
   body.motion-reduced .catlab .react .g-earL, body.motion-reduced .catlab .react .g-earR,
@@ -1566,75 +1571,75 @@
 
     <div class="grid" id="catBreedGrid">
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="mixed"></div>
+        <div class="stage" data-coat="tora"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Mixed / unknown</div>
-          <p class="goal">The graceful default — a black cat with green eyes, continuous with the flow's opening silhouette.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">mixed</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">虎斑橘 · Orange tabby</div>
+          <p class="goal">Warm orange body <code>#EFA45C</code> with ochre stripes across forehead, chest and tail, plus a white muzzle. Switches: <b>stripes</b>, <b>muzzle</b>.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">tora</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="british"></div>
+        <div class="stage" data-coat="mike"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">British Shorthair</div>
-          <p class="goal">Warm-gray solid coat, copper eyes, rounder head and build.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">british-shorthair</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">三花 · Calico</div>
+          <p class="goal">White body left bare, one ginger and one charcoal patch laid inside the body clip, charcoal tail tip. Switches: <b>patches</b>, <b>tailTip</b>.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">mike</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="american"></div>
+        <div class="stage" data-coat="kuro"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">American Shorthair</div>
-          <p class="goal">Warm-silver tabby: forehead M, flank stripes, ringed tail — brand-green eyes.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">american-shorthair</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">賓士 · Tuxedo</div>
+          <p class="goal">White body with a charcoal mask over the right ear and forehead — the eye-patch cat — and a charcoal tail tip. Switches: <b>mask</b>, <b>tailTip</b>.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">kuro</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="ragdoll"></div>
+        <div class="stage" data-coat="nabe"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Ragdoll</div>
-          <p class="goal">Cream coat with gray-brown points, blue eyes, cheek fluff.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">ragdoll</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">奶油 · Cream tabby</div>
+          <p class="goal">The tabby recipe on a cream body <code>#F7DDA6</code> with soft gold stripes — same switches as 虎斑橘, different colour slots. Switches: <b>stripes</b>, <b>muzzle</b>.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">nabe</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="persian"></div>
+        <div class="stage" data-coat="hai"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Persian</div>
-          <p class="goal">Cream and fluffy, with an extra-wide face.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">persian</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">灰襪 · Grey socks</div>
+          <p class="goal">The busiest recipe: white body, grey stripes, grey socks on both front paws and a grey tail tip. Switches: <b>stripes</b>, <b>socks</b>, <b>tailTip</b>.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">hai</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="maine"></div>
+        <div class="stage" data-coat="shama"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Maine Coon</div>
-          <p class="goal">Brown tabby, the biggest build, ear tufts.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">maine-coon</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">重點色 · Colour-point</div>
+          <p class="goal">Warm-ivory body <code>#F6EBDA</code> with taupe points — the same <b>mask</b> + <b>tailTip</b> pair as 賓士, softened by two colour slots. Where Siamese, Ragdoll and Persian all land.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">shama</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="siamese"></div>
+        <div class="stage" data-coat="plain"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Siamese</div>
-          <p class="goal">Cream body, seal points and muzzle mask, blue eyes, slender.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">siamese</span></div>
+          <div class="kind">Cat avatar · Coat recipe</div>
+          <div class="name">白貓 · White</div>
+          <p class="goal">Every pattern switch off: the bare line drawing every cat starts as — white body, 5&nbsp;px <code>#1E1B18</code> outline, white muzzle. The fallback when nothing is known.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">plain</span></div>
         </div>
       </article>
       <article class="card" data-cat="cat-avatar" style="--c:var(--green)">
-        <div class="stage" data-breed="fold"></div>
+        <div class="stage duo" data-poses="1"></div>
         <div class="body">
-          <div class="kind">Cat avatar · Breed preset</div>
-          <div class="name">Scottish Fold</div>
-          <p class="goal">Folded ears on a warm-gray coat, amber eyes.</p>
-          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">scottish-fold</span></div>
+          <div class="kind">Cat avatar · Poses</div>
+          <div class="name">Walk &amp; sleep</div>
+          <p class="goal">All three poses share the 200×200 box, so a cat can swap pose in place. Only <code>sit</code> carries the full pattern set — walk and sleep take mask, patches and stripes, and drop socks and muzzle.</p>
+          <div class="tags"><span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">poses</span></div>
         </div>
       </article>
     </div>
@@ -2122,9 +2127,12 @@
       var wBody = '';
       if (c.patches) wBody += fillPath(WALK.patchA, c.patch2) + fillPath(WALK.patchB, c.patch1);
       if (c.stripes) wBody += pathList(WALK.stripes, patAttrs(c));
+      var wTail = fillPath(WALK.tail, c.body) + clipped(u, 'wt', wTip) + p(WALK.tail, SK);
       body =
-        /* tail */
-        fillPath(WALK.tail, c.body) + clipped(u, 'wt', wTip) + p(WALK.tail, SK) +
+        /* tail — a walking cat's tail sways from its base (WALK pivot ≈ 52,100) */
+        (animate
+          ? '<g class="a-sway" style="transform-box:fill-box;transform-origin:94% 91%;animation-duration:3.8s">' + wTail + '</g>'
+          : wTail) +
         /* legs */
         pathList(WALK.legs, SK) +
         /* body */
@@ -2185,21 +2193,20 @@
         '</g>';
     }
 
-    var clips = pose === 'walk'
-      ? '<clipPath id="' + u + 'wt"><path d="' + WALK.tail + '"/></clipPath>' +
-        '<clipPath id="' + u + 'wb"><path d="' + WALK.body + '"/></clipPath>' +
-        '<clipPath id="' + u + 'wh"><path d="' + WALK.head + '"/></clipPath>'
-      : pose === 'sleep'
-      ? '<clipPath id="' + u + 'zt"><path d="' + SLEEP.tail + '"/></clipPath>' +
-        '<clipPath id="' + u + 'zb"><path d="' + SLEEP.body + '"/></clipPath>' +
-        '<clipPath id="' + u + 'zh"><path d="' + SLEEP.head + '"/></clipPath>'
-      : '<clipPath id="' + u + 'st"><path d="' + SIT.tail + '"/></clipPath>' +
-        '<clipPath id="' + u + 'sb"><path d="' + SIT.body + '"/></clipPath>' +
-        '<clipPath id="' + u + 'sh"><path d="' + SIT.head + '"/></clipPath>';
+    /* only the clips this coat actually references — a bare `plain` cat ships none */
+    var pool = pose === 'walk' ? { wt: WALK.tail, wb: WALK.body, wh: WALK.head }
+             : pose === 'sleep' ? { zt: SLEEP.tail, zb: SLEEP.body, zh: SLEEP.head }
+             : { st: SIT.tail, sb: SIT.body, sh: SIT.head };
+    var clips = Object.keys(pool).filter(function (k) {
+      return body.indexOf('url(#' + u + k + ')') >= 0;
+    }).map(function (k) {
+      return '<clipPath id="' + u + k + '"><path d="' + pool[k] + '"/></clipPath>';
+    }).join('');
 
     if (opts.fragment) return { defs: clips, body: body };
     return '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
-      (opts.label || (c.en + ' line-art cat')) + '"><defs>' + clips + '</defs>' + body + '</svg>';
+      (opts.label || (c.en + ' line-art cat')) + '">' +
+      (clips ? '<defs>' + clips + '</defs>' : '') + body + '</svg>';
   }
 
   /* ---------- shape math (presets.ts, verbatim) ---------- */
@@ -2400,21 +2407,6 @@
           '<g class="g-bandana tb">' + partsBandana(false) + '</g>' + partsHead(v, [], false, false) + '</g>' +
       '</g></svg>';
   }
-  /* static build: only the needed layers, colors baked in, gallery a-blink / a-sway classes */
-  function buildStaticSVG(preset, label) {
-    var c = Object.assign({}, COATS[preset.coat]);
-    if (preset.eye) c.eye = preset.eye;
-    var flags = c.flags;
-    var bx = preset.body, by = Math.min(preset.body, 1.06), hs = preset.head;
-    return '<svg viewBox="0 0 240 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + label + ' cat avatar preset">' +
-      '<ellipse cx="120" cy="240" rx="60" ry="7" fill="currentColor" opacity="0.08"/>' +
-      '<g class="a-sway" style="' + FB + 'transform-origin:8% 88%;animation-duration:5.5s">' + partsTail(c, flags, true) + '</g>' +
-      '<g style="' + FB + 'transform-origin:50% 96%;transform:scale(' + bx + ',' + by + ')">' + partsBody(c, flags, true) + '</g>' +
-      '<g style="' + FB + 'transform-origin:50% 62%;transform:scale(' + hs + ')">' +
-        partsEars(c, preset.ear, !!preset.tufts, true) + partsBandana(true) + partsHead(c, flags, true, !!preset.kitten) +
-      '</g></svg>';
-  }
-
   /* ---------- hero state & flow ---------- */
   var hero = document.getElementById('heroCat');
   if (!hero) return;
@@ -2666,23 +2658,37 @@
   applyShape();
   render();
 
-  /* ---------- breed preset cards ---------- */
-  BREEDS.forEach(function (b) {
-    var stage = document.querySelector('#catBreedGrid .stage[data-breed="' + b.id + '"]');
-    if (stage) stage.innerHTML = buildStaticSVG(b, b.label);
+  /* ---------- coat recipe cards (baked: only the layers this coat needs) ---------- */
+  COAT_ORDER.forEach(function (id) {
+    var c = LINE_COATS[id];
+    var stage = document.querySelector('#catBreedGrid .stage[data-coat="' + id + '"]');
+    if (stage) stage.innerHTML = buildLineCat(c, 'sit', { label: c.label + ' / ' + c.en });
   });
+  /* the poses card — walk + sleep in one 400×200 document so Copy SVG stays one file */
+  var duo = document.querySelector('#catBreedGrid .stage[data-poses]');
+  if (duo) {
+    var wk = buildLineCat(LINE_COATS.tora, 'walk', { fragment: true });
+    var zz = buildLineCat(LINE_COATS.mike, 'sleep', { fragment: true });
+    duo.innerHTML = '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img"' +
+      ' aria-label="line-art cat — walk and sleep poses">' +
+      '<defs>' + wk.defs + zz.defs + '</defs>' +
+      '<g>' + wk.body + '</g><g transform="translate(200,0)">' + zz.body + '</g></svg>';
+  }
 
   /* ---------- size-legibility mock ---------- */
   var LIST = [
-    { name:'Mochi', tag:'Orange tabby · 2 yrs', preset:{ id:'m1', label:'Mochi', coat:'orange', ear:'point', body:1.02, head:1.0 } },
-    { name:'Tama',  tag:'British Shorthair · 5 yrs', preset: breedById('british') },
-    { name:'Luna',  tag:'Mixed · 1 yr', preset: breedById('mixed') }
+    { name:'Mochi', tag:'虎斑橘 · Orange tabby · 2 yrs', coat:'tora',  age:'adult',  kg:4.2 },
+    { name:'Tama',  tag:'灰襪 · Grey socks · 5 yrs',      coat:'hai',   age:'adult',  kg:5.5 },
+    { name:'Luna',  tag:'三花 · Calico · 8 months',       coat:'mike',  age:'kitten', kg:2.6 }
   ];
   var list = document.getElementById('catListMock');
   LIST.forEach(function (item) {
+    var age = AGE_SHAPE[item.age];
     var row = document.createElement('div'); row.className = 'rowcard';
     var ava = document.createElement('div'); ava.className = 'ava';
-    ava.innerHTML = buildStaticSVG(item.preset, item.name);
+    ava.innerHTML = buildLineCat(LINE_COATS[item.coat], 'sit', {
+      label: item.name, headScale: age.head, bodyScale: age.body, build: weightToBuild(item.kg)
+    });
     row.appendChild(ava);
     var meta = document.createElement('div'); meta.className = 'meta';
     var nm = document.createElement('b'); nm.textContent = item.name;
@@ -2693,9 +2699,10 @@
     list.appendChild(row);
   });
   var tiny = document.getElementById('catTinyRow');
-  BREEDS.forEach(function (b) {
+  COAT_ORDER.forEach(function (id) {
+    var c = LINE_COATS[id];
     var ava = document.createElement('div'); ava.className = 'ava t32';
-    ava.innerHTML = buildStaticSVG(b, b.label);
+    ava.innerHTML = buildLineCat(c, 'sit', { label: c.label + ' / ' + c.en, whiskers: false });
     tiny.appendChild(ava);
   });
 })();
