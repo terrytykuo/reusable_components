@@ -203,7 +203,8 @@ A recurring cat mascot is the face of "we've got you."
 **唯一例外:** 下方 **Cat avatar** 區段 2026-08 起改用 line art「淨線 1a」,是使用者的貓(不是吉祥物
 Mew),**不戴紅領巾**,配色由 coat 配方決定;它仍引用 wordmark 的葉飾與寶石花當生成時刻的花圈。
 
-**Status:** 32 journey assets + 8 cat-avatar cards(7 coat 配方 + 1 poses,見下方 Cat avatar 區段)+ 14 raster-archive
+**Status:** 32 journey assets + 8 cat-avatar cards(7 coat 配方 + 1 poses,另有 6×6 coat customizer 面板,
+見下方 Cat avatar 區段)+ 14 raster-archive
 cards(前期 PNG 檔案庫,見下方 App raster 區段). **Tag:** every asset carries the `mewguard` brand tag.
 
 | # | Asset | Stage | Kind | UX payoff |
@@ -255,36 +256,53 @@ cat doc,對應永久 `<CatAvatar>` 元件(無照片時取代通用貓 icon)。
 畫風是 **line art「style 1a 淨線 Clean」**(2026-08 遷移定案,已在 app 上線)。識別模型是重點:
 **每隻貓都是同一張圖**——白身 + 5px `#1E1B18` 描邊,三個 pose(sit / walk / sleep)共用同一個
 200×200 viewBox,所以貓可以原地換 pose;差異全來自鋪在上面的顏色,**6 個 pattern 開關**
-(stripes / patches / mask / socks / tailTip / muzzle)× **3 個色 slot**。因此 **`breed` 只驅動顏色**
-——沒有品種形變,`age` 與 `weight` 是唯一的形狀輸入,上色階段就只是一層不動輪廓的 opacity 淡入
+(stripes / patches / mask / socks / tailTip / muzzle)× **3 個色 slot**。因此 **coat 只驅動顏色**
+——沒有形變,`age` 與 `weight` 是唯一的形狀輸入,上色階段就只是一層不動輪廓的 opacity 淡入
 (不需要舊填色版的 prev/cur crossfade)。繪製規則:由後往前、每個部位 **[fill → pattern → stroke]**,
 `tail → body → ears → head → face`,**順序絕不能動**(下一個部位的 fill 蓋掉上一個的描邊,整隻貓
 才讀起來像一筆連續線稿)。pattern 圖層一律**條件生成**,不留 `opacity:0` 的閒置節點。
 
-三個子區塊:①**創造儀式模擬**——依 flow 順序(名字→年齡→體重→性別→品種→生成)走完
+四個子區塊:①**創造儀式模擬**——依 flow 順序(名字→年齡→體重→性別→外觀→生成)走完
 `lineSpec.ts` 的五段 unlock stage:「白線稿剪影 → 命名甦醒(眼/鼻/嘴/鬍鬚每 80ms 依序彈出、
 隨機眨眼、尾巴擺動)→ 體態成形(`AGE_SHAPE` 縮放頭/身群組)→ 體型(`weightToBuild` 只加寬身體)
-→ 品種上色(app 真實 `BREED_OPTIONS` 經 `BREED_TO_COAT` 解析成 7 種 coat 之一,填進 5 個
-`.g-coat` slot 後淡入)→ 魔法生成(joy pop + 光圈 + **wordmark 半圈花圈依序綻放**)」,性別刻意
+→ 外觀上色(**兩軸 CoatPicker**:pattern chip 列 + colour dot 列,`composeLineCoat()` 即時合成後
+填進 5 個 `.g-coat` slot 淡入;預設 `tabby`+`orange` 在進入該題時就先塗好)→ 魔法生成(joy pop +
+光圈 + **wordmark 半圈花圈依序綻放**)」,性別刻意
 不做外觀對應(避免刻板印象)改以 ear twitch + hop 回應;②**七張 coat 配方卡 + 一張 Poses 卡**
 (共 8 張,版面節奏不變)——虎斑橘 `tora` / 三花 `mike` / 賓士 `kuro` / 奶油 `nabe` / 灰襪 `hai` /
 重點色 `shama` / 白貓 `plain` 各一張 sit 卡,Poses 卡把 walk + sleep 併在同一份 400×200 文件裡
 (Copy SVG 才是單檔),都是正規 gallery 卡片,**Copy SVG / Download 輸出的檔案自帶眨眼與尾巴動畫**;
-③**縮小可讀性測試**——52px 列表(帶真實 age/weight 係數)與 32px 全七配方條帶。互動區段由
+③**Coat customizer 面板**(錨點 `#coat-customizer`,見下段);④**縮小可讀性測試**——52px 列表
+(帶真實 age/weight 係數)與 32px 全七配方條帶。互動區段由
 vanilla JS 驅動(仍零外部依賴),遵守頁面的 Pause / Dark stage / Reduce motion 三個預覽開關與
 `prefers-reduced-motion`。
+
+**Coat customizer(兩軸,2026-08-14 由 app 回寫):** add-cat flow 第 5 頁不再問品種,改問「What does
+{name} look like?」,兩軸各一列——**6 pattern**(`solid` / `tabby` / `tuxedo` / `calico`(Patches)/
+`socks` / `point`(Colorpoint))× **6 colour**(`white` / `orange` / `cream` / `grey` / `black` / `brown`)
+= **36 種組合**。沒有任何一格是手繪的:每個顏色帶一組三階色票 `{ main, dark, light }`,每個 pattern 是
+一條固定配方,`composeLineCoat(pattern, colour)` 機械地填進同一組 6 開關 / 3 色 slot。面板把 36 格全部
+烤出來(靜態、不動,當規格表用),再附色票表與配方表。**White 特例:** `main` 是 `#FFFFFF`,畫在白身上
+會隱形,所以**畫在剪影之上**的 slot(`accent`、`patch1`)改用 `dark` `#C9CCCB`;`body`(畫的就是剪影本身)
+維持 `main`;picker 圓點另用第三個值 `#F3F2EF`,白貓才在白卡上看得見。**預設** `tabby`+`orange`,進題就
+先塗好。**優先序:** `coatPattern` + `coatColor` 兩個都合法 → `composeLineCoat()`;否則(舊 doc、只填一半)
+回退 `deriveLineCoat(breed, seed)` → 七張配方卡 → 名字 hash;新貓寫 `coatPattern`/`coatColor`,不再寫
+`breed`。**與七張配方卡的關係:** 四張逐字重現(虎斑橘 = `tabby:orange`、奶油 = `tabby:cream`、
+三花 = `calico:orange`、白貓 = `solid:white`),三張差一階(賓士 `tuxedo:black` accent/stripe 對調、
+灰襪 `socks:grey` 條紋更深、重點色 `point:brown` mask 略偏),所以兩組並存不合併——配方卡仍是舊貓的正本。
 
 **技術對應:** SVG 結構 ↔ `react-native-svg` 幾乎 1:1;hero 的 pivot 直接寫 app 的 200×200 座標
 (靠 `transform-box: view-box`),對應 `LineCatHero` 的 `O` 表;transform 動畫 ↔ Reanimated;
 魔法粒子建議換用現成 Lottie(見 `lottie/`)。
 **Status:** line-art 1a 淨線,與 `cat_toxin_app/components/cat-avatar/` 同步(2026-08-12 由 app
-反向回寫正本,消除 2026-08-02 遷移造成的 drift)。path 資料逐字對應 `LineCat.tsx`、配方對應
-`lineCoats.ts`、五段 reveal 對應 `lineSpec.ts`、時序常數對應 `presets.ts`。
+反向回寫正本,消除 2026-08-02 遷移造成的 drift;2026-08-14 再回寫兩軸 coat customizer)。path 資料逐字對應
+`LineCat.tsx`、配方對應 `lineCoats.ts`、兩軸合成對應 `coatComposer.ts`、picker 版面對應 `CoatPicker.tsx`、
+優先序對應 `deriveAvatarParams.ts`、五段 reveal 對應 `lineSpec.ts`、時序常數對應 `presets.ts`。
 **與 app 的兩處已知差異:** ①**bandana 已移除**(line art 1a 不戴項圈,遷移決定 #3);
 ②**wordmark 半圈花圈保留**,是生成時刻的正本規格,**app 端尚未 port(follow-up)**。
 **Canonical source:** 此區段即唯一正本,後續迭代直接改 `mewguard.html`,再 port 回 app。
 **Tag:** 區段與八張卡皆帶 `cat-avatar`(加上 `mewguard` 品牌 tag);卡片 tag 用 coat id
-(`tora`/`mike`/`kuro`/`nabe`/`hai`/`shama`/`plain`/`poses`)。
+(`tora`/`mike`/`kuro`/`nabe`/`hai`/`shama`/`plain`/`poses`),customizer 面板另帶 `coat-customizer`。
 
 ### App raster — 前期 PNG 資產檔案庫(`mewguard-raster/`,tag `app-raster`)
 

@@ -433,6 +433,45 @@
   .tinyrow .ava.t32 svg { width: 30px; height: 30px; }
   .tinyrow small { color: var(--faint); }
 
+  /* ---- coat customizer (two axes: pattern × colour) ---- */
+  .coat-dots { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .coat-dot {
+    width: 40px; height: 40px; border-radius: 50%; padding: 0; cursor: pointer;
+    border: 1.5px solid var(--border); font: inherit; font-size: 16px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; transition: all .18s;
+  }
+  .coat-dot:hover { transform: scale(1.06); }
+  .coat-dot.on { border-width: 2.5px; border-color: var(--green); }
+  .coat-matrix {
+    display: grid; grid-template-columns: 84px repeat(6, minmax(0, 1fr));
+    gap: 6px; margin: 18px 0 6px; max-width: 620px;
+  }
+  .coat-matrix .mh {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    font-size: 11.5px; font-weight: 700; color: var(--faint); text-align: center; line-height: 1.2;
+  }
+  .coat-matrix .mh.row { align-items: flex-start; justify-content: center; text-align: left; }
+  .coat-matrix .ava { width: 100%; height: auto; aspect-ratio: 1 / 1; border-radius: 13px; }
+  .coat-matrix .ava svg { width: 86%; height: 86%; }
+  .coat-swatch {
+    width: 14px; height: 14px; border-radius: 50%; display: inline-block;
+    border: 1px solid var(--border); vertical-align: -2px; margin-right: 7px;
+  }
+  .coat-matrix .coat-swatch { margin-right: 0; }
+  .coat-spec {
+    width: 100%; max-width: 620px; border-collapse: collapse; margin-top: 18px; font-size: 12.5px;
+  }
+  .coat-spec th, .coat-spec td {
+    text-align: left; padding: 7px 12px 7px 0; border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  .coat-spec th {
+    color: var(--faint); font-size: 10.5px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .09em; line-height: 1.5;
+  }
+  .coat-spec th small { font-weight: 600; text-transform: none; letter-spacing: 0; opacity: .8; }
+  .coat-spec td small { color: var(--faint); }
+  .coat-spec td:first-child { font-weight: 700; white-space: nowrap; }
+
   /* ---- honor the three global preview toggles ---- */
   body.motion-paused .catlab svg *, body.motion-paused .catlab .sparkle-layer span { animation-play-state: paused !important; }
   /* baked cats live in .stage svg (cards, covered globally) AND in .ava (legibility mock) */
@@ -1540,11 +1579,13 @@
       the direction now shipping in the app. The identity model is the interesting part: <b>every cat is
       the same drawing</b> — a white body inside a 5&nbsp;px <code>#1E1B18</code> outline — and identity
       comes entirely from the colour laid on top, six <b>pattern switches</b> (stripes / patches / mask /
-      socks / tailTip / muzzle) over three <b>colour slots</b>. So <b>breed drives colour only</b>: there is
-      no breed shape morph, which leaves <b>age</b> and <b>weight</b> as the sole shape inputs and makes the
+      socks / tailTip / muzzle) over three <b>colour slots</b>. So <b>the coat drives colour only</b>: there
+      is no shape morph, which leaves <b>age</b> and <b>weight</b> as the sole shape inputs and makes the
       coat reveal a pure fade over an unchanging silhouette. Each answer unlocks one stage — the
       <b>name</b> wakes the face, <b>age</b> sets head-to-body proportions, <b>weight</b> sets the build,
-      <b>breed</b> paints the coat, and <b>sex</b> deliberately maps to no visual (the cat just reacts).
+      <b>appearance</b> paints the coat on two axes (<b>6 patterns × 6 colours</b> — the customizer panel
+      below; it replaced the old breed question), and <b>sex</b> deliberately maps to no visual (the cat
+      just reacts).
       That parameter set is exactly what a <code>users/{uid}/cats</code> doc would store, so the same
       renderer doubles as the app-wide <b>persistent avatar</b> whenever a cat has no photo. Structure maps
       ~1:1 to <code>react-native-svg</code>; the transform animations map to Reanimated.
@@ -1650,6 +1691,72 @@
         </div>
       </article>
     </div>
+
+    <!-- ---- coat customizer: the two-axis picker that replaced the breed question ---- -->
+    <article class="cat-panel" id="coat-customizer">
+      <div class="cat-sizes">
+        <div class="kind" style="color:var(--green)">Cat avatar · Coat customizer</div>
+        <div class="name">兩軸客製 — 6 patterns × 6 colours</div>
+        <p class="goal">
+          Page 5 of the add-cat flow no longer asks a <b>breed</b>; it asks <b>“What does {name} look
+          like?”</b> and offers two axes — a <b>pattern</b> chip row over a <b>colour</b> dot row. The 36
+          cats below are not 36 hand-authored recipes: every colour ships a three-tone palette
+          <code>{ main, dark, light }</code>, every pattern is a fixed formula over those three tones, and
+          <code>composeLineCoat(pattern, colour)</code> fills the same six switches and three colour slots
+          the seven presets above use. An owner describes the cat in front of them instead of guessing a
+          pedigree — 黑襪、白三花、灰重點色 are all sayable now.
+        </p>
+        <div class="coat-matrix" id="coatMatrix"></div>
+        <p class="q-note">
+          <b>White is the one special case.</b> Its <code>main</code> is <code>#FFFFFF</code>, which would
+          vanish on the white body, so every slot that <b>paints on top of</b> the silhouette
+          (<code>accent</code>, <code>patch1</code>) takes <code>dark</code> <code>#C9CCCB</code> instead —
+          <code>body</code>, which paints the silhouette itself, keeps <code>main</code>. The picker dot is
+          a third value again (<code>#F3F2EF</code>), so a white cat is visible on a white card.
+        </p>
+        <table class="coat-spec">
+          <thead><tr><th>Colour</th><th>main<br><small>body</small></th><th>dark<br><small>stripes / points</small></th><th>light<br><small>point body</small></th><th>picker dot</th></tr></thead>
+          <tbody id="coatPaletteRows"></tbody>
+        </table>
+        <table class="coat-spec">
+          <thead><tr><th>Pattern</th><th>Slots</th><th>Switches</th></tr></thead>
+          <tbody>
+            <tr><td>Solid</td><td><code>body ← main</code></td><td><code>muzzle</code></td></tr>
+            <tr><td>Tabby <small>(default)</small></td><td><code>body ← main</code> · <code>stripe ← dark</code></td><td><code>stripes</code> + <code>muzzle</code></td></tr>
+            <tr><td>Tuxedo</td><td><code>accent ← paint</code> · <code>stripe ← dark</code></td><td><code>mask</code> + <code>tailTip</code></td></tr>
+            <tr><td>Patches <small>(calico)</small></td><td><code>patch1 ← paint</code> · <code>patch2</code>, <code>accent ← #2E2A28</code></td><td><code>patches</code> + <code>tailTip</code></td></tr>
+            <tr><td>Socks</td><td><code>accent ← paint</code> · <code>stripe ← dark</code></td><td><code>stripes</code> + <code>socks</code> + <code>tailTip</code></td></tr>
+            <tr><td>Colorpoint</td><td><code>body ← light</code> · <code>accent</code>, <code>stripe ← dark</code></td><td><code>mask</code> + <code>tailTip</code></td></tr>
+          </tbody>
+        </table>
+        <p class="q-note">
+          <code>paint</code> = <code>main</code>, or <code>dark</code> when the colour is white (above).
+          Unlisted slots stay at <code>COAT_BASE</code> — white body, transparent accent, pink inner ear.
+          Coat <b>id</b> is <code>pattern:colour</code> (<code>tabby:orange</code>) and <b>label</b> is
+          <code>&quot;Orange Tabby&quot;</code>.
+        </p>
+        <p class="q-note">
+          <b>Default:</b> <code>tabby</code> + <code>orange</code>, seeded the moment the question opens so
+          the cat arrives painted rather than blank. <b>Precedence:</b> a valid
+          <code>coatPattern</code> <i>and</i> <code>coatColor</code> pair wins → <code>composeLineCoat()</code>;
+          anything else (legacy doc, half-filled pair) falls back to
+          <code>deriveLineCoat(breed, seed)</code> → the seven presets above → a deterministic name hash.
+          New cats persist <code>coatPattern</code>/<code>coatColor</code> and no longer write
+          <code>breed</code> at all.
+        </p>
+        <p class="q-note">
+          <b>Against the seven presets:</b> four are reproduced verbatim — 虎斑橘 = <code>tabby:orange</code>,
+          奶油 = <code>tabby:cream</code>, 三花 = <code>calico:orange</code>, 白貓 = <code>solid:white</code>.
+          Three are near-misses by one palette step, because the composer derives the second tone instead of
+          hand-picking it: 賓士 (<code>tuxedo:black</code> swaps accent and stripe), 灰襪
+          (<code>socks:grey</code> darkens the stripe), 重點色 (<code>point:brown</code> shifts the mask).
+          The presets stay canonical for legacy cats, so the two sets are kept side by side rather than merged.
+        </p>
+        <div class="tags">
+          <span class="tag brand">mewguard</span><span class="tag">cat-avatar</span><span class="tag">coat-customizer</span>
+        </div>
+      </div>
+    </article>
 
     <article class="cat-panel">
       <div class="cat-sizes">
@@ -1931,8 +2038,9 @@
     or hit the <b>download</b> button to save a standalone <code>.svg</code> file — both embed their own animation
     <code>&lt;style&gt;</code>, so the asset stays alive the moment you paste or open it. Palette and tone follow the
     app theme in <code>cat_toxin_app/constants/colors.ts</code>. The <b>Cat avatar</b> section (tag
-    <code>cat-avatar</code>) is an interactive parametric prototype driven by vanilla JS — its eight breed presets are
-    still ordinary gallery cards whose SVGs copy and download as standalone self-animating files. The <b>App raster</b>
+    <code>cat-avatar</code>) is an interactive parametric prototype driven by vanilla JS — its eight coat-recipe cards are
+    still ordinary gallery cards whose SVGs copy and download as standalone self-animating files, and the
+    <b>coat customizer</b> panel bakes the whole two-axis space (6 patterns × 6 colours) as a spec sheet. The <b>App raster</b>
     section (tag <code>app-raster</code>) is the one exception to inline-SVG purity: it archives the real shipped PNGs
     from <code>cat_toxin_app/assets/</code>, served from the sibling <code>mewguard-raster/</code> folder.
   </footer>
@@ -1982,6 +2090,70 @@
   };
   var COAT_ORDER = ['tora', 'mike', 'kuro', 'nabe', 'hai', 'shama', 'plain'];
 
+  /* =====================================================================
+     COAT CUSTOMIZER — two axes (pattern × colour).
+     Ported verbatim (2026-08-14) from the shipped app:
+       cat_toxin_app/components/cat-avatar/coatComposer.ts
+     The add-cat flow's page 5 no longer asks for a breed — it asks what the
+     cat LOOKS LIKE, on two axes: 6 patterns × 6 colours = 36 recipes.
+     Nothing is hand-authored: each colour ships a three-tone palette
+     { main, dark, light } and each pattern is a fixed formula over those
+     three tones, so composeLineCoat() mechanically fills the same six
+     pattern switches / three colour slots the seven presets above use.
+     `en` is a gallery-only addition (buildLineCat's aria-label) — the app's
+     LineCoat has id + label only.
+     ===================================================================== */
+  var COAT_PATTERNS = [
+    { id:'solid',  label:'Solid' },
+    { id:'tabby',  label:'Tabby' },
+    { id:'tuxedo', label:'Tuxedo' },
+    { id:'calico', label:'Patches' },
+    { id:'socks',  label:'Socks' },
+    { id:'point',  label:'Colorpoint' }
+  ];
+  /* `swatch` is the picker dot only — white's dot is off-white so it reads on a white card. */
+  var COAT_COLORS = [
+    { id:'white',  label:'White',  swatch:'#F3F2EF' },
+    { id:'orange', label:'Orange', swatch:'#EFA45C' },
+    { id:'cream',  label:'Cream',  swatch:'#F7DDA6' },
+    { id:'grey',   label:'Grey',   swatch:'#A5A7A5' },
+    { id:'black',  label:'Black',  swatch:'#3A3532' },
+    { id:'brown',  label:'Brown',  swatch:'#B08968' }
+  ];
+  /* Seeded when the flow reaches the appearance question, so the cat is already
+     painted on arrival instead of waiting for the first tap. */
+  var DEFAULT_COAT_PATTERN = 'tabby', DEFAULT_COAT_COLOR = 'orange';
+  /* main = 主毛色 / dark = 條紋、深部 / light = 重點色的淺底 */
+  var COAT_PALETTES = {
+    white:  { main:'#FFFFFF', dark:'#C9CCCB', light:'#FFFFFF' },
+    orange: { main:'#EFA45C', dark:'#C2711F', light:'#FBEBD9' },
+    cream:  { main:'#F7DDA6', dark:'#D9A64B', light:'#FCF3DF' },
+    grey:   { main:'#A5A7A5', dark:'#7E807F', light:'#E8EAE9' },
+    black:  { main:'#3A3532', dark:'#2E2A28', light:'#DAD6D3' },
+    brown:  { main:'#B08968', dark:'#8B7360', light:'#F6EBDA' }
+  };
+  function coatLabelOf(list, id) {
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i].label;
+    return id;
+  }
+  function composeLineCoat(pattern, color) {
+    var pal = COAT_PALETTES[color];
+    /* White's `main` is #FFFFFF and would vanish on the white body — every slot
+       that PAINTS ON TOP of the silhouette falls back to `dark` instead. */
+    var paint = color === 'white' ? pal.dark : pal.main;
+    var label = coatLabelOf(COAT_COLORS, color) + ' ' + coatLabelOf(COAT_PATTERNS, pattern);
+    var meta = { id: pattern + ':' + color, label: label, en: label };
+    if (pattern === 'solid')  return recipe(Object.assign(meta, { body:pal.main, muzzle:true }));
+    if (pattern === 'tabby')  return recipe(Object.assign(meta, { body:pal.main, stripe:pal.dark, stripes:true, muzzle:true }));
+    if (pattern === 'tuxedo') return recipe(Object.assign(meta, { accent:paint, stripe:pal.dark, mask:true, tailTip:true }));
+    if (pattern === 'calico') return recipe(Object.assign(meta, { patch1:paint, patch2:'#2E2A28', accent:'#2E2A28', patches:true, tailTip:true }));
+    if (pattern === 'socks')  return recipe(Object.assign(meta, { accent:paint, stripe:pal.dark, stripes:true, socks:true, tailTip:true }));
+    return recipe(Object.assign(meta, { body:pal.light, accent:pal.dark, stripe:pal.dark, mask:true, tailTip:true })); /* point */
+  }
+
+  /* LEGACY FALLBACK ONLY — cats saved before the customizer have no coat fields,
+     so their breed string still resolves to one of the seven presets above
+     (app's deriveAvatarParams: explicit coatPattern + coatColor win). */
   /* Existing breed strings → a coat recipe (app's BREED_TO_COAT, verbatim). */
   var BREED_TO_COAT = [
     { test: /siamese/i, coat: 'shama' },
@@ -2224,7 +2396,9 @@
   function weightToBuild(kg) { return 0.86 + (clampWeightKg(kg) - 1) / 9 * 0.34; }
 
   /* debug hook — lets a console check every coat × pose without touching the DOM */
-  window.__lineCat = { build: buildLineCat, coats: LINE_COATS, order: COAT_ORDER, derive: deriveLineCoat, weightToBuild: weightToBuild, AGE_SHAPE: AGE_SHAPE };
+  window.__lineCat = { build: buildLineCat, coats: LINE_COATS, order: COAT_ORDER, derive: deriveLineCoat,
+    compose: composeLineCoat, patterns: COAT_PATTERNS, colors: COAT_COLORS, palettes: COAT_PALETTES,
+    weightToBuild: weightToBuild, AGE_SHAPE: AGE_SHAPE };
 
   /* Half-wreath from the wordmark — deep leaves + jewel blooms. Hero-only,
      revealed at the Generate moment (.wreath-on); each .wb bit pops in staggered. */
@@ -2346,12 +2520,12 @@
     }
   }
 
-  var state = { name:'', age:null, kg:4, sex:null, breed:null, coat:null, done:false };
+  var state = { name:'', age:null, kg:4, sex:null, pattern:null, color:null, coat:null, done:false };
 
   /* ---------- the five unlock stages (lineSpec.ts) ----------
-     silhouette → face (name) → shape (age + weight) → coat (breed) → full (generate).
-     `shape` is purely age/weight and `coat` is a pure colour fade, because breed
-     drives colour only — the silhouette is the same for every cat.               */
+     silhouette → face (name) → shape (age + weight) → coat (pattern × colour) → full (generate).
+     `shape` is purely age/weight and `coat` is a pure colour fade, because the coat
+     answer drives colour only — the silhouette is the same for every cat.        */
 
   /* coat: paint the five slots for this recipe, then fade them in */
   function paintCoat(c) {
@@ -2397,10 +2571,9 @@
     setTimeout(function () { hero.classList.remove('react'); }, 700);
   }
 
-  var STEPS = ['Name','Age','Weight','Sex','Breed','Generate'];
-  /* the app's own add-cat breed list (app/cats/new.tsx BREED_OPTIONS) */
-  var BREED_OPTIONS = ['Mixed', 'British Shorthair', 'American Shorthair', 'Ragdoll', 'Persian',
-    'Maine Coon', 'Siamese', 'Scottish Fold', 'Other', 'Not sure'];
+  /* app/cats/new.tsx page order: 1 name · 2 age · 3 weight · 4 sex · 5 appearance · 6 generate.
+     The breed question was removed when the coat customizer shipped (2026-08-14). */
+  var STEPS = ['Name','Age','Weight','Sex','Coat','Generate'];
   var stepIdx = 0, maxStep = 0, interacted = false;
   var stepsEl = document.getElementById('catSteps');
   var qArea = document.getElementById('catQArea');
@@ -2429,6 +2602,25 @@
       c.textContent = o.label;
       c.onclick = function () { interacted = true; onPick(o.v); };
       row.appendChild(c);
+    });
+    return row;
+  }
+  /* the customizer's second axis — colour dots (app CoatPicker's bottom row) */
+  function swatchRow(current, onPick) {
+    var row = document.createElement('div');
+    row.className = 'coat-dots';
+    COAT_COLORS.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'coat-dot' + (current === o.id ? ' on' : '');
+      b.style.background = o.swatch;
+      b.title = o.label;
+      b.setAttribute('aria-label', o.label);
+      b.setAttribute('aria-pressed', current === o.id ? 'true' : 'false');
+      /* contrast for the tick — black is the only dark swatch in the set */
+      if (current === o.id) { b.textContent = '✓'; b.style.color = o.id === 'black' ? '#FFFFFF' : '#1E1B18'; }
+      b.onclick = function () { interacted = true; onPick(o.id); };
+      row.appendChild(b);
     });
     return row;
   }
@@ -2505,19 +2697,22 @@
       nextBtn('Next', !!state.sex, advance);
     }
     if (stepIdx === 4) {
-      q('What breed is ' + personalize(state.name) + '?', 'Breed drives COLOUR ONLY — the outline never changes. BREED_TO_COAT maps the answer onto one of seven coat recipes, then the colour layers fade in over the white line drawing.');
+      q('What does ' + personalize(state.name) + ' look like?', 'Pick a coat and colour — two axes, 36 combinations. Colour only: the outline never changes.');
+      /* the app seeds tabby + orange on arrival, so the cat is already painted */
+      if (!state.pattern) { state.pattern = DEFAULT_COAT_PATTERN; state.color = DEFAULT_COAT_COLOR; }
+      paintCoat(composeLineCoat(state.pattern, state.color));
       qArea.appendChild(choiceRow(
-        BREED_OPTIONS.map(function (b) { return { v: b, label: b }; }),
-        state.breed,
-        function (v) { state.breed = v; paintCoat(deriveLineCoat(v, v)); burst(10, false); render(); }
+        COAT_PATTERNS.map(function (p) { return { v: p.id, label: p.label }; }),
+        state.pattern,
+        function (v) { state.pattern = v; burst(10, false); render(); }
       ));
-      if (state.coat) {
-        note('Resolved coat: <b>' + state.coat.label + ' · ' + state.coat.en + '</b> — ' + activeSwitches(state.coat) +
-          '. Breeds legitimately share recipes (Siamese, Ragdoll and Persian all read as 重點色); every unmatched answer falls through to a deterministic hash, so the same cat always gets the same coat. All seven recipes are on the cards below.');
-      } else {
-        note('Unlocks: <b>the coat colour</b> — six pattern switches × three colour slots. Because the silhouette is identical for every cat, this stage is a pure opacity fade with no shape morph.');
-      }
-      nextBtn('Last step', !!state.breed, advance);
+      var dots = swatchRow(state.color, function (v) { state.color = v; burst(10, false); render(); });
+      dots.style.marginTop = '12px';
+      qArea.appendChild(dots);
+      note('Composed coat: <b>' + state.coat.label + '</b> <code>' + state.coat.id + '</code> — ' + activeSwitches(state.coat) +
+        '. Every cell is mechanical: the colour supplies <code>{ main, dark, light }</code>, the pattern decides which slot takes which tone. ' +
+        'Cats saved before this question existed have no coat fields and still derive from <code>breed</code> — the seven presets on the cards above.');
+      nextBtn('Last step', true, advance);
     }
     if (stepIdx === 5) {
       q('Ready to meet ' + personalize(state.name) + '?', 'One tap — a joy pop, and the wordmark wreath blooms around your cat. In the real app this also masks the Firestore write and photo upload.');
@@ -2538,7 +2733,7 @@
       var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'cat-btn ghost';
       rb.textContent = 'Start over (back to silhouette)';
       rb.onclick = function () {
-        state = { name:'', age:null, kg:4, sex:null, breed:null, coat:null, done:false };
+        state = { name:'', age:null, kg:4, sex:null, pattern:null, color:null, coat:null, done:false };
         stepIdx = 0; maxStep = 0;
         hero.classList.add('no-face');
         hero.classList.remove('awake', 'celebrate', 'react', 'wreath-on');
@@ -2568,6 +2763,34 @@
       ' aria-label="line-art cat — walk and sleep poses">' +
       '<defs>' + wk.defs + zz.defs + '</defs>' +
       '<g>' + wk.body + '</g><g transform="translate(200,0)">' + zz.body + '</g></svg>';
+  }
+
+  /* ---------- coat customizer: the whole 6 × 6 space, plus the palette table ----------
+     Baked still (animate:false) — this is a spec sheet, not 36 idling cats. */
+  var matrixEl = document.getElementById('coatMatrix');
+  if (matrixEl) {
+    var cells = '<div class="mh"></div>' + COAT_COLORS.map(function (col) {
+      return '<div class="mh"><span class="coat-swatch" style="background:' + col.swatch + '"></span>' + col.label + '</div>';
+    }).join('');
+    COAT_PATTERNS.forEach(function (pat) {
+      cells += '<div class="mh row">' + pat.label + '</div>';
+      COAT_COLORS.forEach(function (col) {
+        var c = composeLineCoat(pat.id, col.id);
+        cells += '<div class="ava" title="' + c.id + ' — ' + c.label + '">' +
+          buildLineCat(c, 'sit', { label: c.label, whiskers: false, animate: false }) + '</div>';
+      });
+    });
+    matrixEl.innerHTML = cells;
+  }
+  var palRows = document.getElementById('coatPaletteRows');
+  if (palRows) {
+    palRows.innerHTML = COAT_COLORS.map(function (col) {
+      var p = COAT_PALETTES[col.id];
+      return '<tr><td><span class="coat-swatch" style="background:' + col.swatch + '"></span>' +
+        col.label + ' <small><code>' + col.id + '</code></small></td>' +
+        '<td><code>' + p.main + '</code></td><td><code>' + p.dark + '</code></td>' +
+        '<td><code>' + p.light + '</code></td><td><code>' + col.swatch + '</code></td></tr>';
+    }).join('');
   }
 
   /* ---------- size-legibility mock ---------- */
