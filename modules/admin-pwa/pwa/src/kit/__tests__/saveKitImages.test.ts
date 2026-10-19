@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { saveKitImages } from '../saveKitImages'
+import { saveKitImages, savesToDownloads } from '../saveKitImages'
 
 const slides = [
   { file: '01.jpg', url: 'https://storage.googleapis.com/b/01.jpg' },
@@ -81,6 +81,15 @@ describe('saveKitImages', () => {
     expect(revokeObjectURL).toHaveBeenCalledTimes(2)
   })
 
+  it("mode 'download' skips the share sheet even where it would work", async () => {
+    const fetchImpl = vi.fn((url: string) => Promise.resolve(okResponse(url)))
+    const share = vi.fn((_data?: ShareData) => Promise.resolve())
+    const result = await saveKitImages('k', slides, { fetchImpl, mode: 'download', nav: { share, canShare: () => true } })
+    expect(result).toBe('downloaded')
+    expect(share).not.toHaveBeenCalled()
+    expect(clicked.map((a) => a.download)).toEqual(['k-01.jpg', 'k-03.jpg'])
+  })
+
   it('rejects naming the file when a fetch returns a non-OK status, and saves nothing', async () => {
     const fetchImpl = vi.fn((url: string) =>
       Promise.resolve(url.endsWith('03.jpg') ? ({ ok: false, status: 403 } as Response) : okResponse(url)),
@@ -101,5 +110,11 @@ describe('saveKitImages', () => {
     const fetchImpl = vi.fn()
     await expect(saveKitImages('k', [{ file: 'a.jpg', url: null }], { fetchImpl })).rejects.toThrow('沒有可儲存的圖片')
     expect(fetchImpl).not.toHaveBeenCalled()
+  })
+
+  it('savesToDownloads is true on Android only', () => {
+    expect(savesToDownloads('Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/130 Mobile Safari/537.36')).toBe(true)
+    expect(savesToDownloads('Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1')).toBe(false)
+    expect(savesToDownloads('Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/537.36 Chrome/130 Safari/537.36')).toBe(false)
   })
 })

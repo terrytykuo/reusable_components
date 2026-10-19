@@ -50,6 +50,7 @@ export const defaultStrings = {
   saveAllImages: '儲存全部圖片',
   preparing: (done: number, total: number) => `準備中 ${done}/${total}`,
   downloadedHint: '此瀏覽器不支援分享圖片，已逐張下載。',
+  downloadedToFolderHint: '已逐張存到 Download 資料夾（相簿裡找得到）。Chrome 若詢問是否允許下載多個檔案，請選「允許」。',
   tapAgain: '請再點一次「儲存全部圖片」',
   saveFailed: (message: string) => `儲存失敗：${message}`,
   noImagesToSave: '沒有可儲存的圖片',

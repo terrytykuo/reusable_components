@@ -153,7 +153,7 @@ Safari 開 `https://<site>.web.app` → 分享 → **加入主畫面** → 一�
 | `src/strings.ts` / `src/i18n.ts` | `defaultStrings`、`UiStrings`；`t`（defaults + `brand.strings`） |
 | `src/auth/` | `AuthGate`、`useAdminUser()` → `{ status, user, email, error, signIn, signOut, retry }`、`useAdminContext()`、`AdminUserContext`、`Wordmark`、`describeAuthError`、`ADMIN_CLAIM` |
 | `src/data/firestoreHooks.ts` | `useCollection<T>(path \| null, { orderBy?, direction? = 'desc', limit? = 50 })` → `{ items, loading, error }`；`useDoc<T>(collectionPath, id \| null)` → `{ doc, loading, error, missing }`；`newestFirst(items, key)`；`formatTimestamp(ts, locale?)` |
-| `src/kit/` | `KitViewer({ slides })`、`Caption({ text, title?, copyLabel? })`、`CopyButton({ text, label?, ariaLabel?, className? })`、`DownloadAllButton({ kitId, slides, shareTitle? })`、`saveKitImages(kitId, slides, { onProgress?, title?, fetchImpl?, nav? })`、`StatusToggle({ on, onToggle(next), onError?, labels? })`、`isPosted` / `postedFields` / `setPosted(collectionPath, id, next, by)`、`Loading` / `ErrorNotice` / `Empty` / `BackLink`、`ErrorBoundary`、`usePullToRefresh` / `pullLabel`、`whoName`、`Slide` |
+| `src/kit/` | `KitViewer({ slides })`、`Caption({ text, title?, copyLabel? })`、`CopyButton({ text, label?, ariaLabel?, className? })`、`DownloadAllButton({ kitId, slides, shareTitle? })`、`saveKitImages(kitId, slides, { onProgress?, title?, fetchImpl?, nav?, mode? })`、`savesToDownloads(ua?)`、`StatusToggle({ on, onToggle(next), onError?, labels? })`、`isPosted` / `postedFields` / `setPosted(collectionPath, id, next, by)`、`Loading` / `ErrorNotice` / `Empty` / `BackLink`、`ErrorBoundary`、`usePullToRefresh` / `pullLabel`、`whoName`、`Slide` |
 | `src/push/` | `enablePush` / `refreshPush` / `disablePush` / `removeDevice` / `useMyDevices` / `isPushSupported` / `isStandalone` / `permissionState` / `getVapidKey` / `describePushError` / `DEVICES_PATH`；`Settings`（預設匯出）；`InstallHint`；`Toast({ toast, onDismiss, bottom? })`；`useForegroundMessages(onToast)` |
 | `server/ci/admin-firestore.js` | `initAdmin`、`publishDoc`、`sendPush`、`buildMessage`、`loadServiceAccount`、`credentialFromEnv`、`stripUndefined`、`truncate`、`DEFAULT_PRESERVE`、`DEFAULT_DEVICES_PATH` |
 | `server/functions/src/` | `requireAdmin`、`createOnKitCreated`、`notifyDevices`、`sendToTokens`、`buildMessage`、`truncate` |
@@ -191,7 +191,7 @@ Safari 開 `https://<site>.web.app` → 分享 → **加入主畫面** → 一�
 - **iOS 推播**：iOS 16.4+，且只有從主畫面開啟的 PWA 才收得到；Safari 分頁裡 `PushManager` 不存在，設定頁會顯示「需要先加入主畫面」。前景時只有 toast、沒有系統通知。
 - **PWA storage 被清**：iOS 會在 PWA 長時間未用後清掉 site data。本裝置 token 記在 `localStorage`（`<storageKey>.pushToken`），被清後 app 不知道這台開過通知、也不會自動 refresh——到設定再按一次「開啟通知」（權限仍在，不會再跳詢問）。每次啟動 `refreshPush` 會更新 `lastSeenAt` 並處理 FCM 換 token（舊文件即刪）。
 - **Service worker 未就緒**：`navigator.serviceWorker.ready` 在沒有 SW 時永不 resolve，註冊等 8 秒就放棄並提示重開 app。
-- **存圖需要 CORS**：`saveKitImages` 用 `fetch` 取圖再交給分享表單，圖片主機（Firebase Storage、R2、Pages…）必須對 PWA 的網域回 CORS `GET`。iOS 若 fetch 太久會失去使用者手勢，第二次點擊即可（圖已快取）。桌面瀏覽器不支援分享檔案時改逐張下載。
+- **存圖需要 CORS**：`saveKitImages` 用 `fetch` 取圖再交給分享表單，圖片主機（Firebase Storage、R2、Pages…）必須對 PWA 的網域回 CORS `GET`。iOS 若 fetch 太久會失去使用者手勢，第二次點擊即可（圖已快取）。桌面瀏覽器不支援分享檔案時改逐張下載。**Android 一律逐張下載**（`savesToDownloads`，`mode: 'download'`）：分享面板會讓使用者挑 app，檔案落在該 app 的目錄，發文 app 的選圖器未必掃得到；下載進 Download 資料夾相簿看得到。Chrome 第一次會問「允許下載多個檔案」。
 - **推播去重**：重送的 onCreate 事件或 CI 重跑可能推兩次；給 `tag` 讓同一項目的通知互相取代。
 - 規則只有一層：有 claim 的人可讀寫整個 `admin/**`；需要更細的權限要自己拆 rules。
 - `onKitCreated` 的 trigger 本身沒有 emulator 測試，只測了純函式與 `notifyDevices`（假 db / messaging）。推播與存圖只能實機驗。

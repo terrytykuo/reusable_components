@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { t } from '../i18n'
-import { saveKitImages } from './saveKitImages'
+import { saveKitImages, savesToDownloads } from './saveKitImages'
 import type { Slide } from './types'
 
 interface Props {
@@ -12,7 +12,8 @@ interface Props {
 
 /**
  * "Save all images": every slide of a kit, one image each, through the system
- * share sheet (phones: straight into the photo library). Renders nothing
+ * share sheet (iOS: straight into the photo library) or, on Android, as plain
+ * downloads into the Download folder (savesToDownloads). Renders nothing
  * without downloadable slides.
  */
 export function DownloadAllButton({ kitId, slides, shareTitle }: Props) {
@@ -29,11 +30,13 @@ export function DownloadAllButton({ kitId, slides, shareTitle }: Props) {
     setHint(null)
     setProgress({ done: 0, total: slides.filter((s) => s.url).length })
     try {
+      const toDownloads = savesToDownloads()
       const result = await saveKitImages(kitId, slides, {
         title: shareTitle,
+        mode: toDownloads ? 'download' : 'share',
         onProgress: (done, total) => setProgress({ done, total }),
       })
-      if (result === 'downloaded') setHint(t.downloadedHint)
+      if (result === 'downloaded') setHint(toDownloads ? t.downloadedToFolderHint : t.downloadedHint)
     } catch (e) {
       const name = e instanceof Error ? e.name : ''
       // iOS drops the tap's activation if the fetch took too long; the images

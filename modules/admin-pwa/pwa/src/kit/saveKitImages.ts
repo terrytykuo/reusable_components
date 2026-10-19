@@ -9,6 +9,23 @@ export interface SaveKitOptions {
   fetchImpl?: (url: string) => Promise<Response>
   /** Test seam for `navigator`. */
   nav?: Pick<Navigator, 'share' | 'canShare'>
+  /**
+   * 'share' (default): the system share sheet when it can take files, else
+   * per-image downloads. 'download': per-image downloads even where sharing
+   * works. Use savesToDownloads() to pick: on Android the share sheet makes
+   * the user choose an app and the files land wherever that app puts them,
+   * which the posting app's gallery picker may never index; a plain download
+   * goes to the Download folder, which is media-scanned.
+   */
+  mode?: 'share' | 'download'
+}
+
+/**
+ * True on Android, where 'download' is the right mode (see SaveKitOptions.mode).
+ * iOS stays on the share sheet: Safari would offer "Download" to Files, not Photos.
+ */
+export function savesToDownloads(userAgent: string = navigator.userAgent): boolean {
+  return /\bAndroid\b/i.test(userAgent)
 }
 
 export type SaveKitResult = 'shared' | 'cancelled' | 'downloaded'
@@ -16,13 +33,13 @@ export type SaveKitResult = 'shared' | 'cancelled' | 'downloaded'
 /**
  * Hands every slide image to the system share sheet as separate files, so on a
  * phone they land in the photo library (iOS: "Save N Images"; Android: gallery).
- * Where files cannot be shared (desktop browsers), each image is downloaded on
- * its own instead. Never zips. Needs CORS GET on the image host for the app
+ * Where files cannot be shared (desktop browsers), or with mode 'download'
+ * (Android), each image is downloaded on its own instead. Never zips. Needs CORS GET on the image host for the app
  * origin. Rejects (and saves nothing) if any image fails. File names are
  * `${kitId}-${slide.file}`.
  */
 export async function saveKitImages(kitId: string, slides: Slide[], options: SaveKitOptions = {}): Promise<SaveKitResult> {
-  const { onProgress, title = kitId, fetchImpl = (url: string) => fetch(url), nav = navigator } = options
+  const { onProgress, title = kitId, fetchImpl = (url: string) => fetch(url), nav = navigator, mode = 'share' } = options
   const todo = slides.filter((s): s is Slide & { url: string } => !!s.url)
   if (todo.length === 0) throw new Error(t.noImagesToSave)
 
@@ -45,7 +62,7 @@ export async function saveKitImages(kitId: string, slides: Slide[], options: Sav
     }),
   )
 
-  if (typeof nav.share === 'function' && typeof nav.canShare === 'function' && nav.canShare({ files })) {
+  if (mode === 'share' && typeof nav.share === 'function' && typeof nav.canShare === 'function' && nav.canShare({ files })) {
     try {
       await nav.share({ files, title })
       return 'shared'

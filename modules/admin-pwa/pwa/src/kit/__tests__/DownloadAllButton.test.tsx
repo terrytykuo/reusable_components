@@ -1,9 +1,9 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { saveKitImages } from '../saveKitImages'
+import { saveKitImages, savesToDownloads } from '../saveKitImages'
 import { DownloadAllButton } from '../DownloadAllButton'
 
-vi.mock('../saveKitImages', () => ({ saveKitImages: vi.fn() }))
+vi.mock('../saveKitImages', () => ({ saveKitImages: vi.fn(), savesToDownloads: vi.fn(() => false) }))
 
 const slides = [
   { file: '01.jpg', url: 'https://x/01.jpg' },
@@ -13,6 +13,7 @@ const slides = [
 describe('DownloadAllButton', () => {
   beforeEach(() => {
     vi.mocked(saveKitImages).mockReset()
+    vi.mocked(savesToDownloads).mockReturnValue(false)
   })
   afterEach(cleanup)
 
@@ -37,6 +38,16 @@ describe('DownloadAllButton', () => {
     render(<DownloadAllButton kitId="k" slides={slides} />)
     fireEvent.click(screen.getByRole('button', { name: '儲存全部圖片' }))
     expect(await screen.findByText(/已逐張下載/)).toBeInTheDocument()
+    expect(saveKitImages).toHaveBeenCalledWith('k', slides, expect.objectContaining({ mode: 'share' }))
+  })
+
+  it('on Android downloads to the Download folder and says so', async () => {
+    vi.mocked(savesToDownloads).mockReturnValue(true)
+    vi.mocked(saveKitImages).mockResolvedValue('downloaded')
+    render(<DownloadAllButton kitId="k" slides={slides} />)
+    fireEvent.click(screen.getByRole('button', { name: '儲存全部圖片' }))
+    expect(await screen.findByText(/Download 資料夾/)).toBeInTheDocument()
+    expect(saveKitImages).toHaveBeenCalledWith('k', slides, expect.objectContaining({ mode: 'download' }))
   })
 
   it('asks for a second tap when the share sheet lost the user activation', async () => {
