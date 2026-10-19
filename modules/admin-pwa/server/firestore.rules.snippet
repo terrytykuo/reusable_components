@@ -1,0 +1,15 @@
+// admin-pwa: everything under admin/** is readable and writable only by a signed-in
+// user whose ID token carries the custom claim admin == true (set with set-admin.mjs).
+// CI and Cloud Functions use the Admin SDK, which bypasses rules.
+// Paste inside `match /databases/{database}/documents { ... }`, before any catch-all deny.
+//
+// Path convention: alternate collection / doc so every collection path has an odd
+// number of segments, e.g. admin/kits/{kind}/{id} or admin/pushTokens/devices/{token}.
+match /admin/{document=**} {
+  allow read, write: if request.auth != null && request.auth.token.admin == true;
+}
+
+// A project with no other client data can end with a default deny:
+// match /{document=**} {
+//   allow read, write: if false;
+// }

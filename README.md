@@ -15,6 +15,7 @@
 | [`ios/`](./ios/) | SwiftUI (iOS) | 地理圍欄 LocationManager、本機通知 NotificationManager、泛型 JSON 持久化、權限 UI 元件 | [README](./ios/README.md) · [INDEX](./ios/INDEX.md) |
 | [`llm/`](./llm/) | TypeScript (Node) | LLM JSON 修復、本機 CLI 模型呼叫、retry/並發控制等與供應商無關的工具 | [README](./llm/README.md) · [INDEX](./llm/INDEX.md) |
 | [`skill/`](./skill/) | Claude Code skills | notebooklm-skill、design-sense、harness-engineering 等可安裝的 skill | [INDEX](./skill/INDEX.md) |
+| [`modules/`](./modules/) | 跨層功能模組（Cloud Functions + RN + 本機後台 + PWA） | voucher-system（優惠碼 → RevenueCat promotional entitlement，含後台）、missing-entry-report（查無結果回報 + 補上後自動通知）、admin-pwa（主畫面安裝的手機內部後台：Google 登入 + admin claim、Web Push、素材存圖 / 複製 / 已發開關，推播可由 CI 或 Functions 發） | [README](./modules/README.md) · [INDEX](./modules/INDEX.md) |
 | [`harness/`](./harness/) | Markdown / 工作流 | repo collaboration、agent workflow、共享記憶與驗證流程的模板 | [README](./harness/README.md) |
 
 ---
@@ -27,4 +28,4 @@
 
 ## 來源專案
 
-目前的元件主要抽取自：`mewguard/cat_toxin_app`(RN)、`onmyway`(SwiftUI)、`wiser` 與 `interactive-book-tutor`(web/LLM)。新增元件時請在該元件的 INDEX 條目標註 **來源** 路徑，方便日後回溯與更新。
+目前的元件主要抽取自：`mewguard/cat_toxin_app`(RN / Functions / 後台)、`onmyway`(SwiftUI)、`wiser` 與 `interactive-book-tutor`(web/LLM)。新增元件時請在該元件的 INDEX 條目標註 **來源** 路徑，方便日後回溯與更新。

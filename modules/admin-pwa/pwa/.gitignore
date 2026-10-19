@@ -1,0 +1,16 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+node_modules
+dist
+dist-ssr
+.firebase
+*.local
+# The real .firebaserc names your project; copy it from .firebaserc.example.
+.firebaserc
+
+.DS_Store
+.vscode/*
+.idea

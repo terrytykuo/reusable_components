@@ -1,0 +1,4 @@
+{
+  "projects": { "default": "your-project-id" },
+  "targets": { "your-project-id": { "hosting": { "admin": ["your-hosting-site"] } } }
+}

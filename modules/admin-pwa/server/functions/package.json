@@ -1,0 +1,20 @@
+{
+  "name": "admin-pwa-functions",
+  "private": true,
+  "description": "Template: copy src/*.ts into your functions/src/. This package.json only exists to typecheck and test the template in place.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^5.0.1"
+  }
+}

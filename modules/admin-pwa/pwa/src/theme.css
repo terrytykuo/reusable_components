@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Neutral defaults (slate + blue); replace the values, keep the
+ * names — every component uses these utilities (bg-primary, text-ink, border-line…).
+ * Keep --color-primary in sync with brand.themeColor and --color-paper with
+ * brand.backgroundColor.
+ *
+ * Reference: MewGuard's MewAdmin used the values from its design system
+ * (docs/design/mewguard-design-system.md): green primary, warm-brown ink,
+ * warm paper surfaces, DM Sans + Playfair Display.
+ */
+@theme {
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-light: #DBEAFE;
+  --color-primary-soft: #EFF6FF;
+
+  --color-ink: #0F172A;           /* primary text */
+  --color-ink-secondary: #475569; /* secondary text */
+  --color-ink-muted: #64748B;     /* captions, meta */
+  --color-ink-disabled: #94A3B8;
+
+  --color-card: #FFFFFF;
+  --color-paper: #F8FAFC;         /* page background */
+  --color-paper-strong: #F1F5F9;  /* pressed / placeholder surfaces */
+  --color-surface: #FFFFFF;       /* bars */
+  --color-surface-neutral: #F1F5F9;
+
+  --color-line: #CBD5E1;          /* borders on controls */
+  --color-line-light: #E2E8F0;    /* card borders, dividers */
+  --color-line-accent: #BFDBFE;   /* hint / toast border */
+  --color-line-neutral: #E2E8F0;
+
+  --color-danger-text: #B91C1C;
+  --color-danger-surface: #FEF2F2;
+  --color-danger-border: #FECACA;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
+  --font-display: ui-sans-serif, system-ui, -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+}
+
+html,
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
