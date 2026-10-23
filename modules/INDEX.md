@@ -136,7 +136,7 @@ notifyDevices(db, messaging, devicesPath, msg) / sendToTokens / buildMessage / t
 **來源**: `hejdanmark` — `hdadmin/src/xhs/RevisionBox.tsx`, `revisions.ts`, `types.ts`, `labels.ts`, `hdadmin/src/pages/KitDetail.tsx`, `scripts/social/pull-xhs-revisions.js`, `scripts/social/lib/admin-firestore.js`（`updateRevision`、`PROTECTED`）, `scripts/social/publish-xhs-kit.js`（`markRevisionDone`）, `.github/workflows/xhs-revisions.yml`, `.claude/skills/swapping-a-story/SKILL.md`, routine `hejdanmark-xhs-revision`，設計 `docs/plans/2026-10-23-hdadmin-revision-comment-design.md`
 
 **功能說明**:
-admin-pwa 的延伸。詳情頁正文底下一個「修改意見」欄：admin 寫一句話送出，PWA 以 `arrayUnion` 把 `{id, text, status:'open', createdAt, by}` 加進項目文件的 `revisions`。GitHub Actions cron（每 15 分鐘）把 `open` 改成 `queued`、送 `repository_dispatch`、把請求寫進 repo 的 dispatch log 並 commit——這個 push 叫醒 claude.ai routine 開一個雲端 session，照 repo 的改稿 skill 改、push、觸發重發；重發步驟把它標成 `done`（附 Claude 的回覆與 commit）並推播「已改好」。做不到時 session 在 outcome 檔寫 `revisionFailed: true`，下一輪標 `failed` 並推播原因；逾時 90 分鐘亦然。已發的項目只記錄（`noted`），不合格的項目直接 `failed`。雲端 session 不需要任何 secret。
+admin-pwa 的延伸。詳情頁正文底下一個「修改意見」欄：admin 寫一句話送出，PWA 以 `arrayUnion` 把 `{id, text, status:'open', createdAt, by}` 加進項目文件的 `revisions`。GitHub Actions cron（每小時）把 `open` 改成 `queued`、送 `repository_dispatch`、把請求寫進 repo 的 dispatch log 並 commit——這個 push 叫醒 claude.ai routine 開一個雲端 session，照 repo 的改稿 skill 改、push、觸發重發；重發步驟把它標成 `done`（附 Claude 的回覆與 commit）並推播「已改好」。做不到時 session 在 outcome 檔寫 `revisionFailed: true`，下一輪標 `failed` 並推播原因；逾時 90 分鐘亦然。已發的項目只記錄（`noted`），不合格的項目直接 `failed`。雲端 session 不需要任何 secret。
 
 ### pwa/src/revisions/（複製進 admin-pwa host 的 `src/`）
 

@@ -6,7 +6,7 @@ admin 在手機後台（[admin-pwa](../admin-pwa/)）看到 CI 產出的項目�
 |---|---|---|---|
 | PWA 元件 | [`pwa/src/revisions/`](./pwa/src/revisions/) | React 19 + TS + Tailwind 4（admin-pwa 的 theme token）+ Firestore | `RevisionBox`（輸入框 + 紀錄清單 + 狀態徽章）、`revisions.ts`（建條目 / arrayUnion / 排序 / commit 連結）、`revisionTypes.ts`、`revisionStrings.ts`（走 `brand.strings`）、`revisionStyles.ts`，vitest |
 | CI | [`ci/`](./ci/) | Node CommonJS + firebase-admin，建在 admin-pwa 的 `server/ci/admin-firestore.js` 上 | `revisions.js`（`updateRevision`、`planDispatch`、`planExpire`、`appendLog`、`markRevisionDone`…）、`pull-revisions.js` CLI（`--expire` / `--dispatch` / `--done <id>` / `--dry-run`，host 專屬設定集中在頂端 `CONFIG`），node:test |
-| 排程 | [`workflow/revisions.yml.example`](./workflow/revisions.yml.example) | GitHub Actions | cron 每 15 分鐘：expire → dispatch → commit dispatch log（這個 push 叫醒 routine） |
+| 排程 | [`workflow/revisions.yml.example`](./workflow/revisions.yml.example) | GitHub Actions | cron 每小時：expire → dispatch → commit dispatch log（這個 push 叫醒 routine） |
 | 雲端 session | [`routine/`](./routine/) | claude.ai routine | `PROMPT.md`（prompt 模板）、`README.md`（建 routine、webhook trigger、2026-10-23 實測） |
 | 設計 | [`DESIGN.md`](./DESIGN.md) | — | 為何這樣分工、資料模型、session 要做的事、環境檢查、風險 |
 
@@ -19,7 +19,7 @@ admin 在手機後台（[admin-pwa](../admin-pwa/)）看到 CI 產出的項目�
 ```
 PWA（admin-pwa host）
   └─ RevisionBox → updateDoc(<collection>/{id}, { revisions: arrayUnion({id, text, status:'open', createdAt, by}) })
-GitHub Actions  revisions.yml（cron */15，白天時段；也可手動）
+GitHub Actions  revisions.yml（cron 每小時，白天時段；也可手動）
   ├─ pull-revisions.js --expire    queued 且（outcome 檔 revisionFailed: true 或 > 90 分）→ failed + 推播「修改失敗」
   ├─ pull-revisions.js --dispatch  open：不合格 → failed + 推播；已發 → notePosted() + noted；
   │                                否則（該項目沒有 queued）最舊一條 → queued + repository_dispatch + 寫 dispatch log
@@ -93,7 +93,7 @@ export interface BrandConfig { /* … */ strings: Partial<UiStrings & RevisionSt
 // brand.strings: { revisionSent: '已送出，最多 30 分鐘內開始處理', revisionStatusNoted: '已收進口味紀錄' }
 ```
 
-或單一實例傳 `strings` prop。`revisionSent` 的「15 分鐘」要跟你的 cron 間隔一致。徽章顏色在 `revisionStyles.ts`。
+或單一實例傳 `strings` prop。`revisionSent` 的「1 小時」要跟你的 cron 間隔一致。徽章顏色在 `revisionStyles.ts`。
 
 ### 4. CI 腳本與 secrets
 
@@ -214,10 +214,10 @@ node pull-revisions.js --expire | --dispatch | --done <id> [--dry-run]
 
 - **同一條被做兩次**：routine 對分支上**每個** push 都開 session，pending 判斷只看 outcome 檔有沒有 `revisionId`。一個 session 正在改、另一個 push 進來，第二個 session 也看到 pending 並重做。目前靠「早上分支很少有其他 push」撐著。補法：session 一開始先 push 一個只寫 `revisionId` 的占位 commit 認領（outcome 檔有 id、沒 reply 的視為進行中）。
 - **每個 push 都醒一次**：webhook trigger 的路徑 `filter` 被 API 接受但不生效，所以每個 push 都有約 30 秒的空跑 session（第一個 host 一天 5–8 次）。`repository_dispatch` 事件叫不醒 routine（2026-10-23 實測），所以不能只靠它。
-- **延遲**：cron 每 15 分鐘，GitHub 排程在尖峰還會晚到；第一次真實跑 16 分鐘裡 12 分鐘在等 cron。即時方案（未實作，見來源設計 §3）：一個 Cloudflare Worker / Function 驗 PWA 的 **Firebase ID token**（含 admin claim），驗過就直接把請求 commit 進 dispatch log（GitHub contents API）——那個 push 立刻叫醒 routine；Firestore 狀態仍由 cron 補。這需要 Worker 持有 repo 寫入 token，所以要比 cron 多一層守門。
+- **延遲**：cron 每小時，GitHub 排程在尖峰還會晚到；第一次真實跑 16 分鐘裡 12 分鐘在等 cron。即時方案（未實作，見來源設計 §3）：一個 Cloudflare Worker / Function 驗 PWA 的 **Firebase ID token**（含 admin claim），驗過就直接把請求 commit 進 dispatch log（GitHub contents API）——那個 push 立刻叫醒 routine；Firestore 狀態仍由 cron 補。這需要 Worker 持有 repo 寫入 token，所以要比 cron 多一層守門。
 - **已發的項目只記錄**：`isPosted` 為真就 `noted`，不開 session；要讓已發項目也能改，把 `isPosted` 設成 `() => false`，並讓 prompt 處理「已發管道不動」。
 - **只接合格項目**：`isEligible` 預設只收 `YYYY-MM-DD` id（第一個 host 第一版只接每日項目，指南 / 專題 / 影片直接 `failed`）。放寬前要確認 skill 能處理那種項目。
 - **outcome 檔在 checkout 裡**：`--expire` 讀的是 Actions checkout 的檔，所以 session 必須先 push 再等下一輪；`--done` 讀的是重發 run 的 checkout，`commit` 取 `GITHUB_SHA`（就是重發跑的那個 commit）。
 - **推播**：只有開過通知的裝置收得到（admin-pwa 設定頁）。`--done` 的推播內文是項目 id（不另外讀文件標題）；`--expire` / `--dispatch` 的是文件 `title`。
 - **一個項目一次一條**：同一項目連送三條，要三輪 cron + 三個 session 依序處理。
-- `revisionSent` 預設說「最多 15 分鐘內開始處理」，cron 間隔改了要一起改。
+- `revisionSent` 預設說「最多 1 小時內開始處理」，cron 間隔改了要一起改。

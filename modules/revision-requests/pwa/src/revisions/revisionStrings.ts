@@ -10,7 +10,7 @@ export const defaultRevisionStrings = {
   revisionSend: '送出',
   revisionSending: '送出中…',
   /** Shown after a successful write. Match it to your cron interval. */
-  revisionSent: '已送出，最多 15 分鐘內開始處理',
+  revisionSent: '已送出，最多 1 小時內開始處理',
   revisionTooLong: (max: number) => `最多 ${max} 字`,
   revisionCount: (n: number, max: number) => `${n}／${max}`,
   revisionSendError: (message: string) => `送出失敗：${message}`,

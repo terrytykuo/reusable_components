@@ -25,7 +25,7 @@ admin 早上在手機上看 PWA 裡的項目（例如一份發文素材），不
 ```
 PWA（手機）
   └─ 寫 Firestore  <collection>/{id}.revisions[]  {id, text, status:'open', createdAt, by}   ← arrayUnion，之後不再碰
-GitHub Actions  revisions.yml（cron 每 15 分鐘，白天時段；也可手動）
+GitHub Actions  revisions.yml（cron 每小時，白天時段；也可手動）
   └─ pull-revisions.js --expire   queued 超時或 worker 回報做不到 → failed + 推播
   └─ pull-revisions.js --dispatch
        open → 不合格項目 failed／已發項目 noted／否則最舊一條 queued

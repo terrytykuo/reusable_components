@@ -13,13 +13,13 @@ name: revisions
 # the item (pull-revisions.js --done <id>), not here.
 on:
   schedule:
-    # Every 15 minutes <START>–<END> UTC. GitHub crons are UTC-only and ignore
+    # Hourly at :05, <START>–<END> UTC (the first host ran */15 for a day and found it too busy). GitHub crons are UTC-only and ignore
     # DST: "4-11" is 06:00–13:59 in Copenhagen summer time (UTC+2) and
     # 05:00–12:59 in winter time (UTC+1). Pick the hours for your timezone
     # and accept the one-hour shift, or widen the window by an hour.
     # Scheduled events also arrive late under load; expiry counts from
     # queuedAt, so a late tick only delays a request, never fails it.
-    - cron: "*/15 <START>-<END> * * *"
+    - cron: "5 <START>-<END> * * *"
   workflow_dispatch:
 
 concurrency:
