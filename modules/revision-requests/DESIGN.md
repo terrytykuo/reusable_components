@@ -45,7 +45,7 @@ claude.ai routine（webhook trigger：GitHub push）
 
 | 問題 | 決定 | 理由 |
 |---|---|---|
-| 誰發現有新意見 | GitHub Actions cron 讀 Firestore | 服務帳號本來就在 Actions；雲端 session **不必**拿 Firestore 金鑰。15 分鐘延遲對「搭車時送出」可接受 |
+| 誰發現有新意見 | GitHub Actions cron 讀 Firestore | 服務帳號本來就在 Actions；雲端 session **不必**拿 Firestore 金鑰。一小時的延遲對「搭車時送出」可接受（第一個 host 先跑 15 分鐘，一天後嫌太密） |
 | 為何不讓 PWA 直接打 GitHub / claude.ai | 否決 | 前端不能帶 GitHub token；共用 bearer token 的 Worker 在 admin-pwa 設計時已否決過。要即時見 README §已知限制 的 Worker 方案 |
 | 誰改稿 | claude.ai routine 開一個雲端 session | skill 在 repo 裡，session 一 clone 就有；改稿品質跟手改一樣 |
 | 雲端 session 怎麼被叫醒 | webhook trigger，GitHub **push** 事件 | 原本設計 `repository_dispatch`，實測叫不醒（routine/README.md）；cron 的 log commit 本身就是一個 push |
