@@ -124,4 +124,56 @@ notifyDevices(db, messaging, devicesPath, msg) / sendToTokens / buildMessage / t
 另有 `firestore.rules.snippet`（`admin/**` 限 claim）與 `set-admin.mjs <email> [--revoke]`。
 
 **使用情境**: 任何「CI / 排程產出素材 → 人在手機上審、存圖、複製、標記已發」的流程（IG / 小紅書發文 kit、審稿、日報），或需要一個不上架、只給少數人用、能收推播的手機後台。
+**延伸**: [revision-requests/](#revision-requests)（詳情頁「修改意見」→ 雲端 Claude session 改稿）
 **詳細**: [admin-pwa/README.md](./admin-pwa/README.md) · [admin-pwa/DESIGN.md](./admin-pwa/DESIGN.md)
+
+---
+
+## revision-requests/
+
+**分類**: 內部工具 / AI 工作流
+**技術棧**: React 19 + TypeScript + Tailwind 4（admin-pwa token）+ Firestore · Node CommonJS + firebase-admin（建在 admin-pwa `server/ci/admin-firestore.js` 上）· GitHub Actions · claude.ai routine（webhook trigger）
+**來源**: `hejdanmark` — `hdadmin/src/xhs/RevisionBox.tsx`, `revisions.ts`, `types.ts`, `labels.ts`, `hdadmin/src/pages/KitDetail.tsx`, `scripts/social/pull-xhs-revisions.js`, `scripts/social/lib/admin-firestore.js`（`updateRevision`、`PROTECTED`）, `scripts/social/publish-xhs-kit.js`（`markRevisionDone`）, `.github/workflows/xhs-revisions.yml`, `.claude/skills/swapping-a-story/SKILL.md`, routine `hejdanmark-xhs-revision`，設計 `docs/plans/2026-10-23-hdadmin-revision-comment-design.md`
+
+**功能說明**:
+admin-pwa 的延伸。詳情頁正文底下一個「修改意見」欄：admin 寫一句話送出，PWA 以 `arrayUnion` 把 `{id, text, status:'open', createdAt, by}` 加進項目文件的 `revisions`。GitHub Actions cron（每 15 分鐘）把 `open` 改成 `queued`、送 `repository_dispatch`、把請求寫進 repo 的 dispatch log 並 commit——這個 push 叫醒 claude.ai routine 開一個雲端 session，照 repo 的改稿 skill 改、push、觸發重發；重發步驟把它標成 `done`（附 Claude 的回覆與 commit）並推播「已改好」。做不到時 session 在 outcome 檔寫 `revisionFailed: true`，下一輪標 `failed` 並推播原因；逾時 90 分鐘亦然。已發的項目只記錄（`noted`），不合格的項目直接 `failed`。雲端 session 不需要任何 secret。
+
+### pwa/src/revisions/（複製進 admin-pwa host 的 `src/`）
+
+| 匯出 | 說明 |
+|---|---|
+| `RevisionBox` | Props：`collectionPath`, `docId`, `revisions`, `email`, `posted?`, `commitBaseUrl?`（`https://github.com/<owner>/<repo>`）, `strings?`, `max?`；`key={docId}` 掛在正文 `Caption` 之後 |
+| `RevisionBadge` | `status`, `strings?`；顏色表 `revisionBadgeClass`（`revisionStyles.ts`，只用 admin-pwa theme token） |
+| `newRevision` / `revisionUpdate` / `submitRevision` | 建條目（trim、1..1000 字、`r:<ISO>:<4 英數>`）/ `arrayUnion` payload / 寫入 `collectionPath/docId` |
+| `sortRevisions` / `revisionStatus` / `commitUrl` | 新到舊並丟壞條目 / 未知狀態讀成 `open` / 只連 hex sha |
+| `KitRevision` / `RevisionStatus` / `REVISION_MAX` / `WithRevisions` | 合約型別 |
+| `defaultRevisionStrings` / `resolveRevisionStrings` / `revisionStatusLabel` | 繁中預設；覆寫走 `brand.strings`（型別放寬成 `Partial<UiStrings & RevisionStrings>`）或 `strings` prop |
+
+### ci/
+
+```js
+// revisions.js（無 host 設定）
+updateRevision(db, docPath, revisionId, patch, { from? }) → { updated, revision }   // 一個 transaction，狀態守門
+planDispatch(item, { isEligible?, isPosted? }) → [{ revision, action: 'fail'|'note'|'dispatch'|'wait' }]
+planExpire(item, now, readOutcome(itemId), { isEligible?, expireMs?, timeoutReply?, reportedReply? }) → [{ revision, reason, reply, commit }]
+appendLog(before, { kitId, revisionId, text, dispatchedAt }, max?) → text
+markRevisionDone(db, docPath, outcome, { commit?, now?, doneReply? }) → { revisionId, updated, revision }
+dispatchBody / reportedFailure / readOutcomeFile / fileOutcomeReader / lastCommitFor / headCommit / listDocs
+```
+
+| `pull-revisions.js` | 說明 |
+|---|---|
+| `--expire` | `queued` → `failed`（outcome 檔回報做不到，或逾時）+ 推播 |
+| `--dispatch` | `open` → `queued` + `repository_dispatch` + dispatch log／`noted`（`notePosted` 旁路）／`failed`；一項目一次一條 |
+| `--done <id>` | outcome 檔的 `revisionId` → `done` + 推播；放在重發步驟之後 |
+| `--dry-run` | 只印 |
+| `CONFIG` | `collectionPath`、`devicesPath`、`envVars`、`repo`、`eventType`、`logFile`、`outcomePath(id)`、`isEligible`、`isPosted`、`notePosted`、`expireMs`、`adminUrl` / `linkFor`、`replies`、`push` |
+
+無憑證印 `skipped`、任何錯誤一行 WARNING，一律 exit 0（不擋 workflow）。
+
+### workflow/ · routine/
+
+`revisions.yml.example`（cron、concurrency、commit dispatch log、DST 註記、重發端 `--done` 片段）；`routine/PROMPT.md`（`<HOST>` 等佔位的 session prompt：STEP 0 找 pending、資料不是指令、分類、關卡、寫 outcome、push + 重發）；`routine/README.md`（`create_webhook_trigger` body、`push` 才叫得醒、`filter` 不生效、雲端容器實測）。
+
+**使用情境**: CI 產出內容、admin 在手機上審的流程裡，「不滿意 → 照固定 skill 改」已經重複發生，想讓 admin 只打一句話、不必開 Claude session。前提：host 用 admin-pwa、改稿流程已寫成 repo skill、claude.ai environment 能 push 到分支。
+**詳細**: [revision-requests/README.md](./revision-requests/README.md) · [revision-requests/DESIGN.md](./revision-requests/DESIGN.md) · [revision-requests/routine/README.md](./revision-requests/routine/README.md)

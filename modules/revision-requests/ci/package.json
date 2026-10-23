@@ -1,0 +1,11 @@
+{
+  "name": "revision-requests-ci",
+  "private": true,
+  "description": "Template: copy revisions.js + pull-revisions.js (and admin-pwa's admin-firestore.js) into your CI scripts (CommonJS) and add firebase-admin to that package.json.",
+  "scripts": {
+    "test": "node --test \"*.test.js\""
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

@@ -12,6 +12,8 @@
 
 **來源**：MewGuard 的 MewAdmin（`MewGuard/mewadmin/`，設計 `MewGuard/docs/plans/2026-10-18-mewadmin-pwa-design.md`），推播 Function 取自 `cat_toxin_app/functions/src/admin/push.ts`、`requireAdmin.ts`，claim 腳本取自 `cat_toxin_app/functions/scripts/set-admin.mjs`，CI 寫入範本取自 `social/lib/publish-kit.js`、`social/lib/firestore.js`。2026-10-19 抽取並去品牌化；MewAdmin 本身未改。第一個使用者是 hejdanmark 的 HDAdmin（`hejdanmark/docs/plans/2026-10-19-hdadmin-design.md`）。未收錄來源中的業務頁面（各類 kit 頁、研究留言、優惠碼、待辦）與底部 tab 列。
 
+**延伸**：[`../revision-requests/`](../revision-requests/) 在詳情頁加「修改意見」欄，交給雲端 Claude session 改稿並回推「已改好」，建在本模組的 `pwa/` 與 `server/ci/admin-firestore.js` 上。
+
 ---
 
 ## 架構

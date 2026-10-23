@@ -1,0 +1,77 @@
+name: revisions
+
+# revision-requests: PWA revision requests → a cloud Claude session.
+# Copy to .github/workflows/revisions.yml and replace every <PLACEHOLDER>.
+#
+# Each run first fails the `queued` requests the worker reported as not doable
+# or that waited longer than CONFIG.expireMs (push "failed"), then moves every
+# `open` one on: a repository_dispatch for eligible, unposted items (one per
+# item at a time), `noted` for posted items, `failed` for ineligible ones.
+# The dispatched ones go into the dispatch log, committed here: THAT PUSH is
+# what wakes the routine (a repository_dispatch webhook did not, see
+# routine/README.md). `done` is written later by the step that re-publishes
+# the item (pull-revisions.js --done <id>), not here.
+on:
+  schedule:
+    # Every 15 minutes <START>–<END> UTC. GitHub crons are UTC-only and ignore
+    # DST: "4-11" is 06:00–13:59 in Copenhagen summer time (UTC+2) and
+    # 05:00–12:59 in winter time (UTC+1). Pick the hours for your timezone
+    # and accept the one-hour shift, or widen the window by an hour.
+    # Scheduled events also arrive late under load; expiry counts from
+    # queuedAt, so a late tick only delays a request, never fails it.
+    - cron: "*/15 <START>-<END> * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: <SHARED-GROUP>  # same group as every workflow that commits to the branch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  revisions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.<FIREBASE_SA_SECRET> }}
+      # The job's own token sends the repository_dispatch. GH_DISPATCH_TOKEN
+      # (a PAT, `repo` scope) overrides it when set. May be unset.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_DISPATCH_TOKEN: ${{ secrets.GH_DISPATCH_TOKEN }}
+      # Anything your CONFIG.notePosted needs, e.g.
+      # TASTE_API_TOKEN: ${{ secrets.TASTE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install CI deps (firebase-admin)
+        run: cd <SCRIPTS_DIR> && npm ci --no-audit --no-fund
+
+      - name: Expire stale requests
+        # Never fails: no secret prints "skipped", any error one WARNING line.
+        run: node <SCRIPTS_DIR>/pull-revisions.js --expire
+
+      - name: Dispatch open requests
+        id: dispatch
+        run: node <SCRIPTS_DIR>/pull-revisions.js --dispatch
+
+      - name: Commit the dispatch log (this push wakes the routine)
+        run: |
+          LOG=<LOG_FILE>   # CONFIG.logFile, e.g. revisions-log.json
+          if [ ! -f "$LOG" ]; then echo "no dispatch log yet"; exit 0; fi
+          git add "$LOG"
+          if git diff --cached --quiet; then echo "dispatch log unchanged"; exit 0; fi
+          git config user.name "<BOT_NAME>"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Revisions $(date -u +%F): dispatched ${{ steps.dispatch.outputs.dispatched || 0 }}"
+          git push origin <BRANCH> || (git pull --rebase origin <BRANCH> && git push origin <BRANCH>)
+
+# In the workflow that re-publishes an item after the worker's change, add
+# (after the publish step, same FIREBASE_SERVICE_ACCOUNT env):
+#
+#      - name: Mark the revision done
+#        run: node <SCRIPTS_DIR>/pull-revisions.js --done ${{ inputs.<ITEM_ID_INPUT> }}
