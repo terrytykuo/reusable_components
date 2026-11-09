@@ -8,7 +8,8 @@
 //
 // Reads (never writes) from the app checkout: the hand-drawn tabby
 // (assets/cat-avatar/hand-drawn/tabby.svg) and the brand fonts in node_modules.
-// Writes  out/<name>.png            — the deliverables (exact size, RGB, no alpha)
+// Writes  header-universal-<lang>.png — the deliverables for ASC (3840×1646, RGB, no alpha)
+//         out/<name>.png            — the 5244×2950 universal renders (optional alternative)
 //         out/preview/<name>-guides.png — 25 % previews with Apple's safe area + crop frames
 //         build/*.html              — intermediate pages (ignored by git)
 
@@ -44,8 +45,8 @@ const VARIANTS = {
       { label: '3:2 search results', x: 410, y: 0, w: 4425, h: 2950 },
     ],
     layout: {
-      en:    { headlineSize: 130, headlineLine: 1.14, textW: 780 },
-      'zh-TW': { headlineSize: 240, headlineLine: 1.22, textW: 780 },
+      en:    { headlineSize: 130, headlineLine: 1.14, textW: 780, eyebrowSize: 58, eyebrowGap: 36 },
+      'zh-TW': { headlineSize: 236, headlineLine: 1.22, textW: 780, eyebrowSize: 70, eyebrowGap: 40 },
       catH: 1350, catX: 2740, catY: 700,
       discD: 1450, discX: 2615, discY: 785,
     },
@@ -53,9 +54,11 @@ const VARIANTS = {
   header: {
     W: 3840, H: 1646, safe: { x: 1097, y: 493, w: 1646, h: 661 },
     crops: [],
+    // The deliverable App Store Connect takes for "標題和搜尋結果": written to the folder root as header-universal-<lang>.png
+    deliverName: 'header-universal',
     layout: {
-      en:    { headlineSize: 150, headlineLine: 1.14, textW: 1080 },
-      'zh-TW': { headlineSize: 228, headlineLine: 1.22, textW: 1080 },
+      en:    { headlineSize: 132, headlineLine: 1.14, textW: 1080, eyebrowSize: 58, eyebrowGap: 28 },
+      'zh-TW': { headlineSize: 198, headlineLine: 1.22, textW: 1080, eyebrowSize: 68, eyebrowGap: 30 },
       catH: 1000, catX: 2250, catY: 510,
       discD: 1080, discX: 2155, discY: 560,
     },
@@ -67,14 +70,20 @@ const VARIANTS = {
 // URL, ©, awards. "\n" = forced line break.
 const COPY = {
   en: {
+    appName: 'MewGuard',
     headline: 'Toxin lookup\n& daily care,\nin one place.',
     headlineFont: '"Playfair Display", Georgia, serif',
     letterSpacing: '-0.01em',
+    eyebrowFont: '"DM Sans", -apple-system, sans-serif',
+    eyebrowSpacing: '0.18em',
   },
   'zh-TW': {
+    appName: '喵兵衛',
     headline: '查毒物\n記照護',
     headlineFont: '"PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif',
     letterSpacing: '0.04em',
+    eyebrowFont: '"PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif',
+    eyebrowSpacing: '0.22em',
   },
 };
 
@@ -130,15 +139,18 @@ function render({ variant, lang, guides }) {
     lang, variant, app: APP,
     W: v.W, H: v.H, safeX: v.safe.x, safeY: v.safe.y, safeW: v.safe.w, safeH: v.safe.h,
     headlineSize: ll.headlineSize, headlineLine: ll.headlineLine, textW: ll.textW,
+    eyebrowSize: ll.eyebrowSize, eyebrowGap: ll.eyebrowGap, appName: esc(c.appName),
+    eyebrowFont: c.eyebrowFont, eyebrowSpacing: c.eyebrowSpacing,
     catH: l.catH, catX: l.catX, catY: l.catY, discD: l.discD, discX: l.discX, discY: l.discY,
     headline: esc(c.headline), headlineFont: c.headlineFont, letterSpacing: c.letterSpacing,
     catSvg: catSvg(), crops, bodyClass: guides ? 'show-guides' : '',
   });
   const name = `mewguard-${variant}-${v.W}x${v.H}-${lang}${guides ? '-guides' : ''}`;
+  const deliverable = v.deliverName ? join(HERE, `${v.deliverName}-${lang}.png`) : join(OUT, `${name}.png`);
   mkdirSync(BUILD, { recursive: true }); mkdirSync(PREVIEW, { recursive: true });
   const htmlPath = join(BUILD, `${name}.html`);
   writeFileSync(htmlPath, html);
-  const full = join(guides ? BUILD : OUT, `${name}.png`);
+  const full = guides ? join(BUILD, `${name}.png`) : deliverable;
   screenshot(htmlPath, full, v.W, v.H);
 
   const info = pngInfo(full);
