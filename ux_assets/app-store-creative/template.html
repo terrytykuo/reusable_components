@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+  MewGuard — App Store "Product page header / Search results" creative (source).
+  Rendered by build.mjs: it fills every double-brace placeholder, writes build/*.html, screenshots
+  each with headless Chrome at the exact canvas size, and checks the PNG header.
+
+  Canvas sizes and the Apple "Art Safe Area" (from the official Sketch/PSD templates):
+    universal 5244×2950  safe 1402×962 at (1921, 660)   16:9, crops to 21:9 header and 3:2 search
+    header    3840×1646  safe 1646×661 at (1097, 493)   21:9, product page header only
+  Everything the viewer must see (headline, the cat's face) sits inside the safe
+  area; the background and the cat's body bleed past it, as in Apple's own sample.
+-->
+<html lang="{{lang}}">
+<head>
+<meta charset="utf-8">
+<title>MewGuard {{variant}} {{lang}}</title>
+<style>
+  @font-face { font-family: "Playfair Display"; font-weight: 600; src: url("file://{{app}}/node_modules/@expo-google-fonts/playfair-display/600SemiBold/PlayfairDisplay_600SemiBold.ttf"); }
+  @font-face { font-family: "Playfair Display"; font-weight: 700; src: url("file://{{app}}/node_modules/@expo-google-fonts/playfair-display/700Bold/PlayfairDisplay_700Bold.ttf"); }
+  @font-face { font-family: "DM Sans"; font-weight: 500; src: url("file://{{app}}/node_modules/@expo-google-fonts/dm-sans/500Medium/DMSans_500Medium.ttf"); }
+
+  :root {
+    /* Brand tokens — cat_toxin_app/constants/theme.ts Palette */
+    --green600: #17834B;   /* PRIMARY */
+    --green700: #146B3C;
+    --green100: #EAF6EF;
+    --avatar-bg: #E9F3EE;  /* ground behind cat avatars in the app */
+    --cream50: #FBF8F3;
+    --brown900: #2C1810;
+    --coral: #E76953;
+    --white: #FFFFFF;
+
+    --W: {{W}}px; --H: {{H}}px;
+    --safe-x: {{safeX}}px; --safe-y: {{safeY}}px; --safe-w: {{safeW}}px; --safe-h: {{safeH}}px;
+
+    /* Layout knobs, per variant (filled by build.mjs) */
+    --headline-size: {{headlineSize}}px;
+    --headline-line: {{headlineLine}};
+    --text-w: {{textW}}px;
+    --cat-h: {{catH}}px;
+    --cat-x: {{catX}}px;
+    --cat-y: {{catY}}px;
+    --disc-d: {{discD}}px;
+    --disc-x: {{discX}}px;
+    --disc-y: {{discY}}px;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: var(--W); height: var(--H); overflow: hidden; position: relative;
+    background: var(--green600);
+    background-image:
+      radial-gradient(ellipse 70% 90% at 62% 45%, rgba(255,255,255,.07), rgba(255,255,255,0) 70%),
+      linear-gradient(180deg, var(--green600) 0%, var(--green700) 100%);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Soft stage behind the cat — the app's round avatar ground, made translucent on green */
+  .disc {
+    position: absolute; left: var(--disc-x); top: var(--disc-y);
+    width: var(--disc-d); height: var(--disc-d); border-radius: 50%;
+    background: rgba(255,255,255,.10);
+  }
+  .disc.outer { /* a fainter concentric ring, 1.45× — depth without a second idea */
+    left: calc(var(--disc-x) - var(--disc-d) * 0.225); top: calc(var(--disc-y) - var(--disc-d) * 0.225);
+    width: calc(var(--disc-d) * 1.45); height: calc(var(--disc-d) * 1.45);
+    background: rgba(255,255,255,.045);
+  }
+
+  /* Headline: left of the cat, vertically centred on the safe area */
+  .copy {
+    position: absolute; left: var(--safe-x); top: var(--safe-y);
+    width: var(--text-w); height: var(--safe-h);
+    display: flex; flex-direction: column; justify-content: center;
+    color: var(--white);
+  }
+  .headline {
+    margin: 0; font-weight: 600;
+    font-size: var(--headline-size); line-height: var(--headline-line);
+    letter-spacing: {{letterSpacing}};
+    font-family: {{headlineFont}};
+    white-space: pre-line; /* "\n" in the copy = line break */
+    text-wrap: balance;
+  }
+  .headline em { font-style: normal; color: #FFE1B3; } /* warm highlight, same hue family as the tabby */
+
+  /* The hand-drawn tabby (cat_toxin_app/assets/cat-avatar/hand-drawn/tabby.svg, Terry's drawing), inlined by build.mjs */
+  .cat { position: absolute; left: var(--cat-x); top: var(--cat-y); height: var(--cat-h); }
+  .cat svg { height: 100%; width: auto; display: block; overflow: visible; }
+
+  /* Guides — only when build.mjs renders the *-guides preview */
+  .overlay { display: none; }
+  body.show-guides .overlay { display: block; }
+  .overlay .safe { position: absolute; left: var(--safe-x); top: var(--safe-y); width: var(--safe-w); height: var(--safe-h);
+    box-sizing: border-box; border: 6px solid #00FF00; background: rgba(0,255,0,.18); }
+  .overlay .safe::after { content: "ART SAFE AREA"; position: absolute; left: 0; bottom: 0; background: #00FF00; color: #000;
+    font: 700 40px "DM Sans", -apple-system, sans-serif; padding: 6px 18px; }
+  .overlay .crop { position: absolute; box-sizing: border-box; border: 6px dashed rgba(255,255,255,.85); }
+  .overlay .crop span { position: absolute; left: 12px; top: 12px; color: #fff; font: 500 44px "DM Sans", -apple-system, sans-serif;
+    background: rgba(0,0,0,.45); padding: 6px 16px; border-radius: 12px; }
+</style>
+</head>
+<body class="{{bodyClass}}">
+  <div class="disc outer"></div>
+  <div class="disc"></div>
+  <div class="cat">{{catSvg}}</div>
+  <div class="copy"><h1 class="headline">{{headline}}</h1></div>
+  <div class="overlay">
+    <div class="safe"></div>
+    {{crops}}
+  </div>
+</body>
+</html>
